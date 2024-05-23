@@ -1,0 +1,37 @@
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import { Song } from "../components/SongBox/Interfaces";
+
+interface PlayQueueStore {
+  queue: Song[];
+  addSong: (song: Song) => void;
+  removeSong: (index: number) => void;
+  clearQueue: () => void;
+}
+
+export const playQueueStore = create(
+  persist<PlayQueueStore>(
+    (set, get) => ({
+      queue: [],
+
+      addSong: (song) => {
+        const { queue } = get();
+        if (!queue.some((item) => item.title === song.title)) {
+          set({ queue: [...queue, song] });
+        }else{
+          alert('이미 추가된 곡')
+        }
+      },
+
+      removeSong: (index) => set((state) => ({
+        queue: state.queue.filter((_, i) => i !== index)
+      })),
+
+      clearQueue: () => set({ queue: [] })
+    }),
+    {
+      name: "play-queue-store"
+    }
+  )
+);
+
