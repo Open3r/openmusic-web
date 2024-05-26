@@ -1,10 +1,7 @@
 import styled from "@emotion/styled";
 
-interface BoxStyleProps {
-  thumbailUrl : string;
-}
 
-const SongBox = styled.div<BoxStyleProps>`
+const SongBox = styled.div<{thumbailUrl : string}>`
   width:15rem;
   height:15rem;
   background:url(${props=>props.thumbailUrl}) no-repeat center;

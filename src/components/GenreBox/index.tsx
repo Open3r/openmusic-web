@@ -1,5 +1,9 @@
-import * as GB from './GenreBox.style'
-import { GenreProps } from './Interfaces'
+import * as GB from './style'
+
+interface GenreProps {
+  genre:string;
+  key:number;
+}
 
 const GenreBox = (props:GenreProps) => {
   return (

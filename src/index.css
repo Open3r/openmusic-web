@@ -1,6 +1,10 @@
 body,html {
   margin: 0;
   font-size: 10px;
+  -webkit-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  user-select:none
 }
 p, h1,h2,h3 {
   margin: 0;

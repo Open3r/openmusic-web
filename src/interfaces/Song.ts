@@ -1,4 +1,7 @@
 export interface Song {
-  title: string,
-  artistId: number
+  id: number;
+  title: string;
+  artist: string;
+  musicUrl: string;
+  thumbnailUrl: string;
 }

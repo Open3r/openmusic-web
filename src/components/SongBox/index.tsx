@@ -1,7 +1,8 @@
-import { nowPlayingStore } from '../../store/nowPlayingStore'
-import { playQueueStore } from '../../store/playQueueStore'
-import * as SB from './SongBox.style'
-import { Song } from './Interfaces'
+import { nowPlayingStore } from '../../stores/nowPlayingStore'
+import { playQueueStore } from '../../stores/playQueueStore'
+import * as SB from './style'
+import { Song } from '../../interfaces/Song'
+
 
 const SongBox = (props:Song) => {
   const setNowPlaying = nowPlayingStore((state) => state.setNowPlaying);
@@ -12,7 +13,7 @@ const SongBox = (props:Song) => {
     setNowPlaying({
       artist: props.artist,
       title: props.title,
-      idx: props.idx,
+      idx: props.id,
       thumbnailUrl: props.thumbnailUrl,
       musicUrl: props.musicUrl
     });

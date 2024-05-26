@@ -1,9 +1,22 @@
 import { useEffect, useState, useRef, useCallback } from "react";
-import { nowPlayingStore } from "../../store/nowPlayingStore";
-import { PlayTimeStore } from "../../store/PlayTImeStore";
-import * as PB from "./PlayBar.style";
-import { playQueueStore } from "../../store/playQueueStore";
-import { loopShuffleStore } from "../../store/loopShuffleStore";
+import { nowPlayingStore } from "../../stores/nowPlayingStore";
+import { PlayTimeStore } from "../../stores/PlayTimeStore";
+import * as PB from "./style";
+import { playQueueStore } from "../../stores/playQueueStore";
+import { loopShuffleStore } from "../../stores/loopShuffleStore";
+
+import next from '../../assets/imgs/next.svg';
+import play from '../../assets/imgs/play.svg';
+import pause from '../../assets/imgs/pause.svg';
+import prev from '../../assets/imgs/prev.svg';
+import shuffle from '../../assets/imgs/shuffleOn.svg';
+import unShuffle from '../../assets/imgs/shuffleOff.svg';
+import loop from '../../assets/imgs/repeatOn.svg';
+import unloop from '../../assets/imgs/repeatOff.svg';
+import volMax from '../../assets/imgs/max.svg';
+import volMed from '../../assets/imgs/medium.svg';
+import volMin from '../../assets/imgs/low.svg';
+import mute from '../../assets/imgs/mute.svg';
 
 const PlayBar = () => {
   const nowPlaying = nowPlayingStore((state) => state.nowPlaying);
@@ -67,13 +80,13 @@ const PlayBar = () => {
 
   useEffect(() => {
     if (volume >= 0.66) {
-      setVolIndicator("max");
+      setVolIndicator(volMax);
     } else if (volume >= 0.33) {
-      setVolIndicator("medium");
+      setVolIndicator(volMed);
     } else if (volume > 0) {
-      setVolIndicator("low");
+      setVolIndicator(volMin);
     } else {
-      setVolIndicator("mute");
+      setVolIndicator(mute);
     }
   }, [volume]);
 
@@ -138,6 +151,12 @@ const PlayBar = () => {
     }
   };
 
+  const isPlay = () => {
+    if (audioRef.current?.paused) {
+      setPlayState(false);
+    }
+  }
+
   const updateVolume = (e:any) => {
     const newVolume = Number(e.target.value);
     if(audioRef.current) {
@@ -158,9 +177,6 @@ const PlayBar = () => {
     setShuffleState({ shuffleState: !shuffleState });
     if (!loopState && !shuffleState) {
       setLoopState({ loopState: true });
-    }
-    if (loopState && shuffleState) {
-      setLoopState({ loopState: false });
     }
   };
 
@@ -192,6 +208,7 @@ const PlayBar = () => {
             onTimeUpdate={updatePlayTime}
             onEnded={musicEndEvent}
             ref={audioRef}
+            onPause={isPlay}
           ></audio>
           <PB.AlbumCoverWrap>
             <PB.AlbumCover
@@ -205,25 +222,43 @@ const PlayBar = () => {
           </PB.MusicInfoWrap>
         </PB.SongWrap>
         <PB.PlayBtnsWrap>
-          <PB.PlayBtn src="../assets/imgs/prev.svg" onClick={prevMusic} />
+          <PB.PlayBtn src={prev} onClick={prevMusic} />
           {playState ? (
-            <PB.PlayBtn src="../assets/imgs/pause.svg" onClick={pauseMusic} />
+            <PB.PlayBtn src={pause} onClick={pauseMusic} />
           ) : (
-            <PB.PlayBtn src="../assets/imgs/play.svg" onClick={playMusic} />
+            <PB.PlayBtn src={play} onClick={playMusic} />
           )}
-          <PB.PlayBtn src="../assets/imgs/next.svg" onClick={nextMusic} />
+          <PB.PlayBtn src={next} onClick={nextMusic} />
         </PB.PlayBtnsWrap>
         <PB.TimeIndicatorWrap>
+          {
+            loopState ? (
+              <PB.stateIndicator
+                src={loop}
+                onClick={swapLoopState}
+              />
+            ):(
+              <PB.stateIndicator
+                src={unloop}
+                onClick={swapLoopState}
+              />
+            )
+          }
+          {
+            shuffleState ? (
+              <PB.stateIndicator
+                src={shuffle}
+                onClick={swapShuffleState}
+              />
+            ):(
+              <PB.stateIndicator
+                src={unShuffle}
+                onClick={swapShuffleState}
+              />
+            )
+          }
           <PB.stateIndicator
-            src={`../assets/imgs/repeat${loopState ? "On" : "Off"}.svg`}
-            onClick={swapLoopState}
-          />
-          <PB.stateIndicator
-            src={`../assets/imgs/shuffle${shuffleState ? "On" : "Off"}.svg`}
-            onClick={swapShuffleState}
-          />
-          <PB.stateIndicator
-            src={`../assets/imgs/${volIndicator}.svg`}
+            src={volIndicator}
             alt="Volume Indicator"
             id="volIndicator"
           />

@@ -1,6 +1,6 @@
-import { nowPlayingStore } from "../../store/nowPlayingStore";
-import { playQueueStore } from "../../store/playQueueStore";
-import * as QB from "./QueueBox.style";
+import { nowPlayingStore } from "../../stores/nowPlayingStore";
+import { playQueueStore } from "../../stores/playQueueStore";
+import * as QB from "./style";
 
 const QueueBox = () => {
   const queue = playQueueStore((state) => state.queue);
