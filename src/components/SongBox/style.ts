@@ -13,7 +13,13 @@ const SongBox = styled.div<{thumbailUrl : string}>`
   justify-content:flex-end;
   align-items:flex-end;
   position:relative;
-  box-shadow: 0.5rem 0.5rem 1rem 0.3rem #ccc;
+  border: 0.1rem solid #ccc;
+  flex-shrink:0;
+  margin-right:1rem;
+  &:last-of-type{
+    margin:0;
+  }
+  scroll-snap-align:start;
   cursor:pointer;
   &:hover :first-of-type{
     opacity:0.4;

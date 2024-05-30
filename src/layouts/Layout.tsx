@@ -1,12 +1,12 @@
-import QueueBox from './QueueBox'
 import PlayBar from './PlayBar'
 import { Outlet } from 'react-router-dom'
+import Header from './Header'
 
 const Layout = () => {
   return (
     <>
+      <Header />
       <Outlet />
-      <QueueBox />
       <PlayBar />
     </>
   )

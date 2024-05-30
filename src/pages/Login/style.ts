@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import check from '../../assets/imgs/check.svg'
+import { Link } from "react-router-dom";
 
 const Canvas = styled.div`
   width:100vw;
@@ -156,10 +157,11 @@ const FindMeWrap = styled.div`
   align-items:center;
   margin-bottom:1rem;
 `
-const FindMeText = styled.p`
+const FindMeText = styled(Link)`
   font-size:1.3rem;
   color:gray;
   cursor:pointer;
+  text-decoration:none;
   &:hover{
     text-decoration:underline;
   }

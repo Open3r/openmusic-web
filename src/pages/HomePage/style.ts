@@ -1,12 +1,18 @@
 import styled from "@emotion/styled";
 
 const BoxWrap = styled.div`
-  width:70rem;
+  width:80rem;
   height:20rem;
   display:flex;
   align-items:center;
-  justify-content:space-evenly;
-  margin: 1rem 0;
+  overflow-x: scroll;
+  box-sizing:border-box;
+  scroll-snap-type: x mandatory;
+  -ms-overflow-style: none;
+   scrollbar-width: none; 
+  &::-webkit-scrollbar {
+    display: none; 
+  }
 `
 export {
   BoxWrap

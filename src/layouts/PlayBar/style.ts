@@ -107,17 +107,16 @@ const stateIndicator = styled.img`
 const volumeControllerWrap = styled.div`
   background-color:white;
   display:flex;
-  justify-content:center:
+  justify-content:center;
   align-items:center;
   position:absolute;
   top:-15rem;
   right:5rem;
-  padding: 1rem 0;
+  padding:1rem 0;
 `
 const volumeController = styled.input`
-  transfrom:rotate(90deg);
   writing-mode: bt-lr;
-  -webkit-appearance: slider-vertical;
+  appearance: slider-vertical;
   background-color:white;
   width:3rem;
 `

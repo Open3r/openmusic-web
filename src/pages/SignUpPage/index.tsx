@@ -1,5 +1,5 @@
-import SignUp from "../../components/SignUp"
-import * as S from "./style";
+import * as S from './style';
+import SignUp from '../../components/SignUp';
 
 const SignUpPage = () => {
   return (

@@ -5,15 +5,12 @@ import * as SS from "./style";
 import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
-
   const { signUp, loading, error } = useSignUp();
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
-  const [nickname, setNickname] = useState('');
-  const [pwChk, setPwChk] = useState('');
+  const [nickname, setNickname] = useState("");
+  const [pwChk, setPwChk] = useState("");
   const navigate = useNavigate();
-
-
 
   const handleEmail = (e: any) => {
     setEmail(e.target.value);
@@ -31,19 +28,24 @@ const SignUp = () => {
   };
 
   const submit = async () => {
-    if((email!=''&&nickname!=''&&pw!=''&&pwChk!='')&&pwChk==pw){
+    if (
+      email != "" &&
+      nickname != "" &&
+      pw != "" &&
+      pwChk != "" &&
+      pwChk == pw
+    ) {
       try {
         const data = await signUp(nickname, email, pw);
         console.log("SignUp successful:", data);
-        navigate('/login');
+        navigate("/login");
       } catch (err) {
         console.error("SignUp failed:", err);
       }
-    }else{
-      alert('확인좀');
+    } else {
+      alert("확인좀");
     }
   };
-
 
   return (
     <SS.LoginWrap>
@@ -55,8 +57,8 @@ const SignUp = () => {
           onChange={handleEmail}
           value={email}
           placeholder="이메일을 입력하세요."
-          onKeyDown={(e:any)=>{
-            if(e.key == 'Enter'){
+          onKeyDown={(e: any) => {
+            if (e.key == "Enter") {
               submit();
             }
           }}
@@ -70,8 +72,8 @@ const SignUp = () => {
           onChange={handleNickname}
           value={nickname}
           placeholder="닉네임을 입력하세요."
-          onKeyDown={(e:any)=>{
-            if(e.key == 'Enter'){
+          onKeyDown={(e: any) => {
+            if (e.key == "Enter") {
               submit();
             }
           }}
@@ -85,8 +87,8 @@ const SignUp = () => {
           onChange={handlePw}
           value={pw}
           placeholder="비밀번호를 입력하세요."
-          onKeyDown={(e:any)=>{
-            if(e.key == 'Enter'){
+          onKeyDown={(e: any) => {
+            if (e.key == "Enter") {
               submit();
             }
           }}
@@ -100,8 +102,8 @@ const SignUp = () => {
           onChange={handlePwChk}
           value={pwChk}
           placeholder="비밀번호를 한번 더 입력하세요."
-          onKeyDown={(e:any)=>{
-            if(e.key == 'Enter'){
+          onKeyDown={(e: any) => {
+            if (e.key == "Enter") {
               submit();
             }
           }}
@@ -111,7 +113,9 @@ const SignUp = () => {
         <SS.FindMeText to="/terms">개인정보 처리방침</SS.FindMeText>
         <SS.FindMeText to="/login">회원이신가요?</SS.FindMeText>
       </SS.FindMeWrap>
-      <SS.Button onClick={submit} disabled={loading}>{loading ? '회원가입 중...':'회원가입'}</SS.Button>
+      <SS.Button onClick={submit} disabled={loading}>
+        {loading ? "회원가입 중..." : "회원가입"}
+      </SS.Button>
       <SS.SeperWrap>
         <SS.SeperLine></SS.SeperLine>
         <SS.SeperWord>간편회원가입</SS.SeperWord>
