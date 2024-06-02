@@ -1,6 +1,14 @@
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
 
+const Canvas = styled.div`
+  width:100vw;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+`
+
 const LoginWrap = styled.div`
   width:50rem;
   height:65rem;
@@ -37,6 +45,15 @@ const Label = styled.label`
   font-size:2.5rem;
   margin:0;
   color:black;
+`
+const WarningWrap = styled.div`
+  width:100%;
+  height: 2rem;
+  font-size:1rem;
+  color:red;
+  padding: 0 0.5rem;
+  display:flex;
+  align-items:center;
 `
 const Button = styled.button`
   width:90%;
@@ -113,14 +130,14 @@ const FindMeWrap = styled.div`
   width:90%;
   height:3rem;
   display:flex;
-  justify-content:flex-end;
+  justify-content:space-between;
   align-items:center;
   margin-bottom:1rem;
 `
 const FindMeText = styled(Link)`
   font-size:1.3rem;
   color:gray;
-  margin-left: 1rem; 
+  text-decoration:none;
   cursor:pointer;
   &:hover{
     text-decoration:underline;
@@ -129,10 +146,12 @@ const FindMeText = styled(Link)`
 
 
 export {
+  Canvas,
   LoginWrap,
   InputArea,
   Input,
   Label,
+  WarningWrap,
   Button,
   SeperWrap,
   SeperLine,

@@ -1,10 +1,11 @@
-import { Route, Routes, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
+import { useLocation, Routes, Route } from "react-router-dom";
 import Layout from "../../layouts/Layout";
 import HomePage from "../../pages/HomePage";
 import PlaylistPage from "../../pages/PlaylistPage";
 import Login from "../../pages/Login";
-import SignUpPage from "../../pages/SignUpPage";
+import SignUp from "../../pages/SignUp";
+import Verify from "../../pages/Verify";
 
 const pageVariants = {
   initial: {
@@ -31,11 +32,41 @@ const Router = () => {
   const location = useLocation();
 
   return (
-    <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
-        <Route path="/" element={<Layout />}>
+    <div style={{ overflow: "hidden" }}>
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
+          <Route path="/" element={<Layout />}>
+            <Route
+              index
+              element={
+                <motion.div
+                  initial="initial"
+                  animate="in"
+                  exit="out"
+                  variants={pageVariants}
+                  transition={pageTransition}
+                >
+                  <HomePage />
+                </motion.div>
+              }
+            />
+            <Route
+              path="/playlist"
+              element={
+                <motion.div
+                  initial="initial"
+                  animate="in"
+                  exit="out"
+                  variants={pageVariants}
+                  transition={pageTransition}
+                >
+                  <PlaylistPage />
+                </motion.div>
+              }
+            />
+          </Route>
           <Route
-            index
+            path="/login"
             element={
               <motion.div
                 initial="initial"
@@ -44,12 +75,12 @@ const Router = () => {
                 variants={pageVariants}
                 transition={pageTransition}
               >
-                <HomePage />
+                <Login />
               </motion.div>
             }
           />
           <Route
-            path="/playlist"
+            path="/signup"
             element={
               <motion.div
                 initial="initial"
@@ -58,41 +89,27 @@ const Router = () => {
                 variants={pageVariants}
                 transition={pageTransition}
               >
-                <PlaylistPage />
+                <SignUp />
               </motion.div>
             }
           />
-        </Route>
-        <Route
-          path="/login"
-          element={
-            <motion.div
-              initial="initial"
-              animate="in"
-              exit="out"
-              variants={pageVariants}
-              transition={pageTransition}
-            >
-              <Login />
-            </motion.div>
-          }
-        />
-        <Route
-          path="/signup"
-          element={
-            <motion.div
-              initial="initial"
-              animate="in"
-              exit="out"
-              variants={pageVariants}
-              transition={pageTransition}
-            >
-              <SignUpPage />
-            </motion.div>
-          }
-        />
-      </Routes>
-    </AnimatePresence>
+          <Route
+            path="/verify"
+            element={
+              <motion.div
+                initial="initial"
+                animate="in"
+                exit="out"
+                variants={pageVariants}
+                transition={pageTransition}
+              >
+                <Verify />
+              </motion.div>
+            }
+          />
+        </Routes>
+      </AnimatePresence>
+    </div>
   );
 };
 

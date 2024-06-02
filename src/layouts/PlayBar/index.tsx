@@ -134,8 +134,6 @@ const PlayBar = () => {
   const prevMusic = () => {
     if (queue.length && currIdx > 0) {
       setNowPlaying(queue[currIdx - 1]);
-    } else {
-      alert("재생목록에 곡이 없습니다.");
     }
   };
 
@@ -146,8 +144,6 @@ const PlayBar = () => {
       } else if (loopState) {
         setNowPlaying(queue[0]);
       }
-    } else {
-      alert("재생목록에 곡이 없습니다.");
     }
   };
 

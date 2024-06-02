@@ -1,12 +1,13 @@
 import google from "../../assets/imgs/google.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useLogin from "../../hooks/useLogin";
 import * as S from "./style";
 import { useNavigate } from "react-router-dom";
-import { getCookie, setCookie } from "../../cookies/cookie";
+import { setCookie } from "../../cookies/cookie";
+import NotificationService from "../../components/Notification/NotificationService";
 
 const Login = () => {
-  const { login, loading, error } = useLogin();
+  const { login, loading } = useLogin();
   const [checked, setChecked] = useState(false);
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
@@ -20,27 +21,52 @@ const Login = () => {
     setPw(e.target.value);
   };
 
+  useEffect(()=>{
+    if (email.length > 0) {
+      let warnMessage = document.getElementById("warnEmail") as HTMLDivElement;
+      warnMessage.innerHTML = "";
+    }
+    if (pw.length > 0) {
+      let warnMessage = document.getElementById("warnPw") as HTMLDivElement;
+      warnMessage.innerHTML = "";
+    }
+  },[email,pw])
+
   const submit = async () => {
-    try {
-      const data = await login(email, pw);
-      console.log("Login successful:", data);
-      setCookie("accessToken", data.data.accessToken, { path: "/" });
-      console.log(checked);
-      if (checked) {
-        const expires = new Date();
-        expires.setDate(expires.getDate() + 30);
-        setCookie("refreshToken", data.data.refreshToken, {
-          path: "/",
-          maxAge: 2600000,
-        });
-      } else {
-        setCookie("refreshToken", data.data.refreshToken, { path: "/" });
+    if (email.length > 0 && pw.length > 0) {
+      try {
+        const data = await login(email, pw);
+        if (data.status == 200) {
+          console.log("Login successful:", data);
+          setCookie("accessToken", data.data.accessToken, { path: "/" });
+          if (checked) {
+            const expires = new Date();
+            expires.setDate(expires.getDate() + 30);
+            setCookie("refreshToken", data.data.refreshToken, {
+              path: "/",
+              maxAge: 2600000,
+            });
+          } else {
+            setCookie("refreshToken", data.data.refreshToken, { path: "/" });
+          }
+          NotificationService.success('로그인 성공');
+          navigate("/");
+        } else {
+          NotificationService.error("이메일 또는 비밀번호를 확인해주세요.");
+        }
+      } catch (err) {
+        NotificationService.error("네트워크 에러");
       }
-      console.log(getCookie("accessToken"));
-      console.log(getCookie("refreshToken"));
-      navigate("../");
-    } catch (err) {
-      console.error("Login failed:", err);
+
+    }else{
+      if(email.length <= 0) {
+        let warnMessage = document.getElementById("warnEmail") as HTMLDivElement;
+        warnMessage.innerHTML = '이메일을 입력해주세요.';
+      }
+      if (pw.length <= 0) {
+        let warnMessage = document.getElementById("warnPw") as HTMLDivElement;
+        warnMessage.innerHTML = "비밀번호를 입력해주세요.";
+      }
     }
   };
 
@@ -65,6 +91,7 @@ const Login = () => {
               }
             }}
           />
+          <S.WarningWrap id="warnEmail"></S.WarningWrap>
         </S.InputArea>
         <S.InputArea>
           <S.Label htmlFor="pw">비밀번호</S.Label>
@@ -80,6 +107,7 @@ const Login = () => {
               }
             }}
           />
+          <S.WarningWrap id="warnPw"></S.WarningWrap>
         </S.InputArea>
         <S.ChkArea>
           <S.ChkboxContainer>
@@ -94,8 +122,8 @@ const Login = () => {
           <S.ChkLabel>자동로그인</S.ChkLabel>
         </S.ChkArea>
         <S.FindMeWrap>
-          <S.FindMeText to={'/signup'}>회원이 아니신가요?</S.FindMeText>
-          <S.FindMeText to={'/find'}>비밀번호 찾기</S.FindMeText>
+          <S.FindMeText to={"/signup"}>회원이 아니신가요?</S.FindMeText>
+          <S.FindMeText to={"/find"}>비밀번호 찾기</S.FindMeText>
         </S.FindMeWrap>
         <S.Button onClick={submit} disabled={loading}>
           {loading ? "로그인 중..." : "로그인"}
@@ -109,7 +137,6 @@ const Login = () => {
           <S.SocialIcon src={google} />
           <S.SocialLogin>구글로 로그인</S.SocialLogin>
         </S.SocialLoginWrap>
-        {error}
       </S.LoginWrap>
     </S.Canvas>
   );

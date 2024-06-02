@@ -65,6 +65,15 @@ const Button = styled.button`
     color:#ccc;
   }
 `
+const WarningWrap = styled.div`
+  width:100%;
+  height: 2rem;
+  font-size:1rem;
+  color:red;
+  padding: 0 0.5rem;
+  display:flex;
+  align-items:center;
+`
 const ChkArea = styled.div`
   width:90%;
   height:5rem;
@@ -174,6 +183,7 @@ export {
   Input,
   Label,
   Button,
+  WarningWrap,
   ChkArea,
   DefaultChkbox,
   CustomChkbox,
