@@ -125,6 +125,7 @@ const HomePage = () => {
             title={content.title}
             artist={content.artist}
             idx={idx}
+            key={idx}
             musicUrl={content.musicUrl}
             thumbnailUrl={content.thumbnailUrl}
           ></SongBox>
