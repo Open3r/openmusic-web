@@ -5,6 +5,7 @@ import { css } from "@emotion/react";
 import { SignUpInfoStore } from "../../stores/signUpInfoStore";
 import { useNavigate } from "react-router-dom";
 import useSignUp from "../../hooks/useSignUp";
+import NotificationService from "../../components/Notification/NotificationService";
 
 const Verify = () => {
   const [code, setCode] = useState("");
@@ -22,13 +23,21 @@ const Verify = () => {
     }
   },[email,pw,nickname]);
 
-  const submit = () => {
+  const submit = async () => {
     try {
-      const data = signUp(nickname,email,pw,code);
-      console.log(data);
-      navigate('/login');
-    }catch (err) {
-      console.log(err)
+      const data = await signUp(nickname,email,pw,code);
+      if(data.status == 201){
+        console.log(data);
+        NotificationService.success('회원가입 성공');
+        navigate("/login");
+      }
+    }catch (err:any) {
+      console.log(err);
+      if (err.response.data.code == "INVALID_EMAIL_CODE") {
+        NotificationService.error('잘못된 이메일 인증 코드 입니다.');
+      }else{
+        NotificationService.error("네트워크 에러");
+      }
     }
   }
 

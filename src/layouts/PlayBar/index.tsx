@@ -5,18 +5,18 @@ import * as PB from "./style";
 import { playQueueStore } from "../../stores/playQueueStore";
 import { loopShuffleStore } from "../../stores/loopShuffleStore";
 
-import next from '../../assets/imgs/next.svg';
-import play from '../../assets/imgs/play.svg';
-import pause from '../../assets/imgs/pause.svg';
-import prev from '../../assets/imgs/prev.svg';
-import shuffle from '../../assets/imgs/shuffleOn.svg';
-import unShuffle from '../../assets/imgs/shuffleOff.svg';
-import loop from '../../assets/imgs/repeatOn.svg';
-import unloop from '../../assets/imgs/repeatOff.svg';
-import volMax from '../../assets/imgs/max.svg';
-import volMed from '../../assets/imgs/medium.svg';
-import volMin from '../../assets/imgs/low.svg';
-import mute from '../../assets/imgs/mute.svg';
+import next from "../../assets/imgs/next.svg";
+import play from "../../assets/imgs/play.svg";
+import pause from "../../assets/imgs/pause.svg";
+import prev from "../../assets/imgs/prev.svg";
+import shuffle from "../../assets/imgs/shuffleOn.svg";
+import unShuffle from "../../assets/imgs/shuffleOff.svg";
+import loop from "../../assets/imgs/repeatOn.svg";
+import unloop from "../../assets/imgs/repeatOff.svg";
+import volMax from "../../assets/imgs/max.svg";
+import volMed from "../../assets/imgs/medium.svg";
+import volMin from "../../assets/imgs/low.svg";
+import mute from "../../assets/imgs/mute.svg";
 
 const PlayBar = () => {
   const nowPlaying = nowPlayingStore((state) => state.nowPlaying);
@@ -43,6 +43,7 @@ const PlayBar = () => {
   const [volController, setVolController] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const isDragging = useRef(false);
 
   useEffect(() => {
     if (nowPlaying.title && audioRef.current) {
@@ -50,8 +51,8 @@ const PlayBar = () => {
       audioRef.current.play().catch((err) => {
         if (err instanceof DOMException) {
           setPlayState(false);
-          if(audioRef.current) {
-             audioRef.current.pause();
+          if (audioRef.current) {
+            audioRef.current.pause();
           }
           updateCurrTime({ currTime: 0 });
         }
@@ -90,13 +91,47 @@ const PlayBar = () => {
     }
   }, [volume]);
 
-  const updatePlayTime = (e:any) => {
+  const updatePlayTime = (e: any) => {
     updateCurrTime({ currTime: e.currentTarget.currentTime });
     setFullDuration({ fullDuration: e.currentTarget.duration });
   };
 
-  const changeProgress = (e:any) => {
-    const progressBar = document.getElementById("progressBar") as HTMLDivElement;
+  const handleProgressMouseDown = () => {
+    isDragging.current = true;
+  };
+
+  const handleProgressMouseMove = (e: any) => {
+    if (isDragging.current) {
+      const progressBar = document.getElementById(
+        "progressBar"
+      ) as HTMLDivElement;
+      const progressWidth = progressBar.clientWidth;
+      const mouseX = e.clientX - progressBar.getBoundingClientRect().left;
+      const newTime = (mouseX / progressWidth) * fullDuration;
+      if (audioRef.current) {
+        audioRef.current.currentTime = newTime;
+        updateCurrTime({ currTime: newTime });
+      }
+    }
+  };
+
+  const handleProgressMouseUp = () => {
+    isDragging.current = false;
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousemove", handleProgressMouseMove);
+    document.addEventListener("mouseup", handleProgressMouseUp);
+    return () => {
+      document.removeEventListener("mousemove", handleProgressMouseMove);
+      document.removeEventListener("mouseup", handleProgressMouseUp);
+    };
+  }, []);
+
+  const changeProgress = (e: any) => {
+    const progressBar = document.getElementById(
+      "progressBar"
+    ) as HTMLDivElement;
     const progressWidth = progressBar.clientWidth;
     const mouseX = e.clientX - progressBar.getBoundingClientRect().left;
     if (audioRef.current) {
@@ -104,7 +139,8 @@ const PlayBar = () => {
     }
   };
 
-  const getRandom = (min:number, max:number) => Math.floor(Math.random() * (max - min + 1)) + min;
+  const getRandom = (min: number, max: number) =>
+    Math.floor(Math.random() * (max - min + 1)) + min;
 
   const musicEndEvent = () => {
     if (loopState && shuffleState) {
@@ -115,19 +151,18 @@ const PlayBar = () => {
   };
 
   const playMusic = () => {
-    if(audioRef.current) {
+    if (audioRef.current) {
       if (nowPlaying.title != "") {
         audioRef.current.play();
         setPlayState(true);
       }
     }
-    
   };
 
   const pauseMusic = () => {
-    if(audioRef.current) {
+    if (audioRef.current) {
       audioRef.current.pause();
-   }
+    }
     setPlayState(false);
   };
 
@@ -151,13 +186,13 @@ const PlayBar = () => {
     if (audioRef.current?.paused) {
       setPlayState(false);
     }
-  }
+  };
 
-  const updateVolume = (e:any) => {
+  const updateVolume = (e: any) => {
     const newVolume = Number(e.target.value);
-    if(audioRef.current) {
+    if (audioRef.current) {
       audioRef.current.volume = newVolume;
-   }
+    }
     setVolume(newVolume);
     localStorage.setItem("volume", `${newVolume}`);
   };
@@ -176,7 +211,7 @@ const PlayBar = () => {
     }
   };
 
-  const handleVolumeClick = useCallback((e:any) => {
+  const handleVolumeClick = useCallback((e: any) => {
     if (["volIndicator", "volConWrap", "volCon"].includes(e.target.id)) {
       setVolController((prev) => !prev);
     } else {
@@ -193,7 +228,11 @@ const PlayBar = () => {
 
   return (
     <PB.PlayBarWrap>
-      <PB.ProgressBarWrap onClick={changeProgress} id="progressBar">
+      <PB.ProgressBarWrap
+        onClick={changeProgress}
+        onMouseDown={handleProgressMouseDown}
+        id="progressBar"
+      >
         <PB.ProgressBar progress={progress}></PB.ProgressBar>
       </PB.ProgressBarWrap>
       <PB.SongControlWrap>
@@ -208,12 +247,17 @@ const PlayBar = () => {
           ></audio>
           <PB.AlbumCoverWrap>
             <PB.AlbumCover
-              src={nowPlaying.thumbnailUrl || "https://static-00.iconduck.com/assets.00/music-notes-icon-2048x2046-o5kli2nk.png"}
+              src={
+                nowPlaying.thumbnailUrl ||
+                "https://static-00.iconduck.com/assets.00/music-notes-icon-2048x2046-o5kli2nk.png"
+              }
               alt={`${nowPlaying.idx}`}
             />
           </PB.AlbumCoverWrap>
           <PB.MusicInfoWrap>
-            <PB.Title>{nowPlaying.title || "재생 중인 곡이 없습니다."}</PB.Title>
+            <PB.Title>
+              {nowPlaying.title || "재생 중인 곡이 없습니다."}
+            </PB.Title>
             <PB.Artist>{nowPlaying.artist}</PB.Artist>
           </PB.MusicInfoWrap>
         </PB.SongWrap>
@@ -227,32 +271,16 @@ const PlayBar = () => {
           <PB.PlayBtn src={next} onClick={nextMusic} />
         </PB.PlayBtnsWrap>
         <PB.TimeIndicatorWrap>
-          {
-            loopState ? (
-              <PB.stateIndicator
-                src={loop}
-                onClick={swapLoopState}
-              />
-            ):(
-              <PB.stateIndicator
-                src={unloop}
-                onClick={swapLoopState}
-              />
-            )
-          }
-          {
-            shuffleState ? (
-              <PB.stateIndicator
-                src={shuffle}
-                onClick={swapShuffleState}
-              />
-            ):(
-              <PB.stateIndicator
-                src={unShuffle}
-                onClick={swapShuffleState}
-              />
-            )
-          }
+          {loopState ? (
+            <PB.stateIndicator src={loop} onClick={swapLoopState} />
+          ) : (
+            <PB.stateIndicator src={unloop} onClick={swapLoopState} />
+          )}
+          {shuffleState ? (
+            <PB.stateIndicator src={shuffle} onClick={swapShuffleState} />
+          ) : (
+            <PB.stateIndicator src={unShuffle} onClick={swapShuffleState} />
+          )}
           <PB.stateIndicator
             src={volIndicator}
             alt="Volume Indicator"

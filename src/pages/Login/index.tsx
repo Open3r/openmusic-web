@@ -21,7 +21,7 @@ const Login = () => {
     setPw(e.target.value);
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     if (email.length > 0) {
       let warnMessage = document.getElementById("warnEmail") as HTMLDivElement;
       warnMessage.innerHTML = "";
@@ -30,7 +30,7 @@ const Login = () => {
       let warnMessage = document.getElementById("warnPw") as HTMLDivElement;
       warnMessage.innerHTML = "";
     }
-  },[email,pw])
+  }, [email, pw]);
 
   const submit = async () => {
     if (email.length > 0 && pw.length > 0) {
@@ -49,19 +49,25 @@ const Login = () => {
           } else {
             setCookie("refreshToken", data.data.refreshToken, { path: "/" });
           }
-          NotificationService.success('로그인 성공');
+          NotificationService.success("로그인 성공");
           navigate("/");
-        } else {
-          NotificationService.error("이메일 또는 비밀번호를 확인해주세요.");
         }
-      } catch (err) {
-        NotificationService.error("네트워크 에러");
+      } catch (err: any) {
+        if (
+          err.response.data.status == 400 ||
+          err.response.data.status == 404
+        ) {
+          NotificationService.error("이메일 또는 비밀번호를 확인해주세요.");
+        } else {
+          NotificationService.error("네트워크 에러");
+        }
       }
-
-    }else{
-      if(email.length <= 0) {
-        let warnMessage = document.getElementById("warnEmail") as HTMLDivElement;
-        warnMessage.innerHTML = '이메일을 입력해주세요.';
+    } else {
+      if (email.length <= 0) {
+        let warnMessage = document.getElementById(
+          "warnEmail"
+        ) as HTMLDivElement;
+        warnMessage.innerHTML = "이메일을 입력해주세요.";
       }
       if (pw.length <= 0) {
         let warnMessage = document.getElementById("warnPw") as HTMLDivElement;

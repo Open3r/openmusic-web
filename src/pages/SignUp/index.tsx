@@ -17,7 +17,7 @@ const SignUp = () => {
   const storePw = SignUpInfoStore((state) => state.storePw);
   const storeNickname = SignUpInfoStore((state) => state.storeNickname);
 
-  const { verify, loading, error } = useVerify();
+  const { verify, loading } = useVerify();
 
   const handleEmail = (e: any) => {
     setEmail(e.target.value);
@@ -115,10 +115,16 @@ const SignUp = () => {
       storePw(pw);
       storeNickname(nickname);
       try {
-        await verify(email);
-        navigate("/verify");
-      } catch (err) {
-        console.error("SignUp failed:", err);
+        const data = await verify(email);
+        if (data.status == 201) {
+          navigate("/verify");
+        }
+      }catch (err:any) {
+        if (err.response.data.status == 400) {
+          NotificationService.error("이미 가입된 이메일 입니다.");
+        } else {
+          NotificationService.error("네트워크 에러");
+        }
       }
     } else {
       NotificationService.error("모든 입력 필드를 채워주세요.");
@@ -212,7 +218,6 @@ const SignUp = () => {
           <SS.SocialIcon src={google} />
           <SS.SocialLogin>구글로 로그인</SS.SocialLogin>
         </SS.SocialLoginWrap>
-        {error}
       </SS.LoginWrap>
     </SS.Canvas>
   );
