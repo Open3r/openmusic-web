@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { Song } from "../components/SongBox/Interfaces";
+import { Song } from "../interfaces/Song";
+import NotificationService from "../components/Notification/NotificationService";
 
 interface PlayQueueStore {
   queue: Song[];
@@ -19,7 +20,7 @@ export const playQueueStore = create(
         if (!queue.some((item) => item.title === song.title)) {
           set({ queue: [...queue, song] });
         }else{
-          alert('이미 추가된 곡')
+          NotificationService.warn('이미 재생목록에 있는 곡입니다.')
         }
       },
 

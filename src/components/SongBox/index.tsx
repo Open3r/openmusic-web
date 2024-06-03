@@ -13,7 +13,7 @@ const SongBox = (props:Song) => {
     setNowPlaying({
       artist: props.artist,
       title: props.title,
-      idx: props.id,
+      idx: props.idx,
       thumbnailUrl: props.thumbnailUrl,
       musicUrl: props.musicUrl
     });

@@ -124,7 +124,7 @@ const HomePage = () => {
           <SongBox
             title={content.title}
             artist={content.artist}
-            id={idx}
+            idx={idx}
             musicUrl={content.musicUrl}
             thumbnailUrl={content.thumbnailUrl}
           ></SongBox>

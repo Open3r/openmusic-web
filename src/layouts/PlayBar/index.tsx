@@ -96,48 +96,44 @@ const PlayBar = () => {
     setFullDuration({ fullDuration: e.currentTarget.duration });
   };
 
-  const handleProgressMouseDown = () => {
-    isDragging.current = true;
-  };
-
-  const handleProgressMouseMove = (e: any) => {
-    if (isDragging.current) {
-      const progressBar = document.getElementById(
-        "progressBar"
-      ) as HTMLDivElement;
+  const changeProgress = useCallback(
+    (e: MouseEvent) => {
+      const progressBar = document.getElementById("progressBar") as HTMLDivElement;
       const progressWidth = progressBar.clientWidth;
       const mouseX = e.clientX - progressBar.getBoundingClientRect().left;
-      const newTime = (mouseX / progressWidth) * fullDuration;
       if (audioRef.current) {
-        audioRef.current.currentTime = newTime;
-        updateCurrTime({ currTime: newTime });
+        audioRef.current.currentTime = (mouseX / progressWidth) * fullDuration;
       }
-    }
+    },
+    [fullDuration]
+  );
+
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    isDragging.current = true;
+    changeProgress(e as unknown as MouseEvent);
   };
 
-  const handleProgressMouseUp = () => {
+  const handleMouseMove = useCallback(
+    (e: MouseEvent) => {
+      if (isDragging.current) {
+        changeProgress(e);
+      }
+    },
+    [changeProgress]
+  );
+
+  const handleMouseUp = useCallback(() => {
     isDragging.current = false;
-  };
-
-  useEffect(() => {
-    document.addEventListener("mousemove", handleProgressMouseMove);
-    document.addEventListener("mouseup", handleProgressMouseUp);
-    return () => {
-      document.removeEventListener("mousemove", handleProgressMouseMove);
-      document.removeEventListener("mouseup", handleProgressMouseUp);
-    };
   }, []);
 
-  const changeProgress = (e: any) => {
-    const progressBar = document.getElementById(
-      "progressBar"
-    ) as HTMLDivElement;
-    const progressWidth = progressBar.clientWidth;
-    const mouseX = e.clientX - progressBar.getBoundingClientRect().left;
-    if (audioRef.current) {
-      audioRef.current.currentTime = (mouseX / progressWidth) * fullDuration;
-    }
-  };
+  useEffect(() => {
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [handleMouseMove, handleMouseUp]);
 
   const getRandom = (min: number, max: number) =>
     Math.floor(Math.random() * (max - min + 1)) + min;
@@ -229,8 +225,7 @@ const PlayBar = () => {
   return (
     <PB.PlayBarWrap>
       <PB.ProgressBarWrap
-        onClick={changeProgress}
-        onMouseDown={handleProgressMouseDown}
+        onMouseDown={handleMouseDown}
         id="progressBar"
       >
         <PB.ProgressBar progress={progress}></PB.ProgressBar>
