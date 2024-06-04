@@ -16,6 +16,7 @@ const Header = () => {
         </S.SearchWrap>
       </S.SearchArea>
       <S.MenuArea>
+        <S.Menu>메인</S.Menu>
         <S.Menu>오픈차트</S.Menu>
         <S.Menu>신곡</S.Menu>
         <S.Menu>급상승</S.Menu>

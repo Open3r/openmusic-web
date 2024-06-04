@@ -4,10 +4,12 @@ import * as HS from "./style";
 import useGetUser from "../../hooks/useGetUser";
 import { getCookie } from "../../cookies/cookie";
 import { User } from "../../interfaces/User";
+import { SignUpInfoStore } from "../../stores/signUpInfoStore";
 
 const HomePage = () => {
   const { getUser } = useGetUser();
   const [user, setUser] = useState<User>();
+  const clear = SignUpInfoStore(state=>(state.clear));
 
   useEffect(() => {
     const getUserInfo = async () => {
@@ -22,6 +24,7 @@ const HomePage = () => {
       }
     };
     getUserInfo();
+    clear();
   }, []);
 
   useEffect(() => {

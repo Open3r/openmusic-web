@@ -7,6 +7,7 @@ interface SignUpInfo {
   storeEmail: (email: string) => void;
   storePw: (pw: string) => void;
   storeNickname: (nickname: string) => void;
+  clear: () => void;
 }
 
 export const SignUpInfoStore = create<SignUpInfo>((set) => ({
@@ -15,5 +16,6 @@ export const SignUpInfoStore = create<SignUpInfo>((set) => ({
   nickname: '',
   storeEmail: (email) => set(() => ({ email })),
   storePw: (pw) => set(() => ({ pw })),
-  storeNickname: (nickname) => set(() => ({ nickname }))
+  storeNickname: (nickname) => set(() => ({ nickname })),
+  clear: () => set(()=> ({email : '', pw : '', nickname : ''}))
 }));

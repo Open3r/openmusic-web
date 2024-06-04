@@ -6,40 +6,78 @@ import { SignUpInfoStore } from "../../stores/signUpInfoStore";
 import { useNavigate } from "react-router-dom";
 import useSignUp from "../../hooks/useSignUp";
 import NotificationService from "../../components/Notification/NotificationService";
+import useVerify from "../../hooks/useVerify";
+import { getCookie } from "../../cookies/cookie";
 
 const Verify = () => {
   const [code, setCode] = useState("");
-  const email = SignUpInfoStore(state=>(state.email));
+  const [timeLeft, setTimeLeft] = useState(180); // 3 minutes in seconds
+  const email = SignUpInfoStore((state) => state.email);
   const pw = SignUpInfoStore((state) => state.pw);
   const nickname = SignUpInfoStore((state) => state.nickname);
+  const clear = SignUpInfoStore((state) => state.clear);
   const navigate = useNavigate();
-  const { signUp } = useSignUp();
+  const { signUp,loading } = useSignUp();
+  const { verify } = useVerify();
 
-  useEffect(()=>{
-    if(email.length > 0 && pw.length > 0 && nickname.length > 0) {
-      //code
-    }else{
-      navigate('/signup');
+  useEffect(() => {
+    if (getCookie("accessToken")) {
+      navigate("/");
     }
-  },[email,pw,nickname]);
+    if (email === "") {
+      navigate("/signup");
+    }
+  }, []);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    if (timeLeft === 0) {
+      NotificationService.error("시간이 만료되었습니다.");
+      clear();
+      navigate("/signup");
+    }
+  }, [timeLeft, navigate]);
+
+  const extendExpire = async () => {
+    try {
+      const data = await verify(email);
+      if (data.status === 201) {
+        setTimeLeft((prev) => prev + 180); 
+        NotificationService.success("시간이 연장되었습니다.");
+      }
+    } catch (err: any) {
+      NotificationService.error("네트워크 에러");
+    }
+  };
 
   const submit = async () => {
     try {
-      const data = await signUp(nickname,email,pw,code);
-      if(data.status == 201){
+      const data = await signUp(nickname, email, pw, code);
+      if (data.status === 201) {
         console.log(data);
-        NotificationService.success('회원가입 성공');
+        NotificationService.success("회원가입 성공");
+        clear();
         navigate("/login");
       }
-    }catch (err:any) {
+    } catch (err: any) {
       console.log(err);
-      if (err.response.data.code == "INVALID_EMAIL_CODE") {
-        NotificationService.error('잘못된 이메일 인증 코드 입니다.');
-      }else{
+      if (err.code === "ERR_NETWORK") {
+        NotificationService.error("네트워크 에러");
+      }
+      if (err.response.data.code === "INVALID_EMAIL_CODE") {
+        NotificationService.error("잘못된 이메일 인증 코드 입니다.");
+      } else {
         NotificationService.error("네트워크 에러");
       }
     }
-  }
+  };
 
   const moveInput = (e: any, nextFocus: any, prevFocus: any) => {
     console.log(e.key);
@@ -57,10 +95,10 @@ const Verify = () => {
         digitFive.value +
         digitSix.value
     );
-    if ("1234567890".includes(e.key) || e.key == "Backspace") {
-      if (e.key != "Backspace" && e.target.value.length == 1) {
+    if ("1234567890".includes(e.key) || e.key === "Backspace") {
+      if (e.key !== "Backspace" && e.target.value.length === 1) {
         document.getElementById(nextFocus)?.focus();
-      } else if (e.key == "Backspace" && e.target.value.length == 0) {
+      } else if (e.key === "Backspace" && e.target.value.length === 0) {
         document.getElementById(prevFocus)?.focus();
       }
     } else {
@@ -88,6 +126,14 @@ const Verify = () => {
       text-decoration: underline;
     }
   `;
+
+  const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${
+      remainingSeconds < 10 ? `0${remainingSeconds}` : remainingSeconds
+    }`;
+  };
 
   return (
     <S.Canvas>
@@ -150,12 +196,14 @@ const Verify = () => {
           />
         </S.CodeInputWrap>
         <S.CodeBtnWrap>
-          <S.CodeBtn>3:00후 만료</S.CodeBtn>
+          <S.CodeBtn>{formatTime(timeLeft)} 후 만료</S.CodeBtn>
         </S.CodeBtnWrap>
         <S.CodeBtnWrap>
-          <S.CodeBtn css={hover}>재발급</S.CodeBtn>
+          <S.CodeBtn css={hover} onClick={extendExpire}>
+            시간연장
+          </S.CodeBtn>
         </S.CodeBtnWrap>
-        <button onClick={submit}>회원가입</button>
+        <S.SignupBtn onClick={submit} disabled={loading}>{loading ? '회원가입중...' : '회원가입'}</S.SignupBtn>
       </S.VerifyWrap>
     </S.Canvas>
   );

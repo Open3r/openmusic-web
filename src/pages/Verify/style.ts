@@ -51,3 +51,24 @@ export const CodeBtn = styled.p`
   margin:0;
   font-size:2rem;
 `
+
+export const SignupBtn = styled.button`
+  font-size:2rem;
+  padding: 1rem 5rem;
+  background-color: #52A9F9;
+  border-radius:2rem;
+  color:white;
+  border: none;
+  outline:none;
+  box-shadow: 0.3rem 0.3rem 1rem 0.3rem #ccc;
+  margin-top:10rem;
+  &:active{
+    box-shadow:none;
+    background-color:#558bbd;
+  }
+  &:disabled{
+    box-shadow:none;
+    background-color:#558bbd;
+    color:#ccc;
+  }
+`

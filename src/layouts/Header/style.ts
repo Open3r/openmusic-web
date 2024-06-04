@@ -20,7 +20,8 @@ export const MenuArea = styled.div`
   height:4rem;
   display:flex;
   align-items:center;
-  justify-content:center;
+  justify-content:flex-start;
+  padding:0 5rem;
 `
 export const SearchWrap = styled.div`
   width:60rem;
@@ -52,10 +53,10 @@ export const Logo = styled.img`
   margin:0 1rem;
 `
 export const Menu = styled.p`
+  margin: 0 3rem;
   font-size:2rem;
   color:black;
   cursor: pointer;
-  margin:0 4rem;
   font-weight:bold;
   transition:all 0.3s;
   &:hover{

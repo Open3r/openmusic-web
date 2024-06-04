@@ -9,6 +9,9 @@ const QueueWrap = styled.div`
   height:70rem;
   overflow:scroll;
   border: 0.1rem solid #ccc;
+  position:fixed;
+  top:12rem;
+  right:0rem;
 `
 const QueueSong = styled.div`
   width:20rem;
@@ -18,7 +21,7 @@ const QueueSong = styled.div`
   align-items:center;
   justify-content:center;
   cursor:pointer;
-  background-color:${(props:indicator) => props.indicator}
+  background-color:${(props:indicator) => props.indicator};
 `
 const AlbumCover = styled.img`
   width:5rem;

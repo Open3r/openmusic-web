@@ -120,6 +120,9 @@ const SignUp = () => {
           navigate("/verify");
         }
       }catch (err:any) {
+        if (err.code == 'ERR_NETWORK') {
+          NotificationService.error("네트워크 에러");
+        }
         if (err.response.data.status == 400) {
           NotificationService.error("이미 가입된 이메일 입니다.");
         } else {

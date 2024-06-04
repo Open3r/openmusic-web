@@ -1,10 +1,10 @@
-import google from "../../assets/imgs/google.svg";
 import { useEffect, useState } from "react";
 import useLogin from "../../hooks/useLogin";
 import * as S from "./style";
 import { useNavigate } from "react-router-dom";
 import { setCookie } from "../../cookies/cookie";
 import NotificationService from "../../components/Notification/NotificationService";
+import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 
 const Login = () => {
   const { login, loading } = useLogin();
@@ -53,6 +53,9 @@ const Login = () => {
           navigate("/");
         }
       } catch (err: any) {
+        if (err.code == "ERR_NETWORK") {
+          NotificationService.error("네트워크 에러");
+        }
         if (
           err.response.data.status == 400 ||
           err.response.data.status == 404
@@ -79,6 +82,13 @@ const Login = () => {
   const toggleChecked = () => {
     setChecked(!checked);
   };
+
+  const handleLoginSuccess = (response:any) => {
+    console.log("Login Success:", response);
+  };
+
+  const clientId =
+    "251821039592-jvfk5ffen9707fvtpsbj27tal6eo1m40.apps.googleusercontent.com";
 
   return (
     <S.Canvas>
@@ -139,10 +149,18 @@ const Login = () => {
           <S.SeperWord>간편로그인</S.SeperWord>
           <S.SeperLine></S.SeperLine>
         </S.SeperWrap>
-        <S.SocialLoginWrap>
-          <S.SocialIcon src={google} />
-          <S.SocialLogin>구글로 로그인</S.SocialLogin>
-        </S.SocialLoginWrap>
+        <GoogleOAuthProvider clientId={clientId}>
+          <GoogleLogin
+            onSuccess={(credentialResponse) => {
+              console.log(credentialResponse);
+            }}
+            onError={() => {
+              console.error("Failed Login..");
+            }}
+            useOneTap
+            width={'500px'}
+          />
+        </GoogleOAuthProvider>
       </S.LoginWrap>
     </S.Canvas>
   );
