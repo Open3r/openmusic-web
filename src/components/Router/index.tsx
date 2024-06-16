@@ -6,6 +6,7 @@ import PlaylistPage from "../../pages/PlaylistPage";
 import Login from "../../pages/Login";
 import SignUp from "../../pages/SignUp";
 import Verify from "../../pages/Verify";
+import UploadPage from "../../pages/UploadPage";
 
 const pageVariants = {
   initial: {
@@ -61,6 +62,20 @@ const Router = () => {
                   transition={pageTransition}
                 >
                   <PlaylistPage />
+                </motion.div>
+              }
+            />
+            <Route
+              path="/upload"
+              element={
+                <motion.div
+                  initial="initial"
+                  animate="in"
+                  exit="out"
+                  variants={pageVariants}
+                  transition={pageTransition}
+                >
+                  <UploadPage />
                 </motion.div>
               }
             />

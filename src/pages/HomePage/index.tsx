@@ -120,21 +120,79 @@ const HomePage = () => {
   ];
 
   return (
-    <>
-      <div>{user?.name}</div>
-      <HS.BoxWrap>
-        {songList.map((content, idx) => (
-          <SongBox
-            title={content.title}
-            artist={content.artist}
-            idx={idx}
-            key={idx}
-            musicUrl={content.musicUrl}
-            thumbnailUrl={content.thumbnailUrl}
-          ></SongBox>
-        ))}
-      </HS.BoxWrap>
-    </>
+    <HS.Canvas>
+      <HS.ChartSectionWrap>
+        <HS.RecentlyListenWrap>
+          <HS.SectionTitle>최근 들은 곡 {'>'}</HS.SectionTitle>
+          <HS.RecentlyListenBox>
+            <HS.RecentlyListen></HS.RecentlyListen>
+            <HS.RecentlyListen></HS.RecentlyListen>
+            <HS.RecentlyListen></HS.RecentlyListen>
+            <HS.RecentlyListen></HS.RecentlyListen>
+          </HS.RecentlyListenBox>
+        </HS.RecentlyListenWrap>
+      </HS.ChartSectionWrap>
+      <HS.SectionWrap>
+        <HS.SectionTitle>당신을 위한 추천 {">"}</HS.SectionTitle>
+        <HS.BoxWrap>
+          {songList.map((content, idx) => (
+            <SongBox
+              title={content.title}
+              artist={content.artist}
+              idx={idx}
+              key={idx}
+              musicUrl={content.musicUrl}
+              thumbnailUrl={content.thumbnailUrl}
+            ></SongBox>
+          ))}
+        </HS.BoxWrap>
+      </HS.SectionWrap>
+      <HS.SectionWrap>
+        <HS.SectionTitle>오픈플레이리스트 {">"}</HS.SectionTitle>
+        <HS.BoxWrap>
+          {songList.map((content, idx) => (
+            <SongBox
+              title={content.title}
+              artist={content.artist}
+              idx={idx}
+              key={idx}
+              musicUrl={content.musicUrl}
+              thumbnailUrl={content.thumbnailUrl}
+            ></SongBox>
+          ))}
+        </HS.BoxWrap>
+      </HS.SectionWrap>
+      <HS.SectionWrap>
+        <HS.SectionTitle>최신곡 {">"}</HS.SectionTitle>
+        <HS.BoxWrap>
+          {songList.map((content, idx) => (
+            <SongBox
+              title={content.title}
+              artist={content.artist}
+              idx={idx}
+              key={idx}
+              musicUrl={content.musicUrl}
+              thumbnailUrl={content.thumbnailUrl}
+            ></SongBox>
+          ))}
+        </HS.BoxWrap>
+      </HS.SectionWrap>
+      <HS.SectionWrap>
+        <HS.SectionTitle>나의 플레이리스트 {">"}</HS.SectionTitle>
+        <HS.BoxWrap>
+          {songList.map((content, idx) => (
+            <SongBox
+              title={content.title}
+              artist={content.artist}
+              idx={idx}
+              key={idx}
+              musicUrl={content.musicUrl}
+              thumbnailUrl={content.thumbnailUrl}
+            ></SongBox>
+          ))}
+        </HS.BoxWrap>
+      </HS.SectionWrap>
+    </HS.Canvas>
   );
 };
 

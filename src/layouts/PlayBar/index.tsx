@@ -1,9 +1,12 @@
-import { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useRef, useCallback } from "react";
 import { nowPlayingStore } from "../../stores/nowPlayingStore";
 import { PlayTimeStore } from "../../stores/PlayTimeStore";
 import * as PB from "./style";
 import { playQueueStore } from "../../stores/playQueueStore";
 import { loopShuffleStore } from "../../stores/loopShuffleStore";
+import { PlayStateStore } from "../../stores/playStateStore";
+import useAudioControls from "../../hooks/useAudioControl";
+import useProgress from "../../hooks/useProgress";
 
 import next from "../../assets/imgs/next.svg";
 import play from "../../assets/imgs/play.svg";
@@ -13,18 +16,15 @@ import shuffle from "../../assets/imgs/shuffleOn.svg";
 import unShuffle from "../../assets/imgs/shuffleOff.svg";
 import loop from "../../assets/imgs/repeatOn.svg";
 import unloop from "../../assets/imgs/repeatOff.svg";
-import volMax from "../../assets/imgs/max.svg";
-import volMed from "../../assets/imgs/medium.svg";
-import volMin from "../../assets/imgs/low.svg";
-import mute from "../../assets/imgs/mute.svg";
 
-const PlayBar = () => {
+const PlayBar: React.FC = () => {
+  const playState = PlayStateStore((state) => state.playState);
+  const setPlayState = PlayStateStore((state) => state.setPlayState);
+
   const nowPlaying = nowPlayingStore((state) => state.nowPlaying);
   const setNowPlaying = nowPlayingStore((state) => state.setNowPlaying);
 
   const updateCurrTime = PlayTimeStore((state) => state.updateCurrTime);
-  const setFullDuration = PlayTimeStore((state) => state.setFullDuration);
-  const currTime = PlayTimeStore((state) => state.currTime);
   const fullDuration = PlayTimeStore((state) => state.fullDuration);
 
   const loopState = loopShuffleStore((state) => state.loopState);
@@ -35,105 +35,12 @@ const PlayBar = () => {
   const queue = playQueueStore((state) => state.queue);
   const currIdx = queue.findIndex((song) => song.title === nowPlaying.title);
 
-  const [progress, setProgress] = useState(0);
-  const [time, setTime] = useState({ min: 0, sec: "00" });
-  const [playState, setPlayState] = useState(false);
-  const [volume, setVolume] = useState(1);
-  const [volIndicator, setVolIndicator] = useState("max");
-  const [volController, setVolController] = useState(false);
-
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const isDragging = useRef(false);
 
-  useEffect(() => {
-    if (nowPlaying.title && audioRef.current) {
-      setPlayState(true);
-      audioRef.current.play().catch((err) => {
-        if (err instanceof DOMException) {
-          setPlayState(false);
-          if (audioRef.current) {
-            audioRef.current.pause();
-          }
-          updateCurrTime({ currTime: 0 });
-        }
-      });
-    }
-  }, [nowPlaying, updateCurrTime]);
+  const {volume, volIndicator, volController, setVolController, updateVolume} = useAudioControls(audioRef);
 
-  useEffect(() => {
-    const savedVolume = Number(localStorage.getItem("volume"));
-    setVolume(savedVolume);
-    if (audioRef.current) {
-      audioRef.current.volume = savedVolume;
-    }
-  }, []);
+  const { progress, time, updatePlayTime, handleMouseDown } = useProgress(audioRef,fullDuration);
 
-  useEffect(() => {
-    if (currTime > 0) {
-      setProgress((currTime / fullDuration) * 100);
-    }
-    const seconds = Math.floor(currTime % 60);
-    setTime({
-      min: Math.floor(currTime / 60),
-      sec: seconds < 10 ? `0${seconds}` : `${seconds}`,
-    });
-  }, [currTime, fullDuration]);
-
-  useEffect(() => {
-    if (volume >= 0.66) {
-      setVolIndicator(volMax);
-    } else if (volume >= 0.33) {
-      setVolIndicator(volMed);
-    } else if (volume > 0) {
-      setVolIndicator(volMin);
-    } else {
-      setVolIndicator(mute);
-    }
-  }, [volume]);
-
-  const updatePlayTime = (e: any) => {
-    updateCurrTime({ currTime: e.currentTarget.currentTime });
-    setFullDuration({ fullDuration: e.currentTarget.duration });
-  };
-
-  const changeProgress = useCallback(
-    (e: MouseEvent) => {
-      const progressBar = document.getElementById("progressBar") as HTMLDivElement;
-      const progressWidth = progressBar.clientWidth;
-      const mouseX = e.clientX - progressBar.getBoundingClientRect().left;
-      if (audioRef.current) {
-        audioRef.current.currentTime = (mouseX / progressWidth) * fullDuration;
-      }
-    },
-    [fullDuration]
-  );
-
-  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    isDragging.current = true;
-    changeProgress(e as unknown as MouseEvent);
-  };
-
-  const handleMouseMove = useCallback(
-    (e: MouseEvent) => {
-      if (isDragging.current) {
-        changeProgress(e);
-      }
-    },
-    [changeProgress]
-  );
-
-  const handleMouseUp = useCallback(() => {
-    isDragging.current = false;
-  }, []);
-
-  useEffect(() => {
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseup", handleMouseUp);
-    return () => {
-      document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseup", handleMouseUp);
-    };
-  }, [handleMouseMove, handleMouseUp]);
 
   const getRandom = (min: number, max: number) =>
     Math.floor(Math.random() * (max - min + 1)) + min;
@@ -148,7 +55,7 @@ const PlayBar = () => {
 
   const playMusic = () => {
     if (audioRef.current) {
-      if (nowPlaying.title != "") {
+      if (nowPlaying.title !== "") {
         audioRef.current.play();
         setPlayState(true);
       }
@@ -178,19 +85,16 @@ const PlayBar = () => {
     }
   };
 
-  const isPlay = () => {
+  const stopPlay = () => {
     if (audioRef.current?.paused) {
       setPlayState(false);
     }
   };
 
-  const updateVolume = (e: any) => {
-    const newVolume = Number(e.target.value);
-    if (audioRef.current) {
-      audioRef.current.volume = newVolume;
+  const startPlay = () => {
+    if (audioRef.current?.played) {
+      setPlayState(true);
     }
-    setVolume(newVolume);
-    localStorage.setItem("volume", `${newVolume}`);
   };
 
   const swapLoopState = () => {
@@ -207,13 +111,18 @@ const PlayBar = () => {
     }
   };
 
-  const handleVolumeClick = useCallback((e: any) => {
-    if (["volIndicator", "volConWrap", "volCon"].includes(e.target.id)) {
-      setVolController((prev) => !prev);
-    } else {
-      setVolController(false);
-    }
-  }, []);
+  const handleVolumeClick = useCallback(
+    (e: MouseEvent) => {
+      if (
+        ["volIndicator", "volConWrap", "volCon"].includes(
+          (e.target as HTMLElement).id
+        )
+      ) {
+        setVolController((prev) => !prev);
+      } else {
+        setVolController(false);
+      }
+    },[setVolController]);
 
   useEffect(() => {
     document.documentElement.addEventListener("click", handleVolumeClick);
@@ -222,12 +131,31 @@ const PlayBar = () => {
     };
   }, [handleVolumeClick]);
 
+  useEffect(() => {
+    if (nowPlaying.title && audioRef.current) {
+      audioRef.current.play().catch((err) => {
+        if (err instanceof DOMException) {
+          setPlayState(false);
+          if (audioRef.current) {
+            audioRef.current.pause();
+          }
+          updateCurrTime({ currTime: 0 });
+        }
+      });
+    }
+  }, [nowPlaying, updateCurrTime, setPlayState]);
+
+  if (
+    window.location.pathname == "/login" ||
+    window.location.pathname == "/signup" ||
+    window.location.pathname == "/verify"
+  ) {
+    return null;
+  }
+
   return (
     <PB.PlayBarWrap>
-      <PB.ProgressBarWrap
-        onMouseDown={handleMouseDown}
-        id="progressBar"
-      >
+      <PB.ProgressBarWrap onMouseDown={handleMouseDown} id="progressBar">
         <PB.ProgressBar progress={progress}></PB.ProgressBar>
       </PB.ProgressBarWrap>
       <PB.SongControlWrap>
@@ -238,7 +166,8 @@ const PlayBar = () => {
             onTimeUpdate={updatePlayTime}
             onEnded={musicEndEvent}
             ref={audioRef}
-            onPause={isPlay}
+            onPause={stopPlay}
+            onPlay={startPlay}
           ></audio>
           <PB.AlbumCoverWrap>
             <PB.AlbumCover

@@ -83,9 +83,9 @@ const Login = () => {
     setChecked(!checked);
   };
 
-  const handleLoginSuccess = (response:any) => {
-    console.log("Login Success:", response);
-  };
+  // const handleLoginSuccess = (response: any) => {
+  //   console.log("Login Success:", response);
+  // };
 
   const clientId =
     "251821039592-jvfk5ffen9707fvtpsbj27tal6eo1m40.apps.googleusercontent.com";
@@ -158,7 +158,7 @@ const Login = () => {
               console.error("Failed Login..");
             }}
             useOneTap
-            width={'500px'}
+            width={"500px"}
           />
         </GoogleOAuthProvider>
       </S.LoginWrap>

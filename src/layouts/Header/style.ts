@@ -7,6 +7,10 @@ export const Canvas = styled.div`
   border-bottom:0.1rem solid #ccc;
   display:flex;
   flex-direction:column;
+  position:fixed;
+  top:0;
+  background-color:white;
+  z-index:9;
 `
 export const SearchArea = styled.div`
   width:100%;

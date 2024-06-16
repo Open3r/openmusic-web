@@ -1,8 +1,18 @@
 import * as S from "./style";
 import searchBtn from '../../assets/imgs/search.svg';
 import logo from '../../assets/imgs/logo_color.png';
+import { Link } from "react-router-dom";
 
 const Header = () => {
+
+  if (
+    window.location.pathname == "/login" ||
+    window.location.pathname == "/signup" ||
+    window.location.pathname == "/verify"
+  ) {
+    return null;
+  }
+  
   return (
     <S.Canvas>
       <S.SearchArea>
@@ -16,9 +26,13 @@ const Header = () => {
         </S.SearchWrap>
       </S.SearchArea>
       <S.MenuArea>
-        <S.Menu>메인</S.Menu>
+        <Link to={"/"} style={{ textDecoration: "none" }}>
+          <S.Menu>메인</S.Menu>
+        </Link>
         <S.Menu>오픈차트</S.Menu>
-        <S.Menu>신곡</S.Menu>
+        <Link to={"/upload"} style={{ textDecoration: "none" }}>
+          <S.Menu>신곡</S.Menu>
+        </Link>
         <S.Menu>급상승</S.Menu>
         <S.Menu>재생목록</S.Menu>
         <S.Menu>오픈북</S.Menu>
