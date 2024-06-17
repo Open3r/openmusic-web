@@ -9,7 +9,7 @@ function useReissue() {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.post('http://openmusic.kro.kr:8080/auth/reissue', { refreshToken });
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/auth/reissue`, { refreshToken });
       setLoading(false);
       return response.data;
     } catch (err:any) {

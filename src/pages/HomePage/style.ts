@@ -13,6 +13,8 @@ const Canvas = styled.div`
 
 const ChartSectionWrap = styled.div`
   width:100%;
+  display:flex;
+  justify-content:space-between;
 `
 
 const SectionWrap = styled.div`
@@ -40,15 +42,6 @@ const RecentlyListenBox = styled.div`
   flex-wrap:wrap;
   justify-content:space-between;
 `
-const RecentlyListen = styled.div`
-  width:40rem;
-  height:9rem;
-  margin:0.5rem 0;
-  border: 0.1rem solid rgba(200,200,200,0.4);
-  box-sizing:border-box;
-  border-radius:1rem;
-  background:rgba(200,200,200,0.2);
-`
 
 const BoxWrap = styled.div`
   width:64rem;
@@ -63,6 +56,22 @@ const BoxWrap = styled.div`
     display: none; 
   }
 `
+const RankWrap = styled.div`
+  width:35%;
+  display:flex;
+  margin: 5rem 0;
+  flex-direction:column;
+`
+const RankBox = styled.div`
+  width: 100%;
+  height:21rem;
+  border-radius:1rem;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  background-color:rgba(200,200,200,0.2);
+`
+
 export {
   BoxWrap,
   Canvas,
@@ -71,5 +80,6 @@ export {
   ChartSectionWrap,
   RecentlyListenBox,
   RecentlyListenWrap,
-  RecentlyListen
+  RankWrap,
+  RankBox
 }

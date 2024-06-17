@@ -9,7 +9,7 @@ function useSignUp() {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.post('http://openmusic.kro.kr:8080/auth/signup', { name, email, emailCode, password });
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/auth/signup`, { name, email, emailCode, password });
       setLoading(false);
       return response.data;
     } catch (err:any) {

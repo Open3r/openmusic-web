@@ -68,6 +68,7 @@ const useProgress = (audioRef: MutableRefObject<HTMLAudioElement | null>,fullDur
     time,
     updatePlayTime,
     handleMouseDown,
+    setProgress
   };
 };
 

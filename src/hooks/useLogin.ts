@@ -10,7 +10,7 @@ function useLogin() {
     setError(null);
     
     try {
-      const response = await axios.post('http://openmusic.kro.kr:8080/auth/login', { email, password });
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/auth/login`, { email, password });
 
       return response.data;
     } catch (err:any) {
