@@ -1,24 +1,31 @@
-// import { GoogleLogin } from "@react-oauth/google";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import CustomToastContainer from "./components/Notification/CustomToastContainer";
 import Router from "./components/Router";
 import Header from "./layouts/Header";
 import PlayBar from "./layouts/PlayBar";
 
 function App() {
+  const [hideLayout, setHideLayout] = useState(false);
+  const location = useLocation();
 
+  useEffect(() => {
+    const hidePaths = ["/login", "/signup", "/verify"];
+    setHideLayout(hidePaths.includes(location.pathname));
+  }, [location.pathname]);
 
   return (
     <>
-      <Header />
       <CustomToastContainer />
       <Router />
-      <PlayBar />
-      {/* <GoogleLogin
-      onSuccess={response => console.log(response)}
-      onError={() => console.error("Error")}
-      /> */}
+      {!hideLayout && (
+        <>
+          <Header />
+          <PlayBar />
+        </>
+      )}
     </>
   );
 }
 
-export default App
+export default App;

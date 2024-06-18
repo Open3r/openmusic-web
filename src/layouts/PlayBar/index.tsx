@@ -151,13 +151,6 @@ const PlayBar: React.FC = () => {
     }
   }, [nowPlaying]);
 
-  if (
-    window.location.pathname == "/login" ||
-    window.location.pathname == "/signup" ||
-    window.location.pathname == "/verify"
-  ) {
-    return null;
-  }
 
   return (
     <PB.PlayBarWrap>

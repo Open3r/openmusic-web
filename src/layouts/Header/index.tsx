@@ -5,14 +5,6 @@ import { Link } from "react-router-dom";
 
 const Header = () => {
 
-  if (
-    window.location.pathname == "/login" ||
-    window.location.pathname == "/signup" ||
-    window.location.pathname == "/verify"
-  ) {
-    return null;
-  }
-  
   return (
     <S.Canvas>
       <S.SearchArea>

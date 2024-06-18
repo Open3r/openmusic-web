@@ -15,7 +15,7 @@ function useGetUser() {
     setLoading(true);
     setError(null);
     if(refreshToken == undefined){
-      // navigate('/login');
+      navigate('/login');
     }else{
       if(accessToken == undefined) {
         const reissueReq = await reissue(refreshToken);
