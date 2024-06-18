@@ -43,7 +43,7 @@ const HomePage = () => {
         "https://image.bugsm.co.kr/album/images/500/201722/20172253.jpg",
     },
     {
-      title: "Interlude",
+      title: "skeletons",
       artist: "keshi",
       musicUrl: "../../assets/skeletons.mp3",
       thumbnailUrl:
@@ -130,7 +130,7 @@ const HomePage = () => {
         "https://image.bugsm.co.kr/album/images/500/201722/20172253.jpg",
     },
     {
-      title: "Interlude",
+      title: "skeletons",
       artist: "keshi",
       musicUrl: "../../assets/skeletons.mp3",
       thumbnailUrl:

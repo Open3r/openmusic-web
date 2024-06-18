@@ -1,10 +1,10 @@
 import styled from "@emotion/styled";
 
 
-const SongBox = styled.div<{thumbailUrl : string}>`
+const SongBox = styled.div<{thumbnailUrl : string}>`
   width:15rem;
   height:15rem;
-  background:url(${props=>props.thumbailUrl}) no-repeat center;
+  background:url(${props => props.thumbnailUrl}) no-repeat center;
   background-size:cover;
   overflow:hidden;
   border-radius:1.5rem;
