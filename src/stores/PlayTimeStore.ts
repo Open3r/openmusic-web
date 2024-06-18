@@ -16,6 +16,6 @@ export const PlayTimeStore = create(
     updateCurrTime: ({ currTime }) => set({ currTime }),
   }),
   {
-    name: "playTime-storage"
+    name: "play-time-store"
   }
 ));

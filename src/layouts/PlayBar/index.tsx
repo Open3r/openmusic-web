@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback, useState} from "react";
+import React, { useEffect, useRef, useCallback } from "react";
 import { nowPlayingStore } from "../../stores/nowPlayingStore";
 import { PlayTimeStore } from "../../stores/PlayTimeStore";
 import * as PB from "./style";
@@ -37,15 +37,17 @@ const PlayBar: React.FC = () => {
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  const {volume, volIndicator, volController, setVolController, updateVolume} = useAudioControls(audioRef);
+  const {
+    volume,
+    volIndicator,
+    volController,
+    setVolController,
+    updateVolume,
+  } = useAudioControls(audioRef);
 
-  const { progress, time, updatePlayTime, handleMouseDown, setProgress } = useProgress(audioRef,fullDuration);
+  const { progress, time, updatePlayTime, handleMouseDown } =useProgress(audioRef, fullDuration);
 
-  const [isInitialRender, setIsInitialRender] = useState(true);
-
-
-  const getRandom = (min: number, max: number) =>
-    Math.floor(Math.random() * (max - min + 1)) + min;
+  const getRandom = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
 
   const musicEndEvent = () => {
     if (loopState && shuffleState) {
@@ -115,12 +117,18 @@ const PlayBar: React.FC = () => {
 
   const handleVolumeClick = useCallback(
     (e: MouseEvent) => {
-      if (["volIndicator", "volConWrap", "volCon"].includes((e.target as HTMLElement).id)) {
+      if (
+        ["volIndicator", "volConWrap", "volCon"].includes(
+          (e.target as HTMLElement).id
+        )
+      ) {
         setVolController((prev) => !prev);
       } else {
         setVolController(false);
       }
-    },[setVolController]);
+    },
+    [setVolController]
+  );
 
   useEffect(() => {
     document.documentElement.addEventListener("click", handleVolumeClick);
@@ -131,26 +139,17 @@ const PlayBar: React.FC = () => {
 
   useEffect(() => {
     if (nowPlaying.title && audioRef.current) {
-      if(isInitialRender) {
-        audioRef.current.pause();
-        setPlayState(false);
-        setIsInitialRender(false);
-        updateCurrTime({currTime: 0});
-        setProgress(0);
-      }else{
-        audioRef.current.play().catch((err) => {
-          if (err instanceof DOMException) {
-            setPlayState(false);
-            if (audioRef.current) {
-              audioRef.current.pause();
-            }
-            updateCurrTime({ currTime: 0 });
+      audioRef.current.play().catch((err) => {
+        if (err instanceof DOMException) {
+          setPlayState(false);
+          if (audioRef.current) {
+            audioRef.current.pause();
           }
-        });
-      }
+          updateCurrTime({ currTime: 0 });
+        }
+      });
     }
   }, [nowPlaying]);
-
 
   return (
     <PB.PlayBarWrap>

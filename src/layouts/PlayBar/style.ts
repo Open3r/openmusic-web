@@ -113,6 +113,7 @@ const volumeControllerWrap = styled.div`
   top:-15rem;
   right:5rem;
   padding:1rem 0;
+  border: 0.1rem solid #ccc;
 `
 const volumeController = styled.input`
   writing-mode: vertical-lr; 

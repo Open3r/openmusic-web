@@ -2,6 +2,7 @@ import { nowPlayingStore } from '../../stores/nowPlayingStore'
 import { playQueueStore } from '../../stores/playQueueStore'
 import * as S from './style'
 import { Song } from '../../interfaces/Song'
+import { recentlyPlayStore } from '../../stores/recentlyPlayStore'
 
 interface SongBoxProps extends Song {
   type : string
@@ -11,6 +12,7 @@ const SongBox = (props:SongBoxProps) => {
   const setNowPlaying = nowPlayingStore((state) => state.setNowPlaying);
   const addSong = playQueueStore((state)=>state.addSong);
   const queue = playQueueStore((state)=>state.queue);
+  const storeRecently = recentlyPlayStore((state)=>state.storeRecently);
   
   const addSongQueue = () => {
     setNowPlaying({
@@ -26,6 +28,13 @@ const SongBox = (props:SongBoxProps) => {
       idx: queue.length,
       thumbnailUrl: props.thumbnailUrl,
       musicUrl: props.musicUrl
+    });
+    storeRecently({
+      artist: props.artist,
+      title: props.title,
+      idx: props.idx,
+      thumbnailUrl: props.thumbnailUrl,
+      musicUrl: props.musicUrl,
     });
   }
 

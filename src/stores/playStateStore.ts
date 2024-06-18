@@ -13,7 +13,7 @@ export const PlayStateStore = create(
       setPlayState: (playState) => set({ playState }),
     }),
     {
-      name: "playState-storage",
+      name: "play-state-store",
     }
   )
 );

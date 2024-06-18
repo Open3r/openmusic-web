@@ -113,7 +113,7 @@ const Rank = styled.div`
   display:flex;
 `
 const RankNumWrap = styled.div`
-  width:5rem;
+  width:4rem;
   height:100%;
   display:flex;
   justify-content:center;
@@ -121,9 +121,11 @@ const RankNumWrap = styled.div`
   font-size:2rem;
   color:#52A9F9;
   font-weight:bolder;
+  box-sizing:border-box;
+  padding-left:1rem;
 `
 const RankSongWrap = styled.div`
-  width:calc(100% - 5rem);
+  width:calc(100% - 4rem);
   height:100%;
   position:relative;
   display:flex;

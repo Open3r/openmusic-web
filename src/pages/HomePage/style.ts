@@ -71,6 +71,11 @@ const RankBox = styled.div`
   flex-direction:column;
   background-color:rgba(200,200,200,0.2);
 `
+const NoSongAlert = styled.h1`
+  margin: 0 calc(50% - 11rem);
+  align-self:center;
+  color:#ccc;
+`
 
 export {
   BoxWrap,
@@ -81,5 +86,6 @@ export {
   RecentlyListenBox,
   RecentlyListenWrap,
   RankWrap,
-  RankBox
+  RankBox,
+  NoSongAlert
 }
