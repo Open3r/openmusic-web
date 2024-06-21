@@ -1,37 +1,9 @@
-import { useEffect, useState } from "react";
 import SongBox from "../../components/SongBox";
 import * as HS from "./style";
-import useGetUser from "../../hooks/useGetUser";
-import { getCookie } from "../../cookies/cookie";
-import { User } from "../../interfaces/User";
-import { SignUpInfoStore } from "../../stores/signUpInfoStore";
 import { recentlyPlayStore } from "../../stores/recentlyPlayStore";
 
 const HomePage = () => {
-  const { getUser } = useGetUser();
-  const [user, setUser] = useState<User>();
-  const clear = SignUpInfoStore(state=>(state.clear));
   const recentlyPlayed = recentlyPlayStore((state)=>state.recentlyPlayed);
-
-  useEffect(() => {
-    const getUserInfo = async () => {
-      try {
-        const res = await getUser(
-          getCookie("accessToken"),
-          getCookie("refreshToken")
-        );
-        setUser(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    getUserInfo();
-    clear();
-  }, []);
-
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
 
 
   const songList = [

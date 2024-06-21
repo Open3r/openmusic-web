@@ -1,7 +1,10 @@
 export interface User {
   id: number;
-  name: string;
+  nickname: string;
   email: string;
   provider: string;
-  profileUrl: string;
+  avatarUrl: string;
+  role: string;
+  status: string;
+  
 }
