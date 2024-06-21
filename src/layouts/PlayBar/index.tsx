@@ -45,7 +45,7 @@ const PlayBar: React.FC = () => {
     updateVolume,
   } = useAudioControls(audioRef);
 
-  const { progress, time, updatePlayTime, handleMouseDown } =useProgress(audioRef, fullDuration);
+  const { progress, time, updatePlayTime, handleMouseDown, currTime } = useProgress(audioRef, fullDuration);
 
   const getRandom = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
 
@@ -56,6 +56,13 @@ const PlayBar: React.FC = () => {
       nextMusic();
     }
   };
+
+  const initializeTime = () => {
+    if(audioRef.current){
+      updateCurrTime({ currTime: 0 });
+      audioRef.current.currentTime = 0;
+    }
+  }
 
   const playMusic = () => {
     if (audioRef.current) {
@@ -73,9 +80,16 @@ const PlayBar: React.FC = () => {
     setPlayState(false);
   };
 
+
   const prevMusic = () => {
-    if (queue.length && currIdx > 0) {
-      setNowPlaying(queue[currIdx - 1]);
+    if (currTime < 20) {
+      if (queue.length && currIdx > 0) {
+        setNowPlaying(queue[currIdx - 1]);
+      }else{
+        initializeTime();
+      }
+    }else{
+      initializeTime();
     }
   };
 
