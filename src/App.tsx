@@ -12,6 +12,7 @@ function App() {
   const location = useLocation();
   const { getUser } = useGetUser();
   const setUser = userStore(state=>state.setUser);
+  const user = userStore(state=>state.user);
 
   const userReq = async () => {
     try {
@@ -30,6 +31,10 @@ function App() {
   useEffect(()=>{
     userReq();
   },[]);
+
+  useEffect(()=>{
+    console.log(user);
+  },[user]);
 
   return (
     <>
