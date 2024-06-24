@@ -22,35 +22,36 @@ instance.interceptors.response.use(
   (response) => {
     return response;
   },
-  async (error: AxiosError) => {
+  (error: AxiosError) => {
     console.log("리스폰스 인터셉티드 에러");
     console.log(error);
     const originalReq = error.config!;
     originalReq.headers["Content-Type"] = "application/json";
     const refreshToken = getCookie("refreshToken");
+    console.log(refreshToken);
     try {
       console.log("재발급 시도");
-      const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/auth/reissue`,
-        { refreshToken },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const newAccessToken = res.data.accessToken;
-      const newRefreshToken = res.data.refreshToken;
+      axios.post(
+        `${import.meta.env.VITE_API_URL}/auth/reissue`,{ refreshToken }
+      ).then((response)=>{
+        console.log(response);
+        const newAccessToken = response.data.accessToken;
+        const newRefreshToken = response.data.refreshToken;
+        console.log(newAccessToken, newRefreshToken);
 
-      console.log(newAccessToken, newRefreshToken);
-
-      setCookie("accessToken", newAccessToken, { path: "/" });
-      setCookie("refreshToken", newRefreshToken, {
-        path: "/",
-        maxAge: "2600000",
+        setCookie("accessToken", newAccessToken, { path: "/" });
+        setCookie("refreshToken", newRefreshToken, {
+          path: "/",
+          maxAge: "2600000",
+        });
+        originalReq.headers.Authorization = `Bearer ${getCookie(
+          "accessToken"
+        )}`;
+        return instance(originalReq);
+      }).catch((err)=>{
+        console.log(err);
       });
-      originalReq.headers.Authorization = `Bearer ${getCookie("accessToken")}`;
-      return instance(originalReq);
+      
     } catch (error) {
       console.log(error, "안녕하세요");
     }
