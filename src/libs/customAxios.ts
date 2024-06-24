@@ -23,21 +23,15 @@ instance.interceptors.response.use(
     return response;
   },
   (error: AxiosError) => {
-    console.log("리스폰스 인터셉티드 에러");
-    console.log(error);
     const originalReq = error.config!;
     originalReq.headers["Content-Type"] = "application/json";
     const refreshToken = getCookie("refreshToken");
-    console.log(refreshToken);
     try {
-      console.log("재발급 시도");
       axios.post(
         `${import.meta.env.VITE_API_URL}/auth/reissue`,{ refreshToken }
       ).then((response)=>{
-        console.log(response);
-        const newAccessToken = response.data.accessToken;
-        const newRefreshToken = response.data.refreshToken;
-        console.log(newAccessToken, newRefreshToken);
+        const newAccessToken = response.data.data.accessToken;
+        const newRefreshToken = response.data.data.refreshToken;
 
         setCookie("accessToken", newAccessToken, { path: "/" });
         setCookie("refreshToken", newRefreshToken, {
@@ -53,7 +47,7 @@ instance.interceptors.response.use(
       });
       
     } catch (error) {
-      console.log(error, "안녕하세요");
+      console.log(error);
     }
     return Promise.reject(error);
   }

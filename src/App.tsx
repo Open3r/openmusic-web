@@ -33,9 +33,8 @@ function App() {
   },[]);
 
   useEffect(()=>{
-    if(user.id != 0) {
-      console.log(user);
-    }
+    console.log(user);
+    
   },[user]);
 
   return (

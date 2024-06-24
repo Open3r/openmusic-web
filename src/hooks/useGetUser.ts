@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getCookie } from "../cookies/cookie";
-import instance from "./instance";
+import instance from "../libs/customAxios";
 
 function useGetUser() {
   const [loading, setLoading] = useState(false);
