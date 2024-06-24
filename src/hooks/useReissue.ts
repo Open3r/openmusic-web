@@ -10,12 +10,18 @@ function useReissue() {
     setLoading(true);
     setError(null);
     const refreshToken = getCookie("refreshToken");
-    // const refreshToken = localStorage.getItem('refreshToken');
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/auth/reissue`,
-        { refreshToken }
+        { refreshToken },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
       );
+      console.log("리이수");
+      console.log(response);
       setLoading(false);
       return response.data;
     } catch (err: any) {

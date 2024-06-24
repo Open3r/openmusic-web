@@ -8,7 +8,6 @@ function useGetUser() {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const refreshToken = getCookie("refreshToken");
-  // const refreshToken = localStorage.getItem('refreshToken');
 
   const getUser = async () => {
     setLoading(true);
@@ -16,6 +15,7 @@ function useGetUser() {
     if (refreshToken == undefined) {
       navigate("/login");
     }
+    
     try {
       const response = await instance.get("/auth/me");
       return response.data;

@@ -39,16 +39,13 @@ const Login = () => {
         if (data.status == 200) {
           console.log("Login successful:", data);
           setCookie("accessToken", data.data.accessToken, { path: "/" });
-          // localStorage.setItem('accessToken', data.data.accessToken);
           if (checked) {
             setCookie("refreshToken", data.data.refreshToken, {
               path: "/",
               maxAge: 2600000,
             });
-            // localStorage.setItem('refreshToken',data.data.refreshToken);
           } else {
             setCookie("refreshToken", data.data.refreshToken, { path: "/" });
-            // localStorage.setItem('refreshToken', data.data.refreshToken);
           }
           NotificationService.success("로그인 성공");
           navigate("/");
