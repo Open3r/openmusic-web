@@ -1,22 +1,13 @@
 import { useRef, useState } from "react";
 import * as S from "./style";
+import { userStore } from "../../stores/userStore";
 
 const SideMenu = () => {
   const sideMenu = useRef<HTMLDivElement | null>(null);
   const onOffBtn = useRef<HTMLDivElement | null>(null);
   const shadow = useRef<HTMLDivElement | null>(null);
   const [menuState, setMenuState] = useState(false);
-
-  // shadow.current?.addEventListener('click',(e:any)=>{
-  //   if(!e.target.className.includes('sideMenu')) {
-  //     if(sideMenu.current && onOffBtn.current && shadow.current) {
-  //       sideMenu.current.style.left = "-30rem";
-  //       onOffBtn.current.style.left = "0.5rem";
-  //       shadow.current.style.display = 'none';
-  //       setMenuState(false);
-  //     }
-  //   }
-  // });
+  const user = userStore(state=>state.user);
 
   const menuOnOff = () => {
     if (sideMenu.current && onOffBtn.current && shadow.current) {
@@ -37,7 +28,7 @@ const SideMenu = () => {
   return (
     <>
       <S.Container ref={sideMenu} className="sideMenu">
-        SideMenu
+        {user.nickname}
         <S.MenuOnBtn
           onClick={menuOnOff}
           ref={onOffBtn}

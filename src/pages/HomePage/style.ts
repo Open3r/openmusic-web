@@ -34,6 +34,8 @@ const RecentlyListenWrap = styled.div`
   display:flex;
   flex-direction:column;
   margin: 5rem 0;
+  border-right: 0.1rem solid #ccc;
+  padding-right: 2rem;
 `
 const RecentlyListenBox = styled.div`
   width:100%;

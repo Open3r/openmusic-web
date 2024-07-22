@@ -17,11 +17,10 @@ function useGetUser() {
     }
     
     try {
-      const response = await instance.get("/auth/me");
-      return response.data;
+      await instance.get("/auth/me");
     } catch (err: any) {
       setError(err.response ? err.response.data : "Network error");
-      console.log(err);
+      navigate('/login');
       throw err;
     } finally {
       setLoading(false);

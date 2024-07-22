@@ -8,11 +8,11 @@ import useGetUser from "./hooks/useGetUser";
 import { userStore } from "./stores/userStore";
 
 function App() {
-  const [hideLayout, setHideLayout] = useState(false);
+  const [headerHideLayout, setHeaderHideLayout] = useState(false);
+  const [playBarHideLayout, setPlayBarHideLayout] = useState(false);
   const location = useLocation();
   const { getUser } = useGetUser();
   const setUser = userStore(state=>state.setUser);
-  const user = userStore(state=>state.user);
 
   const userReq = async () => {
     try {
@@ -25,25 +25,30 @@ function App() {
 
   useEffect(() => {
     const hidePaths = ["/login", "/signup", "/verify"];
-    setHideLayout(hidePaths.includes(location.pathname));
+    setHeaderHideLayout(hidePaths.includes(location.pathname));
+  }, [location.pathname]);
+
+  useEffect(() => {
+    const hidePaths = ["/login", "/signup", "/verify", "/upload"];
+    setPlayBarHideLayout(hidePaths.includes(location.pathname));
   }, [location.pathname]);
 
   useEffect(()=>{
     userReq();
   },[]);
 
-  useEffect(()=>{
-    console.log(user);
-    
-  },[user]);
 
   return (
     <>
       <CustomToastContainer />
       <Router />
-      {!hideLayout && (
+      {!headerHideLayout && (
         <>
           <Header />
+        </>
+      )}
+      {!playBarHideLayout && (
+        <>
           <PlayBar />
         </>
       )}

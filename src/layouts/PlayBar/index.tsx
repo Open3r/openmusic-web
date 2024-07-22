@@ -131,12 +131,10 @@ const PlayBar: React.FC = () => {
 
   const handleVolumeClick = useCallback(
     (e: MouseEvent) => {
-      if (
-        ["volIndicator", "volConWrap", "volCon"].includes(
-          (e.target as HTMLElement).id
-        )
-      ) {
-        setVolController((prev) => !prev);
+      if ((e.target as HTMLElement).className.includes('volume')) {
+        if((e.target as HTMLElement).className.includes('volBtn')) {
+          setVolController(prev=>!prev);
+        }
       } else {
         setVolController(false);
       }
@@ -220,10 +218,10 @@ const PlayBar: React.FC = () => {
           <PB.stateIndicator
             src={volIndicator}
             alt="Volume Indicator"
-            id="volIndicator"
+            className="volume volBtn"
           />
           {volController && (
-            <PB.volumeControllerWrap id="volConWrap">
+            <PB.volumeControllerWrap className="volume">
               <PB.volumeController
                 type="range"
                 min={0}
@@ -231,7 +229,7 @@ const PlayBar: React.FC = () => {
                 step={0.1}
                 onChange={updateVolume}
                 value={volume}
-                id="volCon"
+                className="volume"
               />
             </PB.volumeControllerWrap>
           )}

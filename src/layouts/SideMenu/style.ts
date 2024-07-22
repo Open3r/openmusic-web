@@ -1,14 +1,13 @@
 import styled from "@emotion/styled";
-
 export const Container = styled.div`
   width:30rem;
-  height:calc(100% - 10rem);
+  height:100vh;
   background-color:white;
   position: fixed;
-  bottom:10rem;
+  bottom:0;
   left:-30rem;
   z-index: 999999;
-  transition: all 0.5s;
+  transition: all 0.5s ease-in-out;
   box-sizing:border-box;
   display:inline;
 `
@@ -21,7 +20,7 @@ export const MenuOnBtn = styled.div `
   top:calc(50% - 8rem);
   left: 0.5rem;
   cursor: pointer;
-  transition: all 0.5s;
+  transition: all 0.5s ease-in-out;
   &:active{
     width: 0.5rem;
     height:11rem;
@@ -29,12 +28,11 @@ export const MenuOnBtn = styled.div `
 `
 export const shadow = styled.div`
   width:100%;
-  height:calc(100% - 10rem);
+  height:100vh;
   background-color:rgba(0,0,0,0.1);
   position:fixed;
   z-index:99999;
   right:0;
-  top:0;
   display:none;
   transition:all 0.5s;
 `

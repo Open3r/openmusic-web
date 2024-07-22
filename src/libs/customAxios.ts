@@ -1,16 +1,23 @@
-import axios, { AxiosError } from "axios";
+import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 import { getCookie, setCookie } from "../cookies/cookie";
 
+interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
+  _retry?: boolean;
+}
 
 const instance = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
-  withCredentials: true,
+  headers: {
+    "Content-Type": "application/json;charset=UTF-8",
+    Accept: "application/json",
+    
+  },
+  withCredentials: true
 });
 
 instance.interceptors.request.use(
   async (config) => {
     config.headers.Authorization = `Bearer ${getCookie("accessToken")}`;
-    console.log("리퀘스트 인터셉티드");
     return config;
   },
   (error) => {
@@ -22,34 +29,38 @@ instance.interceptors.response.use(
   (response) => {
     return response;
   },
-  (error: AxiosError) => {
-    const originalReq = error.config!;
-    originalReq.headers["Content-Type"] = "application/json";
-    const refreshToken = getCookie("refreshToken");
-    try {
-      axios.post(
-        `${import.meta.env.VITE_API_URL}/auth/reissue`,{ refreshToken }
-      ).then((response)=>{
-        const newAccessToken = response.data.data.accessToken;
-        const newRefreshToken = response.data.data.refreshToken;
+  async (error: AxiosError) => {
+    const originalRequest = error.config as CustomAxiosRequestConfig;
+    if (
+      originalRequest &&
+      error.response?.status === 401 &&
+      !originalRequest._retry
+    ) {
+      originalRequest._retry = true;
+      const refreshToken = getCookie("refreshToken");
+      if (refreshToken) {
+        try {
+          const response = await axios.post(
+            `${import.meta.env.VITE_API_URL}/auth/refresh`,
+            {
+              refreshToken,
+            }
+          );
+          const newAccessToken = response.data.accessToken;
+          const newRefreshToken = response.data.refreshToken;
 
-        setCookie("accessToken", newAccessToken, { path: "/" });
-        setCookie("refreshToken", newRefreshToken, {
-          path: "/",
-          maxAge: "2600000",
-        });
-        originalReq.headers.Authorization = `Bearer ${getCookie(
-          "accessToken"
-        )}`;
-        return instance(originalReq);
-      }).catch((err)=>{
-        console.log(err);
-      });
-      
-    } catch (error) {
-      console.log(error);
+          setCookie("accessToken", newAccessToken, { path: "/" });
+          setCookie("refreshToken", newRefreshToken, {
+            path: "/",
+            maxAge: "2600000",
+          });
+          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+          return instance(originalRequest);
+        } catch (refreshError) {
+          return Promise.reject(refreshError);
+        }
+      }
     }
-    return Promise.reject(error);
   }
 );
 
