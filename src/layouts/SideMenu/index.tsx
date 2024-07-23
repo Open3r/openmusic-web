@@ -14,7 +14,7 @@ const SideMenu = () => {
       if (!menuState) {
         sideMenu.current.style.left = "0rem";
         onOffBtn.current.style.left = "30.5rem";
-        shadow.current.style.display = 'inline';
+        shadow.current.style.display = 'block';
         setMenuState(true);
       } else {
         sideMenu.current.style.left = "-30rem";

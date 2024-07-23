@@ -2,8 +2,29 @@ import * as S from "./style";
 import searchBtn from '../../assets/imgs/search.svg';
 import logo from '../../assets/imgs/logo_color.png';
 import { Link } from "react-router-dom";
+import useGetUser from "../../hooks/useGetUser";
+import { userStore } from "../../stores/userStore";
+import { useEffect } from "react";
 
 const Header = () => {
+
+  const { getUser,error } = useGetUser();
+  const setUser = userStore((state) => state.setUser);
+
+  const userReq = async () => {
+    try {
+      const res = await getUser();
+      console.log(res.data);
+      setUser(res.data);
+    } catch (err) {
+      console.log(err);
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    userReq();
+  }, []);
 
   return (
     <S.Canvas>

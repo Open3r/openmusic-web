@@ -27,12 +27,12 @@ export const MenuOnBtn = styled.div `
   }
 `
 export const shadow = styled.div`
-  width:100%;
+  width:100vw;
   height:100vh;
   background-color:rgba(0,0,0,0.1);
   position:fixed;
   z-index:99999;
   right:0;
-  display:none;
+  display:block;
   transition:all 0.5s;
 `

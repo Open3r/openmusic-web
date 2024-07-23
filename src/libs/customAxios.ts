@@ -8,19 +8,19 @@ interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
 const instance = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   headers: {
-    "Content-Type": "application/json;charset=UTF-8",
     Accept: "application/json",
-    
   },
   withCredentials: true
 });
 
 instance.interceptors.request.use(
   async (config) => {
+    config.headers["Content-Type"] = "application/json";
     config.headers.Authorization = `Bearer ${getCookie("accessToken")}`;
     return config;
   },
   (error) => {
+    console.log('req err:',error);
     return Promise.reject(error);
   }
 );
@@ -31,6 +31,9 @@ instance.interceptors.response.use(
   },
   async (error: AxiosError) => {
     const originalRequest = error.config as CustomAxiosRequestConfig;
+    originalRequest.headers["Content-Type"] = "application/json";
+    console.log('res err:',error);
+    console.log(originalRequest.headers["Content-Type"]);
     if (
       originalRequest &&
       error.response?.status === 401 &&
@@ -57,9 +60,11 @@ instance.interceptors.response.use(
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
           return instance(originalRequest);
         } catch (refreshError) {
+          console.log('refreshErr:',refreshError);
           return Promise.reject(refreshError);
         }
       }
+      return Promise.reject(error);
     }
   }
 );
