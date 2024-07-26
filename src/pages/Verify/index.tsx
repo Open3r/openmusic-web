@@ -5,19 +5,19 @@ import { css } from "@emotion/react";
 import { SignUpInfoStore } from "../../stores/signUpInfoStore";
 import { useNavigate } from "react-router-dom";
 import useSignUp from "../../hooks/useSignUp";
-import NotificationService from "../../components/Notification/NotificationService";
+import NotificationService from "../../libs/notification/NotificationService";
 import useVerify from "../../hooks/useVerify";
-import { getCookie } from "../../cookies/cookie";
+import { getCookie } from "../../libs/cookies/cookie";
 
 const Verify = () => {
   const [code, setCode] = useState("");
-  const [timeLeft, setTimeLeft] = useState(180); // 3 minutes in seconds
+  const [timeLeft, setTimeLeft] = useState(180);
   const email = SignUpInfoStore((state) => state.email);
   const pw = SignUpInfoStore((state) => state.pw);
   const nickname = SignUpInfoStore((state) => state.nickname);
   const clear = SignUpInfoStore((state) => state.clear);
   const navigate = useNavigate();
-  const { signUp,loading } = useSignUp();
+  const { signUp, loading } = useSignUp();
   const { verify } = useVerify();
 
   useEffect(() => {
@@ -49,7 +49,7 @@ const Verify = () => {
     try {
       const data = await verify(email);
       if (data.status === 201) {
-        setTimeLeft((prev) => prev + 180); 
+        setTimeLeft(180);
         NotificationService.success("시간이 연장되었습니다.");
       }
     } catch (err: any) {
@@ -61,13 +61,11 @@ const Verify = () => {
     try {
       const data = await signUp(nickname, email, pw, code);
       if (data.status === 201) {
-        console.log(data);
         NotificationService.success("회원가입 성공");
         clear();
         navigate("/login");
       }
     } catch (err: any) {
-      console.log(err);
       if (err.code === "ERR_NETWORK") {
         NotificationService.error("네트워크 에러");
       }
@@ -80,7 +78,6 @@ const Verify = () => {
   };
 
   const moveInput = (e: any, nextFocus: any, prevFocus: any) => {
-    console.log(e.key);
     let digitOne = document.getElementById("code1") as HTMLInputElement;
     let digitTwo = document.getElementById("code2") as HTMLInputElement;
     let digitThree = document.getElementById("code3") as HTMLInputElement;
@@ -116,10 +113,6 @@ const Verify = () => {
       });
     });
   });
-
-  useEffect(() => {
-    console.log(code);
-  }, [code]);
 
   const hover = css`
     &:hover {
@@ -203,7 +196,9 @@ const Verify = () => {
             시간연장
           </S.CodeBtn>
         </S.CodeBtnWrap>
-        <S.SignupBtn onClick={submit} disabled={loading}>{loading ? '회원가입중...' : '회원가입'}</S.SignupBtn>
+        <S.SignupBtn onClick={submit} disabled={loading}>
+          {loading ? "회원가입중..." : "회원가입"}
+        </S.SignupBtn>
       </S.VerifyWrap>
     </S.Canvas>
   );

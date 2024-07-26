@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback } from "react";
+import React, { useEffect, useRef, useCallback, useState } from "react";
 import { nowPlayingStore } from "../../stores/nowPlayingStore";
 import { PlayTimeStore } from "../../stores/PlayTimeStore";
 import * as PB from "./style";
@@ -16,6 +16,7 @@ import shuffle from "../../assets/imgs/shuffleOn.svg";
 import unShuffle from "../../assets/imgs/shuffleOff.svg";
 import loop from "../../assets/imgs/repeatOn.svg";
 import unloop from "../../assets/imgs/repeatOff.svg";
+import playlistPlus from '../../assets/imgs/playlistPlus.svg';
 
 const PlayBar: React.FC = () => {
   const playState = PlayStateStore((state) => state.playState);
@@ -44,6 +45,8 @@ const PlayBar: React.FC = () => {
     setVolController,
     updateVolume,
   } = useAudioControls(audioRef);
+
+  const [initialRender, setInitialRender] = useState(true);
 
   const { progress, time, updatePlayTime, handleMouseDown, currTime } = useProgress(audioRef, fullDuration);
 
@@ -150,16 +153,25 @@ const PlayBar: React.FC = () => {
   }, [handleVolumeClick]);
 
   useEffect(() => {
-    if (nowPlaying.title && audioRef.current) {
-      audioRef.current.play().catch((err) => {
-        if (err instanceof DOMException) {
-          setPlayState(false);
-          if (audioRef.current) {
-            audioRef.current.pause();
+    if(initialRender) {
+      setPlayState(false);
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+      updateCurrTime({ currTime: 0 });
+      setInitialRender(false);
+    }else{
+      if (nowPlaying.title && audioRef.current) {
+        audioRef.current.play().catch((err) => {
+          if (err instanceof DOMException) {
+            setPlayState(false);
+            if (audioRef.current) {
+              audioRef.current.pause();
+            }
+            updateCurrTime({ currTime: 0 });
           }
-          updateCurrTime({ currTime: 0 });
-        }
-      });
+        });
+      }
     }
   }, [nowPlaying]);
 
@@ -171,7 +183,7 @@ const PlayBar: React.FC = () => {
       <PB.SongControlWrap>
         <PB.SongWrap>
           <audio
-            src={nowPlaying.musicUrl}
+            src={nowPlaying.url}
             id="audio"
             onTimeUpdate={updatePlayTime}
             onEnded={musicEndEvent}
@@ -185,14 +197,14 @@ const PlayBar: React.FC = () => {
                 nowPlaying.thumbnailUrl ||
                 "https://static-00.iconduck.com/assets.00/music-notes-icon-2048x2046-o5kli2nk.png"
               }
-              alt={`${nowPlaying.idx}`}
+              alt={`${nowPlaying.id}`}
             />
           </PB.AlbumCoverWrap>
           <PB.MusicInfoWrap>
             <PB.Title>
               {nowPlaying.title || "재생 중인 곡이 없습니다."}
             </PB.Title>
-            <PB.Artist>{nowPlaying.artist}</PB.Artist>
+            <PB.Artist>{nowPlaying.artist.nickname}</PB.Artist>
           </PB.MusicInfoWrap>
         </PB.SongWrap>
         <PB.PlayBtnsWrap>
@@ -205,24 +217,28 @@ const PlayBar: React.FC = () => {
           <PB.PlayBtn src={next} onClick={nextMusic} />
         </PB.PlayBtnsWrap>
         <PB.TimeIndicatorWrap>
+          <PB.StateIndicator
+            src={playlistPlus}
+            style={{ width: "3rem", height: "3rem" }}
+          />
           {loopState ? (
-            <PB.stateIndicator src={loop} onClick={swapLoopState} />
+            <PB.StateIndicator src={loop} onClick={swapLoopState} />
           ) : (
-            <PB.stateIndicator src={unloop} onClick={swapLoopState} />
+            <PB.StateIndicator src={unloop} onClick={swapLoopState} />
           )}
           {shuffleState ? (
-            <PB.stateIndicator src={shuffle} onClick={swapShuffleState} />
+            <PB.StateIndicator src={shuffle} onClick={swapShuffleState} />
           ) : (
-            <PB.stateIndicator src={unShuffle} onClick={swapShuffleState} />
+            <PB.StateIndicator src={unShuffle} onClick={swapShuffleState} />
           )}
-          <PB.stateIndicator
+          <PB.StateIndicator
             src={volIndicator}
             alt="Volume Indicator"
             className="volume volBtn"
           />
           {volController && (
-            <PB.volumeControllerWrap className="volume">
-              <PB.volumeController
+            <PB.VolumeControllerWrap className="volume">
+              <PB.VolumeController
                 type="range"
                 min={0}
                 max={1}
@@ -231,7 +247,7 @@ const PlayBar: React.FC = () => {
                 value={volume}
                 className="volume"
               />
-            </PB.volumeControllerWrap>
+            </PB.VolumeControllerWrap>
           )}
           <PB.TimeIndicator>
             {time.min}:{time.sec}

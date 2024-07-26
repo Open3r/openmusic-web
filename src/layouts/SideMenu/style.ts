@@ -32,7 +32,8 @@ export const shadow = styled.div`
   background-color:rgba(0,0,0,0.1);
   position:fixed;
   z-index:99999;
+  top:0;
   right:0;
-  display:block;
+  display:none;
   transition:all 0.5s;
 `

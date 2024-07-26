@@ -13,7 +13,7 @@ export const recentlyPlayStore = create(
       recentlyPlayed: [],
       storeRecently: (song) => {
         const { recentlyPlayed } = get();
-        if (!recentlyPlayed.some((item) => item.idx === song.idx && item.artist == song.artist)) {
+        if (!recentlyPlayed.some((item) => item.id === song.id && item.artist.id == song.artist.id)) {
           set({ recentlyPlayed: [...recentlyPlayed, song] });
         }
       }

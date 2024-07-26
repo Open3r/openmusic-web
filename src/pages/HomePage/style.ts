@@ -27,6 +27,7 @@ const SectionTitle = styled.h1`
   font-size:2rem;
   word-spacing:0.2rem;
   margin:0;
+  margin-bottom:1rem;
   cursor: pointer;
 `
 const RecentlyListenWrap = styled.div`

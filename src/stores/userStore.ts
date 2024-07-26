@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { User } from "../interfaces/User";
 
-interface UserStore {
+export interface UserStore {
   user: User;
   setUser: (user: User) => void;
 }

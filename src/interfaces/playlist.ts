@@ -1,7 +1,15 @@
 import { Song } from "./Song";
+import { User } from "./User";
 
-export interface Playlist {
-  djName: string;
-  songs: Song[];
-  createdAt: string;
+export interface PlaylistType {
+  id:number;
+  title:string;
+  coverUrl:string;
+  scope:string;
+  songs:Song[];
+  liked:boolean;
+  likeCount:number;
+  artist:User;
+  createdAt:string;
+  updatedAt:string;
 }

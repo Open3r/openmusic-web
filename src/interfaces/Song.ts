@@ -1,7 +1,12 @@
+import { Artist } from "./artist";
+
 export interface Song {
-  idx: number;
+  id: number;
   title: string;
-  artist: string;
-  musicUrl: string;
+  artist: Artist;
+  url: string;
   thumbnailUrl: string;
+  likes:[];
+  genre:string;
+  scope:string;
 }

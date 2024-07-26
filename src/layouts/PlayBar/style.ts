@@ -11,6 +11,7 @@ const PlayBarWrap = styled.div`
   flex-direction:column;
   justify-content:space-between;
   position:fixed;
+  z-index: 99;
   bottom:0;
   left:0;
   background-color:white;
@@ -90,7 +91,7 @@ const TimeIndicatorWrap = styled.div`
 `
 const TimeIndicator = styled.p`
   font-size:1.3rem;
-  margin:0 1rem;
+  width:3rem;
   align-self:flex-start;
 `
 const PlayBtn = styled.img`
@@ -98,13 +99,13 @@ const PlayBtn = styled.img`
   height:4rem;
   margin: 0 2rem;
 `
-const stateIndicator = styled.img`
+const StateIndicator = styled.img`
   width:4rem;
   height:4rem;
   margin-left:2rem;
   cursor:pointer;
 `
-const volumeControllerWrap = styled.div`
+const VolumeControllerWrap = styled.div`
   background-color:white;
   display:flex;
   justify-content:center;
@@ -116,7 +117,7 @@ const volumeControllerWrap = styled.div`
   box-shadow: 0.3rem 0.3rem 1rem 0.5rem #ccc;
   border-radius: 0.5rem;
 `
-const volumeController = styled.input`
+const VolumeController = styled.input`
   writing-mode: vertical-lr; 
   direction: rtl;
   background-color:white;
@@ -138,7 +139,7 @@ export {
   PlayBtnsWrap,
   SongControlWrap,
   PlayBtn,
-  stateIndicator,
-  volumeController,
-  volumeControllerWrap
+  StateIndicator,
+  VolumeController,
+  VolumeControllerWrap
 }

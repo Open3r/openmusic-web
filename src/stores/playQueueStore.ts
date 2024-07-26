@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { Song } from "../interfaces/Song";
-import NotificationService from "../components/Notification/NotificationService";
+import NotificationService from "../libs/notification/NotificationService";
 
 interface PlayQueueStore {
   queue: Song[];
@@ -17,22 +17,26 @@ export const playQueueStore = create(
 
       addSong: (song) => {
         const { queue } = get();
-        if (!queue.some((item) => item.title == song.title && item.artist == song.artist)) {
+        if (
+          !queue.some(
+            (item) => item.title == song.title && item.artist == song.artist
+          )
+        ) {
           set({ queue: [...queue, song] });
-        }else{
-          NotificationService.warn('이미 재생목록에 있는 곡입니다.')
+        } else {
+          NotificationService.warn("이미 재생목록에 있는 곡입니다.");
         }
       },
 
-      removeSong: (index) => set((state) => ({
-        queue: state.queue.filter((_, i) => i !== index)
-      })),
+      removeSong: (index) =>
+        set((state) => ({
+          queue: state.queue.filter((_, i) => i !== index),
+        })),
 
-      clearQueue: () => set({ queue: [] })
+      clearQueue: () => set({ queue: [] }),
     }),
     {
-      name: "play-queue-store"
+      name: "play-queue-store",
     }
   )
 );
-

@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import useLogin from "../../hooks/useLogin";
 import * as S from "./style";
 import { useNavigate } from "react-router-dom";
-import { setCookie } from "../../cookies/cookie";
-import NotificationService from "../../components/Notification/NotificationService";
+import { setCookie } from "../../libs/cookies/cookie";
+import NotificationService from "../../libs/notification/NotificationService";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 
 const Login = () => {
@@ -37,7 +37,6 @@ const Login = () => {
       try {
         const data = await login(email, pw);
         if (data.status == 200) {
-          console.log("Login successful:", data);
           setCookie("accessToken", data.data.accessToken, { path: "/" });
           if (checked) {
             setCookie("refreshToken", data.data.refreshToken, {
@@ -81,9 +80,6 @@ const Login = () => {
     setChecked(!checked);
   };
 
-  // const handleLoginSuccess = (response: any) => {
-  //   console.log("Login Success:", response);
-  // };
 
   const clientId =
     "251821039592-jvfk5ffen9707fvtpsbj27tal6eo1m40.apps.googleusercontent.com";

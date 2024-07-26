@@ -1,5 +1,4 @@
-interface UploadSong {
-  title:string;
-  thumbnail:string;
-  music:string;
+export interface UploadSong {
+  title: string;
+  url: string;
 }

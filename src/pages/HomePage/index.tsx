@@ -1,128 +1,38 @@
 import SongBox from "../../components/SongBox";
 import * as HS from "./style";
 import { recentlyPlayStore } from "../../stores/recentlyPlayStore";
+import useGetMusic from "../../hooks/useGetMusic";
+import { useEffect, useState } from "react";
+import { Song } from "../../interfaces/Song";
+import useGetRank from "../../hooks/useGetRank";
+import NotificationService from "../../libs/notification/NotificationService";
 
 const HomePage = () => {
   const recentlyPlayed = recentlyPlayStore((state)=>state.recentlyPlayed);
+  const [songList, setSongList] = useState<Song[]>();
+  const [songRank, setSongRank] = useState<Song[]>();
 
 
-  const songList = [
-    {
-      title: "Interlude",
-      artist: "Changmo",
-      musicUrl: "../../assets/Interlude.mp3",
-      thumbnailUrl:
-        "https://image.bugsm.co.kr/album/images/500/201722/20172253.jpg",
-    },
-    {
-      title: "skeletons",
-      artist: "keshi",
-      musicUrl: "../../assets/skeletons.mp3",
-      thumbnailUrl:
-        "https://images.genius.com/87cac3cb929a14ca907df61abbb75761.1000x1000x1.jpg",
-    },
-    {
-      title: "cool with you",
-      artist: "NewJeans",
-      musicUrl: "../../assets/cool-with-you.mp3",
-      thumbnailUrl:
-        "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/a8ae47b2-0a74-4f13-ab4a-044db0aa19e0/dg3baio-a522e3a4-b2c2-4323-807c-86b457916e2e.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2E4YWU0N2IyLTBhNzQtNGYxMy1hYjRhLTA0NGRiMGFhMTllMFwvZGczYmFpby1hNTIyZTNhNC1iMmMyLTQzMjMtODA3Yy04NmI0NTc5MTZlMmUuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.Bz_WD7Ht35U_Ia7XbcVQuuSKdRvIpg63iSSf7l5N_Dw",
-    },
-    {
-      title: "ALWAYS",
-      artist: "Forrest Frank",
-      musicUrl: "../../assets/ALWAYS.mp3",
-      thumbnailUrl:
-        "https://i1.sndcdn.com/artworks-lF74qAS6BCYO-0-t500x500.jpg",
-    },
-    {
-      title: "ALWAYS",
-      artist: "Forrest Frank",
-      musicUrl: "../../assets/ALWAYS.mp3",
-      thumbnailUrl:
-        "https://i1.sndcdn.com/artworks-lF74qAS6BCYO-0-t500x500.jpg",
-    },
-    {
-      title: "ALWAYS",
-      artist: "Forrest Frank",
-      musicUrl: "../../assets/ALWAYS.mp3",
-      thumbnailUrl:
-        "https://i1.sndcdn.com/artworks-lF74qAS6BCYO-0-t500x500.jpg",
-    },
-    {
-      title: "ALWAYS",
-      artist: "Forrest Frank",
-      musicUrl: "../../assets/ALWAYS.mp3",
-      thumbnailUrl:
-        "https://i1.sndcdn.com/artworks-lF74qAS6BCYO-0-t500x500.jpg",
-    },
-    {
-      title: "ALWAYS",
-      artist: "Forrest Frank",
-      musicUrl: "../../assets/ALWAYS.mp3",
-      thumbnailUrl:
-        "https://i1.sndcdn.com/artworks-lF74qAS6BCYO-0-t500x500.jpg",
-    },
-    {
-      title: "ALWAYS",
-      artist: "Forrest Frank",
-      musicUrl: "../../assets/ALWAYS.mp3",
-      thumbnailUrl:
-        "https://i1.sndcdn.com/artworks-lF74qAS6BCYO-0-t500x500.jpg",
-    },
-    {
-      title: "ALWAYS",
-      artist: "Forrest Frank",
-      musicUrl: "../../assets/ALWAYS.mp3",
-      thumbnailUrl:
-        "https://i1.sndcdn.com/artworks-lF74qAS6BCYO-0-t500x500.jpg",
-    },
-    {
-      title: "ALWAYS",
-      artist: "Forrest Frank",
-      musicUrl: "../../assets/ALWAYS.mp3",
-      thumbnailUrl:
-        "https://i1.sndcdn.com/artworks-lF74qAS6BCYO-0-t500x500.jpg",
-    },
-    {
-      title: "ALWAYS",
-      artist: "Forrest Frank",
-      musicUrl: "../../assets/ALWAYS.mp3",
-      thumbnailUrl:
-        "https://i1.sndcdn.com/artworks-lF74qAS6BCYO-0-t500x500.jpg",
-    },
-  ];
-  const RecentSongList = recentlyPlayed.slice(0,4);
-  const RankList = [
-    {
-      title: "Interlude",
-      artist: "Changmo",
-      musicUrl: "../../assets/Interlude.mp3",
-      thumbnailUrl:
-        "https://image.bugsm.co.kr/album/images/500/201722/20172253.jpg",
-    },
-    {
-      title: "skeletons",
-      artist: "keshi",
-      musicUrl: "../../assets/skeletons.mp3",
-      thumbnailUrl:
-        "https://images.genius.com/87cac3cb929a14ca907df61abbb75761.1000x1000x1.jpg",
-    },
-    {
-      title: "cool with you",
-      artist: "NewJeans",
-      musicUrl: "../../assets/cool-with-you.mp3",
-      thumbnailUrl:
-        "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/a8ae47b2-0a74-4f13-ab4a-044db0aa19e0/dg3baio-a522e3a4-b2c2-4323-807c-86b457916e2e.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2E4YWU0N2IyLTBhNzQtNGYxMy1hYjRhLTA0NGRiMGFhMTllMFwvZGczYmFpby1hNTIyZTNhNC1iMmMyLTQzMjMtODA3Yy04NmI0NTc5MTZlMmUuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.Bz_WD7Ht35U_Ia7XbcVQuuSKdRvIpg63iSSf7l5N_Dw",
-    },
-    {
-      title: "ALWAYS",
-      artist: "Forrest Frank",
-      musicUrl: "../../assets/ALWAYS.mp3",
-      thumbnailUrl:
-        "https://i1.sndcdn.com/artworks-lF74qAS6BCYO-0-t500x500.jpg",
-    },
-  ];
+  const RecentSongList = recentlyPlayed.reverse().slice(0,4);
+  
+
+  const { getMusic } = useGetMusic();
+  const { getRank } = useGetRank();
+
+  const musicReq = async () => {
+    try{
+      const res = await getMusic();
+      setSongList(res);
+      const rank = await getRank();
+      setSongRank(rank);
+    }catch(err){
+      NotificationService.error('네트워크 에러');
+    }
+  }
+
+  useEffect(()=>{
+    musicReq();
+  },[]);
 
   return (
     <HS.Canvas>
@@ -132,14 +42,17 @@ const HomePage = () => {
           <HS.RecentlyListenBox>
             {RecentSongList.length > 0 ? (
               RecentSongList.map((content, idx) => (
-                <SongBox 
+                <SongBox
                   title={content.title}
                   artist={content.artist}
-                  idx={idx}
+                  id={idx}
                   key={idx}
-                  musicUrl={content.musicUrl}
+                  url={content.url}
                   thumbnailUrl={content.thumbnailUrl}
-                  type={'history'}
+                  type={"history"}
+                  genre={content.genre}
+                  scope={content.scope}
+                  likes={content.likes}
                 ></SongBox>
               ))
             ) : (
@@ -148,34 +61,42 @@ const HomePage = () => {
           </HS.RecentlyListenBox>
         </HS.RecentlyListenWrap>
         <HS.RankWrap>
-          <HS.SectionTitle>랭킹 {'>'}</HS.SectionTitle>
+          <HS.SectionTitle>랭킹 {">"}</HS.SectionTitle>
           <HS.RankBox>
-            {RankList.sort(()=> Math.random() - 0.5).slice(0,3).map((content, idx)=> (
-              <SongBox
-                title={content.title}
-                artist={content.artist}
-                idx={idx}
-                key={idx}
-                musicUrl={content.musicUrl}
-                thumbnailUrl={content.thumbnailUrl}
-                type={'rank'}
-              ></SongBox>
-            ))}
+            {songRank?.sort(() => Math.random() - 0.5)
+              .slice(0, 3)
+              .map((content, idx) => (
+                <SongBox
+                  title={content.title}
+                  artist={content.artist}
+                  id={idx}
+                  key={idx}
+                  url={content.url}
+                  thumbnailUrl={content.thumbnailUrl}
+                  type={"rank"}
+                  genre={content.genre}
+                  scope={content.scope}
+                  likes={content.likes}
+                ></SongBox>
+              ))}
           </HS.RankBox>
         </HS.RankWrap>
       </HS.ChartSectionWrap>
       <HS.SectionWrap>
         <HS.SectionTitle>당신을 위한 추천 {">"}</HS.SectionTitle>
         <HS.BoxWrap>
-          {songList.map((content, idx) => (
+          {songList?.map((content, idx) => (
             <SongBox
               title={content.title}
               artist={content.artist}
-              idx={idx}
+              id={idx}
               key={idx}
-              musicUrl={content.musicUrl}
+              url={content.url}
               thumbnailUrl={content.thumbnailUrl}
-              type={'square'}
+              type={"square"}
+              genre={content.genre}
+              scope={content.scope}
+              likes={content.likes}
             ></SongBox>
           ))}
         </HS.BoxWrap>
@@ -183,15 +104,18 @@ const HomePage = () => {
       <HS.SectionWrap>
         <HS.SectionTitle>오픈플레이리스트 {">"}</HS.SectionTitle>
         <HS.BoxWrap>
-          {songList.map((content, idx) => (
+          {songList?.map((content, idx) => (
             <SongBox
               title={content.title}
               artist={content.artist}
-              idx={idx}
+              id={idx}
               key={idx}
-              musicUrl={content.musicUrl}
+              url={content.url}
               thumbnailUrl={content.thumbnailUrl}
-              type={'square'}
+              type={"square"}
+              genre={content.genre}
+              scope={content.scope}
+              likes={content.likes}
             ></SongBox>
           ))}
         </HS.BoxWrap>
@@ -199,15 +123,18 @@ const HomePage = () => {
       <HS.SectionWrap>
         <HS.SectionTitle>최신곡 {">"}</HS.SectionTitle>
         <HS.BoxWrap>
-          {songList.map((content, idx) => (
+          {songList?.map((content, idx) => (
             <SongBox
               title={content.title}
               artist={content.artist}
-              idx={idx}
+              id={idx}
               key={idx}
-              musicUrl={content.musicUrl}
+              url={content.url}
               thumbnailUrl={content.thumbnailUrl}
-              type={'square'}
+              type={"square"}
+              genre={content.genre}
+              scope={content.scope}
+              likes={content.likes}
             ></SongBox>
           ))}
         </HS.BoxWrap>
@@ -215,15 +142,18 @@ const HomePage = () => {
       <HS.SectionWrap>
         <HS.SectionTitle>나의 플레이리스트 {">"}</HS.SectionTitle>
         <HS.BoxWrap>
-          {songList.map((content, idx) => (
+          {songList?.map((content, idx) => (
             <SongBox
               title={content.title}
               artist={content.artist}
-              idx={idx}
+              id={idx}
               key={idx}
-              musicUrl={content.musicUrl}
+              url={content.url}
               thumbnailUrl={content.thumbnailUrl}
-              type={'square'}
+              type={"square"}
+              genre={content.genre}
+              scope={content.scope}
+              likes={content.likes}
             ></SongBox>
           ))}
         </HS.BoxWrap>

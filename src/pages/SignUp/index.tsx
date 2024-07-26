@@ -4,7 +4,7 @@ import * as SS from "./style";
 import { SignUpInfoStore } from "../../stores/signUpInfoStore";
 import { useNavigate } from "react-router-dom";
 import useVerify from "../../hooks/useVerify";
-import NotificationService from "../../components/Notification/NotificationService";
+import NotificationService from "../../libs/notification/NotificationService";
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
@@ -119,8 +119,8 @@ const SignUp = () => {
         if (data.status == 201) {
           navigate("/verify");
         }
-      }catch (err:any) {
-        if (err.code == 'ERR_NETWORK') {
+      } catch (err: any) {
+        if (err.code == "ERR_NETWORK") {
           NotificationService.error("네트워크 에러");
         }
         if (err.response.data.status == 400) {

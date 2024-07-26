@@ -12,6 +12,7 @@ const SongBox = styled.div<{thumbnailUrl : string}>`
   flex-direction:column;
   justify-content:flex-end;
   align-items:flex-end;
+  text-align:end;
   position:relative;
   border: 0.1rem solid #ccc;
   flex-shrink:0;
@@ -26,15 +27,20 @@ const SongBox = styled.div<{thumbnailUrl : string}>`
   }
 `
 const Artist = styled.p`
-  font-size:1.3rem;
-  color:lightgray;
-  margin:0 1rem;
-`
+  font-size: 1.3rem;
+  color: lightgray;
+  margin: 0 1rem;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 0 1rem;
+  margin-bottom: 1rem;
+`;
 const Title = styled.p`
-  font-size:1.7rem;
-  color:lightgray;
-  margin:0 1rem;
-`
+  font-size: 1.7rem;
+  color: lightgray;
+  margin: 0 1rem;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 0 1rem;
+`;
 const BoxHover = styled.div`
   position:absolute;
   background-color:black;
@@ -51,6 +57,7 @@ const BoxHover = styled.div`
   &:hover{
     opacity:0.4;
   }
+  
 `
 const HoverWord = styled.p`
   font-size:1.5rem;

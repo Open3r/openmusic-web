@@ -1,20 +1,20 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { Artist } from "../interfaces/artist";
 
-// NowPlaying 인터페이스 정의
 interface NowPlaying {
   nowPlaying: {
-    artist: string;
+    artist: Artist;
     title: string;
-    idx: number;
-    musicUrl: string;
+    id: number;
+    url: string;
     thumbnailUrl: string;
   };
   setNowPlaying: (source: {
-    artist: string;
+    artist: Artist;
     title: string;
-    idx: number;
-    musicUrl: string;
+    id: number;
+    url: string;
     thumbnailUrl: string;
   }) => void;
 }
@@ -23,16 +23,20 @@ export const nowPlayingStore = create(
   persist<NowPlaying>(
     (set) => ({
       nowPlaying: {
-        artist: "",
+        artist: {
+          id:0,
+          nickname:"",
+          avatarUrl:"",
+        },
         title: "",
-        idx: 0,
-        musicUrl: "",
+        id: 0,
+        url: "",
         thumbnailUrl: "",
       },
       setNowPlaying: (source) => set({ nowPlaying: source }),
     }),
     {
-      name: "now-playing-store", // 로컬 스토리지에 저장될 키 이름
+      name: "now-playing-store",
     }
   )
 );
