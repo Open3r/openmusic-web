@@ -133,7 +133,6 @@ const Login = () => {
         </S.ChkArea>
         <S.FindMeWrap>
           <S.FindMeText to={"/signup"}>회원이 아니신가요?</S.FindMeText>
-          <S.FindMeText to={"/find"}>비밀번호 찾기</S.FindMeText>
         </S.FindMeWrap>
         <S.Button onClick={submit} disabled={loading}>
           {loading ? "로그인 중..." : "로그인"}

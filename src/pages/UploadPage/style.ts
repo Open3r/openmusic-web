@@ -25,8 +25,8 @@ export const SongInfoWrap = styled.div`
 export const AlbumCoverInput = styled.div<{ $albumCover: string }>`
   background: url(${(props) => props.$albumCover}) center no-repeat;
   background-size: cover;
-  width: 20rem;
-  height: 20rem;
+  width: 15rem;
+  height: 15rem;
   border-radius: 3rem;
   cursor: pointer;
 
@@ -38,7 +38,7 @@ export const AlbumCoverInput = styled.div<{ $albumCover: string }>`
 
 export const AlbumTitleInput = styled.input`
   width:100%;
-  font-size:2rem;
+  font-size:1.5rem;
   border:0.1rem solid #ccc;
   outline:none;
   padding:1rem 0.5rem;
@@ -66,7 +66,7 @@ export const AlbumMetaSelect = styled.select`
 export const AlbumDescription = styled.textarea`
   font-size:1.5rem;
   width:100%;
-  height:30rem;
+  height:calc(100% - 40rem);
   resize:none;
   border:0.1rem solid #ccc;
   outline:none;
@@ -177,8 +177,8 @@ export const LoadingShadow = styled.div`
 
 export const Spinner = styled.div`
   display: inline-block;
-  width: 5rem;
-  height: 5rem;
+  width: 4rem;
+  height: 4rem;
   border: 0.3rem solid rgba(195, 195, 195, 0.6);
   border-radius: 50%;
   border-top-color: #636767;

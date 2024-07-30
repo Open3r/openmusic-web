@@ -24,7 +24,7 @@ const SongControlWrap = styled.div`
   align-items:center;
 `
 const SongWrap = styled.div`
-  width:30rem;
+  width:34rem;
   height:100%;
   display:flex;
   align-items:center;
@@ -57,7 +57,9 @@ const AlbumCover = styled.img`
   width:7rem;
   height:7rem;
   border-radius:1rem;
-`
+  object-fit:cover;
+  object-position:center;
+`;
 const ProgressBarWrap = styled.div`
   width:100%;
   height:0.5rem;
@@ -82,14 +84,14 @@ const PlayBtnsWrap = styled.div`
   justify-content:center;
 `
 const TimeIndicatorWrap = styled.div`
-  width:30rem;
+  width:35rem;
   height:100%;
   display:flex;
   justify-content:flex-end;
   align-items:center;
   position:relative;
 `
-const TimeIndicator = styled.p`
+const TimeIndicator = styled.div`
   font-size:1.3rem;
   width:3rem;
   align-self:flex-start;
@@ -124,6 +126,23 @@ const VolumeController = styled.input`
   width:3rem;
 `
 
+const AddToPlaylistWrap = styled.div`
+  width:22rem;
+  position:absolute;
+  height:27rem;
+  background-color:white;
+  top:-25rem;
+  right:24rem;
+  box-shadow: 0.1rem 0.1rem 1rem 0.1rem #ccc;
+` 
+const AddToPlaylistMain = styled.div`
+  width:100%;
+  height:calc(100% - 3rem);
+  overflow-y:scroll;
+`
+
+
+
 export {
   AlbumCover,
   PlayBarWrap,
@@ -141,5 +160,7 @@ export {
   PlayBtn,
   StateIndicator,
   VolumeController,
-  VolumeControllerWrap
+  VolumeControllerWrap,
+  AddToPlaylistWrap,
+  AddToPlaylistMain
 }

@@ -116,7 +116,7 @@ const SignUp = () => {
       storeNickname(nickname);
       try {
         const data = await verify(email);
-        if (data.status == 201) {
+        if (data.status == 200) {
           navigate("/verify");
         }
       } catch (err: any) {
@@ -206,7 +206,12 @@ const SignUp = () => {
           </SS.WarningWrap>
         </SS.InputArea>
         <SS.FindMeWrap>
-          <SS.FindMeText to="/terms">개인정보 처리방침</SS.FindMeText>
+          <SS.FindMeText
+            to="https://copper-wedge-be0.notion.site/Openmusic-481b7ce9c03443e9ab28c34a12f66b4e"
+            target="blank"
+          >
+            개인정보 처리방침
+          </SS.FindMeText>
           <SS.FindMeText to="/login">회원이신가요?</SS.FindMeText>
         </SS.FindMeWrap>
         <SS.Button onClick={submit} disabled={loading}>

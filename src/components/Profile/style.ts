@@ -15,7 +15,6 @@ export const Avatar = styled.div<{ avatarUrl: string }>`
     opacity: 0.4;
   }
   overflow:hidden;
-  cursor: pointer;
   box-shadow:0.1rem 0.1rem 1rem 0.1rem #ccc;
 `;
 export const AvatarHover = styled.div`

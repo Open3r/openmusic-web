@@ -15,5 +15,5 @@ export const Title = styled.h1`
 export const Main = styled.div`
   width:100%;
   height:calc(100% - 5rem);
-  overflow:scroll;
+  overflow-y:scroll;
 `

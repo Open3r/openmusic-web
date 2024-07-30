@@ -1,12 +1,14 @@
-import { Artist } from "./artist";
+
+import { User } from "./User";
 
 export interface Song {
   id: number;
   title: string;
-  artist: Artist;
+  artist: User;
   url: string;
   thumbnailUrl: string;
-  likes:[];
+  liked:boolean;
+  likeCount:number;
   genre:string;
   scope:string;
 }

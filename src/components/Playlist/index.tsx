@@ -9,6 +9,8 @@ import Uploading from "../../assets/imgs/uploading.svg";
 import useFileUpload from "../../hooks/useFileUpload";
 import instance from "../../libs/axios/customAxios";
 import NotificationService from "../../libs/notification/NotificationService";
+import { playlistUpdateStore } from "../../stores/playlistUpdateStore";
+import { paging } from "../../libs/axios/paging";
 
 const Playlist = ({
   playlists,
@@ -28,6 +30,8 @@ const Playlist = ({
   const fileRef = useRef<HTMLInputElement | null>(null);
 
   const { fileUpload, loading } = useFileUpload();
+
+  const setUpdate = playlistUpdateStore(state=>state.setUpdate);
 
   const handlePlaylistCoverValue = async () => {
     if (fileRef.current && fileRef.current.files && fileRef.current.files[0]) {
@@ -71,14 +75,15 @@ const Playlist = ({
         setPlaylistCover(undefined);
         setPlaylistTitle('');
         setPlaylistScope("PUBLIC");
-        instance.get('/playlists/my')
+        instance.get('/users/me/playlists',{params:paging})
         .then((response)=>{
-          setPlaylists(response.data.data);
+          setPlaylists(response.data.data.content);
         });
         setIsModalOpen(false);
       })
       .finally(() => {
         setSubmitLoading(false);
+        setUpdate(true);
       });
   };
 
@@ -87,7 +92,7 @@ const Playlist = ({
       <S.Title>플레이리스트</S.Title>
       <S.Main>
         {playlists?.map((item) => (
-          <PlaylistBox key={item.id} item={item} />
+          <PlaylistBox type="default" key={item.id} item={item} />
         ))}
         <S.AddPlaylist onClick={handleModal}>
           <img src={Plus} />

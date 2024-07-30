@@ -13,13 +13,17 @@ const useFileUpload = () => {
     formData.append("files",file)
     try {
       const res = await instance.post('/files/upload',formData);
-      return res.data.data[0].url ;
+      return res.data.data[0].url;
     }catch(err:any){
       NotificationService.error('네트워크 에러');
-      setError(err);
+      if(err&&err.response){
+        setError(err);
+      }
     }finally{
       setLoading(false);
-      return Promise.reject(error);
+      if(error){
+        return Promise.reject(error);
+      }
     }
   }
 

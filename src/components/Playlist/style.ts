@@ -5,6 +5,7 @@ export const Container = styled.div`
   height: 100%;
   padding:2rem;
   box-sizing:border-box;
+  overflow-y:scroll;
 `;
 
 export const Title = styled.h1`
@@ -12,7 +13,6 @@ export const Title = styled.h1`
   height:5rem;
 `
 export const Main = styled.div`
-  overflow-y: scroll;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   padding: 1rem;

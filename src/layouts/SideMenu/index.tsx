@@ -4,7 +4,7 @@ import { userStore } from "../../stores/userStore";
 
 const SideMenu = () => {
   const sideMenu = useRef<HTMLDivElement | null>(null);
-  const onOffBtn = useRef<HTMLDivElement | null>(null);
+  const onOffBtn = useRef<HTMLImageElement | null>(null);
   const shadow = useRef<HTMLDivElement | null>(null);
   const [menuState, setMenuState] = useState(false);
   const user = userStore(state=>state.user);

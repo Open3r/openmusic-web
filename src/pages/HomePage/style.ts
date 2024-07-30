@@ -1,15 +1,21 @@
 import styled from "@emotion/styled";
 
 const Canvas = styled.div`
-  width:140rem;
-  margin:0 auto;
-  height:calc(100% - 22rem);
-  margin-bottom:10rem;
-  margin-top:12rem;
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:space-between;
-`
+  width: 140rem;
+  margin: 0 auto;
+  height: calc(100vh - 22rem);
+  margin-bottom: 10rem;
+  margin-top: 12rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  overflow-y:scroll;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+  }
+`;
 
 const ChartSectionWrap = styled.div`
   width:100%;

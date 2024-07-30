@@ -6,7 +6,12 @@ import instance from '../../libs/axios/customAxios';
 import { UserStore } from '../../stores/userStore';
 import EditNickname from '../../assets/imgs/EditNickname.svg';
 import NotificationService from '../../libs/notification/NotificationService';
-const Profile = ({user,setUser}:UserStore) => {
+
+interface ProfileComp extends UserStore {
+  type:string;
+}
+
+const Profile = ({user,setUser,type}:ProfileComp) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [submitLoading, setSubmitLoading] = useState(false);
   const [editNickname, setEditNickname] = useState(false);
@@ -142,125 +147,142 @@ const Profile = ({user,setUser}:UserStore) => {
     }
   }
 
-
-  return (
-    <S.Container>
-      <S.Avatar avatarUrl={user.avatarUrl}>
-        <S.AvatarHover
-          style={{ width: "20rem", height: "20rem" }}
-          onClick={handleModal}
-        >
-          아바타 변경
-        </S.AvatarHover>
-      </S.Avatar>
-      {isModalOpen ? (
-        <S.AvatarEditWrap>
-          <S.AvatarEdit>
-            <S.AvatarPreviewWrap>
-              <S.AvatarPreview
-                avatarUrl={
-                  !loading
-                    ? avatar == ""
-                      ? user.avatarUrl
-                      : avatar
-                    : Uploading
-                }
-              >
-                <S.AvatarHover onClick={OpenInput}>눌러서 업로드</S.AvatarHover>
-                <input
-                  type="file"
-                  accept="image/*"
-                  ref={inputRef}
-                  onChange={handleFileChange}
+  if(type==='mypage') {
+    return (
+      <S.Container>
+        <S.Avatar avatarUrl={user.avatarUrl}>
+          <S.AvatarHover
+            style={{ width: "20rem", height: "20rem" }}
+            onClick={handleModal}
+          >
+            아바타 변경
+          </S.AvatarHover>
+        </S.Avatar>
+        {isModalOpen ? (
+          <S.AvatarEditWrap>
+            <S.AvatarEdit>
+              <S.AvatarPreviewWrap>
+                <S.AvatarPreview
+                  avatarUrl={
+                    !loading
+                      ? avatar == ""
+                        ? user.avatarUrl
+                        : avatar
+                      : Uploading
+                  }
+                >
+                  <S.AvatarHover onClick={OpenInput}>
+                    눌러서 업로드
+                  </S.AvatarHover>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    ref={inputRef}
+                    onChange={handleFileChange}
+                  />
+                </S.AvatarPreview>
+                <S.EditInput
+                  type="password"
+                  placeholder="비밀번호"
+                  onChange={handlePassword}
                 />
-              </S.AvatarPreview>
-              <S.EditInput
-                type="password"
-                placeholder="비밀번호"
-                onChange={handlePassword}
-              />
-            </S.AvatarPreviewWrap>
-            <S.AvatarControllWrap>
-              <S.AvatarController
-                color={submitLoading ? "#558bbd" : "#52A9F9"}
-                activeColor="#558bbd"
-                onClick={submit}
-                disabled={loading || submitLoading}
-              >
-                {submitLoading ? "변경중..." : "변경"}
-              </S.AvatarController>
-              <S.AvatarController
-                color="lightgray"
-                activeColor="#ccc"
-                onClick={handleModal}
-                disabled={loading || submitLoading}
-              >
-                취소
-              </S.AvatarController>
-            </S.AvatarControllWrap>
-          </S.AvatarEdit>
-        </S.AvatarEditWrap>
-      ) : null}
-      <S.Nickname>
-        {user.nickname}
-        <img
-          src={EditNickname}
-          style={{ height: "3rem", cursor: "pointer" }}
-          onClick={handleEditNicknameArea}
-        />
-      </S.Nickname>
-      {editNickname ? (
-        <S.EditWrap>
-          <S.EditInput
-            type="text"
-            placeholder="새로운 닉네임"
-            onChange={handleNickname}
+              </S.AvatarPreviewWrap>
+              <S.AvatarControllWrap>
+                <S.AvatarController
+                  color={submitLoading ? "#558bbd" : "#52A9F9"}
+                  activeColor="#558bbd"
+                  onClick={submit}
+                  disabled={loading || submitLoading}
+                >
+                  {submitLoading ? "변경중..." : "변경"}
+                </S.AvatarController>
+                <S.AvatarController
+                  color="lightgray"
+                  activeColor="#ccc"
+                  onClick={handleModal}
+                  disabled={loading || submitLoading}
+                >
+                  취소
+                </S.AvatarController>
+              </S.AvatarControllWrap>
+            </S.AvatarEdit>
+          </S.AvatarEditWrap>
+        ) : null}
+        <S.Nickname>
+          {user.nickname}
+          <img
+            src={EditNickname}
+            style={{ height: "3rem", cursor: "pointer" }}
+            onClick={handleEditNicknameArea}
           />
-          <S.EditInput
-            type="password"
-            placeholder="비밀번호"
-            onChange={handlePassword}
-          />
-          <S.EditSubmit onClick={submit} disabled={submitLoading}>
-            {submitLoading ? "변경중..." : "변경"}
-          </S.EditSubmit>
-        </S.EditWrap>
-      ) : null}
-      <S.Addiction>{user.email}</S.Addiction>
-      {editPassword ? (
-        <S.EditWrap style={{ height: "20rem" }}>
-          <S.EditInput
-            type="password"
-            placeholder="새로운 비밀번호"
-            onChange={handleNewPassword}
-          />
-          <S.EditInput
-            type="password"
-            placeholder="비밀번호"
-            onChange={handlePassword}
-          />
-          <S.ButtonWrap>
-            <S.EditSubmit onClick={passwordChangeSubmit} disabled={submitLoading}>
+        </S.Nickname>
+        {editNickname ? (
+          <S.EditWrap>
+            <S.EditInput
+              type="text"
+              placeholder="새로운 닉네임"
+              onChange={handleNickname}
+            />
+            <S.EditInput
+              type="password"
+              placeholder="비밀번호"
+              onChange={handlePassword}
+            />
+            <S.EditSubmit onClick={submit} disabled={submitLoading}>
               {submitLoading ? "변경중..." : "변경"}
             </S.EditSubmit>
-            <S.EditSubmit
-              onClick={handleEditPasswordArea}
-              style={{ backgroundColor: "gray" }}
-            >
-              취소
-            </S.EditSubmit>
-          </S.ButtonWrap>
-        </S.EditWrap>
-      ) : (
-        <S.Addiction
-          style={{ cursor: "pointer", textDecoration: "underline" }}
-          onClick={handleEditPasswordArea}
-        >
-          비밀번호 변경
-        </S.Addiction>
-      )}
-    </S.Container>
-  );
+          </S.EditWrap>
+        ) : null}
+        <S.Addiction>{user.email}</S.Addiction>
+        {editPassword ? (
+          <S.EditWrap style={{ height: "20rem" }}>
+            <S.EditInput
+              type="password"
+              placeholder="새로운 비밀번호"
+              onChange={handleNewPassword}
+            />
+            <S.EditInput
+              type="password"
+              placeholder="비밀번호"
+              onChange={handlePassword}
+            />
+            <S.ButtonWrap>
+              <S.EditSubmit
+                onClick={passwordChangeSubmit}
+                disabled={submitLoading}
+              >
+                {submitLoading ? "변경중..." : "변경"}
+              </S.EditSubmit>
+              <S.EditSubmit
+                onClick={handleEditPasswordArea}
+                style={{ backgroundColor: "gray" }}
+              >
+                취소
+              </S.EditSubmit>
+            </S.ButtonWrap>
+          </S.EditWrap>
+        ) : (
+          <S.Addiction
+            style={{ cursor: "pointer", textDecoration: "underline" }}
+            onClick={handleEditPasswordArea}
+          >
+            비밀번호 변경
+          </S.Addiction>
+        )}
+      </S.Container>
+    );
+  }
+  if(type === 'artist'){
+    return (
+      <S.Container>
+        <S.Avatar avatarUrl={user.avatarUrl}></S.Avatar>
+        <S.Nickname>
+          {user.nickname}
+        </S.Nickname>
+        <S.Addiction>{user.email}</S.Addiction>
+      </S.Container>
+    )
+  }
 }
 
 export default Profile

@@ -70,7 +70,7 @@ instance.interceptors.response.use(
           setTimeout(()=>{
             NotificationService.error("토큰이 만료되었습니다.");
           },100);
-          // window.location.href = "/login";
+          window.location.href = "/login";
           removeCookie("accessToken");
           removeCookie("refreshToken");
           return Promise.reject(refreshError);

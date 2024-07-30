@@ -8,6 +8,10 @@ import SignUp from "../../pages/SignUp";
 import Verify from "../../pages/Verify";
 import UploadPage from "../../pages/UploadPage";
 import MyPage from "../../pages/MyPage";
+import AlbumPage from "../../pages/AlbumPage";
+import ArtistPage from "../../pages/ArtistPage";
+import NotFoundPage from "../../pages/NotFondPage";
+import { SearchPage } from "../../pages/SearchPage";
 
 const Router = () => {
   const location = useLocation();
@@ -36,9 +40,13 @@ const Router = () => {
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<Layout />}>
             <Route index element={<HomePage />} />
-            <Route path="/playlist" element={<PlaylistPage />} />
+            <Route path="/playlist/:id" element={<PlaylistPage />} />
+            <Route path="/album/:id" element={<AlbumPage />} />
             <Route path="/upload" element={<UploadPage />} />
             <Route path="/my-page" element={<MyPage />} />
+            <Route path="/artist/:id" element={<ArtistPage />} />
+            <Route path="/search/:keyword" element={<SearchPage/>} /> 
+            <Route path="/*" element={<NotFoundPage />} />
           </Route>
           <Route
             path="/login"

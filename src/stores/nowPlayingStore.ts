@@ -1,22 +1,10 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { Artist } from "../interfaces/artist";
+import { Song } from "../interfaces/Song";
 
 interface NowPlaying {
-  nowPlaying: {
-    artist: Artist;
-    title: string;
-    id: number;
-    url: string;
-    thumbnailUrl: string;
-  };
-  setNowPlaying: (source: {
-    artist: Artist;
-    title: string;
-    id: number;
-    url: string;
-    thumbnailUrl: string;
-  }) => void;
+  nowPlaying: Song;
+  setNowPlaying: (source: Song) => void;
 }
 
 export const nowPlayingStore = create(
@@ -24,20 +12,27 @@ export const nowPlayingStore = create(
     (set) => ({
       nowPlaying: {
         artist: {
-          id:0,
-          nickname:"",
-          avatarUrl:"",
+          id: 0,
+          nickname: "",
+          avatarUrl: "",
+          email: '',
+          role: '',
+          status: '',
+          provider: '',
         },
         title: "",
         id: 0,
         url: "",
         thumbnailUrl: "",
+        liked: false,
+        likeCount: 0,
+        genre: "",
+        scope: "",
       },
-      setNowPlaying: (source) => set({ nowPlaying: source }),
+      setNowPlaying: (source) => set({ nowPlaying: { ...source } }),
     }),
     {
       name: "now-playing-store",
     }
   )
 );
-

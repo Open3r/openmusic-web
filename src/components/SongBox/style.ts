@@ -57,7 +57,7 @@ const BoxHover = styled.div`
   &:hover{
     opacity:0.4;
   }
-  
+
 `
 const HoverWord = styled.p`
   font-size:1.5rem;
@@ -140,14 +140,31 @@ const RankSongWrap = styled.div`
   box-sizing:border-box;
   padding: 0 1rem;
 `
+const RankSongLikeWrap = styled.div`
+  width:4rem;
+  height:7rem;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+`
 const RankSongInfoWrap = styled.div`
-  width:calc(100% - 7rem);
+  width:10rem;
   height:80%;
   display:flex;
   flex-direction:column;
   justify-content:space-evenly;
   box-sizing:border-box;
   padding: 0 1rem;
+`
+const RankSongAlbum = styled.div`
+  width:12rem;
+  height:7rem;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  color:gray;
+  font-size:1.7rem;
+  margin-right:10rem;
 `
 const RankSongTitle = styled.h1`
   font-size: 1.2rem;
@@ -178,6 +195,76 @@ const RankSongHover = styled.div`
   }
 `
 
+const ListMusic = styled.div`
+  max-width: 100%;
+  min-width:calc(100% - 5rem);
+  height: 10rem;
+  display: flex;
+  position: relative;
+  &:hover :first-of-type {
+    opacity: 0.4;
+  }
+  align-items:center;
+  border-bottom: 0.1rem solid #ccc;
+`;
+const ListMusicHover = styled.div`
+  position:absolute;
+  top:0;
+  left:0;
+  background-color:black;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  opacity:0;
+  &:hover{
+    opacity:0.4;
+  }
+  width:100%;
+  height:100%;
+  transition:all 0.3s;
+  cursor: pointer;
+`
+const ListNum = styled.div`
+  width: 5rem;
+  height:5rem;
+  font-size: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #52a9f9;
+`;
+const ListCover = styled.img`
+  width:8rem;
+  height:8rem;
+  object-fit:cover;
+  object-position:center;
+  border-radius:1rem;
+`
+const ListMusicInfoWrap = styled.div`
+  width:35%;
+  height:90%;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-evenly;
+  padding:0 1rem;
+  box-sizing:border-box;
+`
+export const ListMusicAlbum = styled.div`
+  width:55%;
+  height:90%;
+  display:flex;
+  align-items:center;
+  color:gray;
+  font-size:1.6rem;
+`
+export const ListMusicTitle = styled.h1`
+  font-size:1.5rem;
+  font-weight:bold;
+`
+export const ListMusicArtist = styled.p`
+  font-size: 1.2rem;
+  color:gray;
+`
 
 export {
   SongBox,
@@ -193,8 +280,15 @@ export {
   Rank,
   RankNumWrap,
   RankSongWrap,
+  RankSongAlbum,
+  RankSongLikeWrap,
   RankSongHover,
   RankSongInfoWrap,
   RankSongTitle,
-  RankSongArtist
+  RankSongArtist,
+  ListMusic,
+  ListMusicHover,
+  ListNum,
+  ListCover,
+  ListMusicInfoWrap,
 }

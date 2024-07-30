@@ -1,17 +1,21 @@
 import * as S from "./style";
 import searchBtn from '../../assets/imgs/search.svg';
 import logo from '../../assets/imgs/logo_color.png';
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import useGetUser from "../../hooks/useGetUser";
 import { userStore } from "../../stores/userStore";
 import { useEffect, useState } from "react";
+import NotificationService from "../../libs/notification/NotificationService";
 
 const Header = () => {
 
   const { getUser } = useGetUser();
   const setUser = userStore((state) => state.setUser);
   const [pageState, setPageState] = useState<"MAIN"|"UPLOAD"|"CHART"|"INCREASE"|"QUEUE"|"MYPAGE">("MAIN");
+  const [searchText, setSearchText] = useState("");
+
   const location = useLocation();
+  const navigate = useNavigate();
 
   const userReq = async () => {
     await getUser().then((res)=>{
@@ -22,6 +26,18 @@ const Header = () => {
   useEffect(() => {
     userReq();
   }, []);
+
+  const handleSearch = (e:React.ChangeEvent<HTMLInputElement>) => {
+    setSearchText(e.target.value);
+  }
+
+  const search = () => {
+    if(searchText.trim() === '') {
+      NotificationService.warn('검색어를 입력해주세요.');
+      return
+    }
+    navigate(`/search/${searchText}`);
+  }
 
   useEffect(()=>{
     if(location.pathname === "/") {
@@ -52,8 +68,15 @@ const Header = () => {
           <S.Search
             type="search"
             placeholder="오늘은 어떤 음악이 듣고 싶나요?"
+            onChange={handleSearch}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                search();
+              }
+            }}
           />
-          <S.SearchBtn src={searchBtn} />
+          <S.SearchBtn src={searchBtn} onClick={search} />
         </S.SearchWrap>
       </S.SearchArea>
       <S.MenuArea>

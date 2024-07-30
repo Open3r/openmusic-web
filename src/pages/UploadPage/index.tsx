@@ -73,7 +73,6 @@ const UploadPage = () => {
       const file = musicRef.files[0];
       try{
         const url = await fileUpload(file);
-        console.log(url);
         setSongs((prev) => {
           const updatedSongs = [...prev];
           if (url) {
@@ -130,7 +129,7 @@ const UploadPage = () => {
   return (
     <S.Canvas>
       {
-        !loading ? (
+        loading ? (
           <S.LoadingShadow>
             <S.Spinner>
             </S.Spinner>

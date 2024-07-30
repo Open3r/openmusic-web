@@ -12,7 +12,7 @@ function useGetUser() {
     setLoading(true);
     setError(null);
     if (refreshToken == undefined) {
-      // navigate("/login");
+      navigate("/login");
       return;
     }
     try {
@@ -20,7 +20,7 @@ function useGetUser() {
       return res.data;
     } catch (err: any) {
       setError(err.response ? err.response.data : "Network error");
-      // navigate("/login");
+      navigate("/login");
       throw err;
     } finally {
       setLoading(false);

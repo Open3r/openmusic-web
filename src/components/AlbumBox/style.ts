@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 
 export const Container = styled.div`
-  width:93%;
+  width:34rem;
   height:10rem;
   background-color:white;
   box-shadow:0.1rem 0.1rem 1rem 0.1rem #ccc;
@@ -12,6 +12,10 @@ export const Container = styled.div`
   padding:0 1rem;
   box-sizing:border-box;
   cursor: pointer;
+  &:hover {
+    transform:translateY(-3px);
+  }
+  transition: all 0.3s;
 `
 export const AlbumCover = styled.div<{cover:string}>`
   width:8rem;

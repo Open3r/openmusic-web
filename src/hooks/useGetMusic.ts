@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getCookie } from "../libs/cookies/cookie";
 import instance from "../libs/axios/customAxios";
+import { paging } from "../libs/axios/paging";
 function useGetMusic() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -12,15 +13,15 @@ function useGetMusic() {
     setLoading(true);
     setError(null);
     if (refreshToken == undefined) {
-      // navigate("/login");
+      navigate("/login");
       return;
     }
     try {
-      const res = await instance.get(`/songs/public`);
-      return res.data.data;
+      const res = await instance.get(`/songs`,{params:paging});
+      return res.data.data.content;
     } catch (err: any) {
       setError(err.response ? err.response.data : "Network error");
-      // navigate("/login");
+      navigate("/login");
       throw err;
     } finally {
       setLoading(false);

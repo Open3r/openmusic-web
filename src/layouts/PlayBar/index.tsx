@@ -7,7 +7,6 @@ import { loopShuffleStore } from "../../stores/loopShuffleStore";
 import { PlayStateStore } from "../../stores/playStateStore";
 import useAudioControls from "../../hooks/useAudioControl";
 import useProgress from "../../hooks/useProgress";
-
 import next from "../../assets/imgs/next.svg";
 import play from "../../assets/imgs/play.svg";
 import pause from "../../assets/imgs/pause.svg";
@@ -17,6 +16,14 @@ import unShuffle from "../../assets/imgs/shuffleOff.svg";
 import loop from "../../assets/imgs/repeatOn.svg";
 import unloop from "../../assets/imgs/repeatOff.svg";
 import playlistPlus from '../../assets/imgs/playlistPlus.svg';
+import { PlaylistType } from "../../interfaces/playlist";
+import instance from "../../libs/axios/customAxios";
+import PlaylistBox from "../../components/PlaylistBox";
+import { playlistUpdateStore } from "../../stores/playlistUpdateStore";
+import { paging } from "../../libs/axios/paging";
+import Like from '../../assets/imgs/like.svg';
+import Unlike from '../../assets/imgs/unlike.svg';
+import { likeUpdateStore } from "../../stores/likeUpdateStore";
 
 const PlayBar: React.FC = () => {
   const playState = PlayStateStore((state) => state.playState);
@@ -33,8 +40,13 @@ const PlayBar: React.FC = () => {
   const setLoopState = loopShuffleStore((state) => state.setLoopState);
   const setShuffleState = loopShuffleStore((state) => state.setShuffleState);
 
+  const update = playlistUpdateStore(state=>state.update);
+  const setUpdate = playlistUpdateStore(state=>state.setUpdate);
+
   const queue = playQueueStore((state) => state.queue);
-  const currIdx = queue.findIndex((song) => song.title === nowPlaying.title);
+  const currIdx = queue.findIndex((song) => song.id === nowPlaying.id);
+
+  const setLikeUpdate = likeUpdateStore(state=>state.setLikeUpdate);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -47,18 +59,37 @@ const PlayBar: React.FC = () => {
   } = useAudioControls(audioRef);
 
   const [initialRender, setInitialRender] = useState(true);
+  const [myPlaylists, setMyPlaylists] = useState<PlaylistType[]>();
+  const [playlistModal, setPlaylistModal] = useState(false);
+  const [likeLoading, setLikeLoading] = useState(false);
+  const [requested, setRequested] = useState(false);
 
   const { progress, time, updatePlayTime, handleMouseDown, currTime } = useProgress(audioRef, fullDuration);
 
-  const getRandom = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
+  const getRandom = (min: number, max: number) => {
+    const prev = currIdx;
+    let rand = Math.floor(Math.random() * (max - min + 1)) + min;
+    while(prev == rand) {
+      rand = Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    return rand;
+  }
+   
 
   const musicEndEvent = () => {
-    if (loopState && shuffleState) {
-      setNowPlaying(queue[getRandom(0, queue.length - 1)]);
-    } else {
+    if (loopState) {
+      if (shuffleState) {
+        const rand = getRandom(0, queue.length - 1);
+        setNowPlaying(queue[rand]);
+      } else {
+        nextMusic();
+      }
+    }else{
       nextMusic();
     }
+    setRequested(false);
   };
+
 
   const initializeTime = () => {
     if(audioRef.current){
@@ -88,7 +119,10 @@ const PlayBar: React.FC = () => {
     if (currTime < 20) {
       if (queue.length && currIdx > 0) {
         setNowPlaying(queue[currIdx - 1]);
-      }else{
+      }else if (queue.length && currIdx === 0) {
+        setNowPlaying(queue[queue.length - 1]);
+      }
+      else{
         initializeTime();
       }
     }else{
@@ -97,11 +131,17 @@ const PlayBar: React.FC = () => {
   };
 
   const nextMusic = () => {
+    console.log(currIdx,queue.length - 1);
     if (queue.length) {
       if (currIdx < queue.length - 1) {
         setNowPlaying(queue[currIdx + 1]);
-      } else if (loopState) {
+      } else if (loopState && currIdx === queue.length - 1) {
         setNowPlaying(queue[0]);
+        if(audioRef.current) {
+          audioRef.current.play();
+        }
+      }else{
+        stopPlay();
       }
     }
   };
@@ -145,6 +185,28 @@ const PlayBar: React.FC = () => {
     [setVolController]
   );
 
+  const handleSpace = useCallback(
+    (e:KeyboardEvent) => {
+      if (
+        (e.target as HTMLElement).tagName === "INPUT" ||
+        (e.target as HTMLElement).tagName === "TEXTAREA"
+      ) {
+        return;
+      }
+      if (e.key === " ") {
+        e.preventDefault();
+        if (playState) {
+          audioRef.current?.pause();
+          setPlayState(false);
+        } else {
+          audioRef.current?.play();
+          setPlayState(true);
+        }
+      }
+    },
+    [playState, setPlayState]
+  );
+
   useEffect(() => {
     document.documentElement.addEventListener("click", handleVolumeClick);
     return () => {
@@ -153,7 +215,22 @@ const PlayBar: React.FC = () => {
   }, [handleVolumeClick]);
 
   useEffect(() => {
+    document.addEventListener("keydown", handleSpace);
+    return () => {
+      document.removeEventListener("keydown", handleSpace);
+    }
+  }, [handleSpace]);
+
+  const musicReq = async () => {
+    console.log('musicRequested');
+    const res = await instance.get(`/songs/${nowPlaying.id}`);
+    setNowPlaying(res.data.data);
+    setRequested(true);
+  }
+
+  useEffect(() => {
     if(initialRender) {
+      initializeTime();
       setPlayState(false);
       if (audioRef.current) {
         audioRef.current.pause();
@@ -161,7 +238,10 @@ const PlayBar: React.FC = () => {
       updateCurrTime({ currTime: 0 });
       setInitialRender(false);
     }else{
-      if (nowPlaying.title && audioRef.current) {
+      if (nowPlaying.title && audioRef.current && playState) {
+        if(!requested) {
+          musicReq();
+        }
         audioRef.current.play().catch((err) => {
           if (err instanceof DOMException) {
             setPlayState(false);
@@ -174,6 +254,67 @@ const PlayBar: React.FC = () => {
       }
     }
   }, [nowPlaying]);
+
+  const myPlaylistReq = async () => {
+    await instance.get("/users/me/playlists",{params:paging}).then((res) => {
+      setMyPlaylists(res.data.data.content);
+    });
+  };
+
+  useEffect(()=>{
+    myPlaylistReq();
+    setUpdate(false);
+  },[update]);
+
+  const handleAddPlaylistClick = useCallback(
+    (e: MouseEvent) => {
+      if ((e.target as HTMLElement).className.includes("playlist")) {
+        if ((e.target as HTMLElement).className.includes("addBtn")) {
+          setPlaylistModal((prev) => !prev);
+        }
+      } else {
+        setPlaylistModal(false);
+      }
+    },
+    [setPlaylistModal]
+  );
+
+  useEffect(() => {
+    document.addEventListener("click", handleAddPlaylistClick);
+    return () => {
+      document.removeEventListener("click", handleAddPlaylistClick);
+    };
+  }, [handleAddPlaylistClick]);
+
+  const likeReq = async () => {
+    setLikeLoading(true);
+    if(!likeLoading) {
+      await instance
+        .post(`/songs/${nowPlaying.id}/likes`)
+        .then((res) => {
+          setNowPlaying(res.data.data);
+          setLikeUpdate(true);
+        })
+        .finally(() => {
+          setLikeLoading(false);
+        });
+    }
+  } 
+
+  const unlikeReq = async () => {
+    setLikeLoading(true);
+    if (!likeLoading) {
+      await instance
+        .delete(`/songs/${nowPlaying.id}/likes`)
+        .then((res) => {
+          setNowPlaying(res.data.data);
+          setLikeUpdate(true);
+        })
+        .finally(() => {
+          setLikeLoading(false);
+        });
+    }
+  }; 
 
   return (
     <PB.PlayBarWrap>
@@ -214,13 +355,55 @@ const PlayBar: React.FC = () => {
           ) : (
             <PB.PlayBtn src={play} onClick={playMusic} />
           )}
-          <PB.PlayBtn src={next} onClick={nextMusic} />
+          <PB.PlayBtn src={next} onClick={musicEndEvent} />
         </PB.PlayBtnsWrap>
         <PB.TimeIndicatorWrap>
+          {!nowPlaying.liked ? (
+            <PB.StateIndicator
+              src={Unlike}
+              style={{ width: "3rem", height: "3rem" }}
+              onClick={likeReq}
+            />
+          ) : (
+            <PB.StateIndicator
+              src={Like}
+              style={{ width: "3rem", height: "3rem" }}
+              onClick={unlikeReq}
+            />
+          )}
+
           <PB.StateIndicator
             src={playlistPlus}
             style={{ width: "3rem", height: "3rem" }}
+            className="addBtn playlist"
           />
+          {playlistModal ? (
+            <PB.AddToPlaylistWrap className="playlist">
+              <h1
+                style={{
+                  height: "3rem",
+                  padding: "0 1rem",
+                  boxSizing: "border-box",
+                  fontSize: "1.5rem",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+                className="playlist"
+              >
+                플레이리스트에 추가
+              </h1>
+              <PB.AddToPlaylistMain className="playlist">
+                {myPlaylists?.map((item) => (
+                  <PlaylistBox
+                    item={item}
+                    key={item.id}
+                    type="playbar"
+                    songId={nowPlaying.id}
+                  />
+                ))}
+              </PB.AddToPlaylistMain>
+            </PB.AddToPlaylistWrap>
+          ) : null}
           {loopState ? (
             <PB.StateIndicator src={loop} onClick={swapLoopState} />
           ) : (

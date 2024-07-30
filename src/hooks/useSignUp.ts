@@ -5,11 +5,11 @@ function useSignUp() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const signUp = async (name:string, email:string, password:string, emailCode:string) => {
+  const signUp = async (nickname:string, email:string, password:string, emailCode:string) => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/auth/signup`, { name, email, emailCode, password });
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/auth/signup`, { nickname, email, emailCode, password });
       setLoading(false);
       return response.data;
     } catch (err:any) {
