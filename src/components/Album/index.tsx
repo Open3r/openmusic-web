@@ -8,7 +8,7 @@ const Album = ({albums}: {albums: AlbumType[]|undefined}) => {
       <S.Title>앨범</S.Title>
       <S.Main>
         {albums?.map((item) => (
-          <AlbumBox item={item} key={item.id}/>
+          <AlbumBox item={item} key={item.id} type='default'/>
         ))}
       </S.Main>
     </S.Container>

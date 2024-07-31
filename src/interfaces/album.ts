@@ -1,5 +1,5 @@
-import { Song } from "./Song";
-import { User } from "./User";
+import { Song } from './Song';
+import { User } from './User';
 
 export interface AlbumType{
   id:number;
@@ -12,4 +12,25 @@ export interface AlbumType{
   artist:User;
   createdAt:string;
   updatedAt:string;
+}
+
+export interface AlbumTypeNoSong{
+  id: number,
+  title: string,
+  description: string,
+  coverUrl: string,
+  artist: {
+    id: 0,
+    nickname: string,
+    email: string,
+    provider: string,
+    avatarUrl: string,
+    role: string,
+    status: string,
+    genres: [
+      string
+    ],
+    createdAt: string,
+    updatedAt: string
+  }
 }

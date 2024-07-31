@@ -100,6 +100,7 @@ const PlayBtn = styled.img`
   width:4rem;
   height:4rem;
   margin: 0 2rem;
+  cursor: pointer;
 `
 const StateIndicator = styled.img`
   width:4rem;
@@ -137,10 +138,22 @@ const AddToPlaylistWrap = styled.div`
 ` 
 const AddToPlaylistMain = styled.div`
   width:100%;
-  height:calc(100% - 3rem);
+  height:calc(100% - 8rem);
   overflow-y:scroll;
 `
-
+const AddToQueue = styled.div`
+  width:100%;
+  height:5rem;
+  font-size:2rem;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  &:hover{
+    background-color:#F1F1F1;
+  }
+  transition: all 0.3s;
+  cursor:pointer;
+`
 
 
 export {
@@ -162,5 +175,6 @@ export {
   VolumeController,
   VolumeControllerWrap,
   AddToPlaylistWrap,
-  AddToPlaylistMain
+  AddToPlaylistMain,
+  AddToQueue
 }

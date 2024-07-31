@@ -9,7 +9,7 @@ function useGetMusic() {
   const navigate = useNavigate();
   const refreshToken = getCookie("refreshToken");
 
-  const getMusic = async () => {
+  const getMusic = async (size:number) => {
     setLoading(true);
     setError(null);
     if (refreshToken == undefined) {
@@ -17,7 +17,7 @@ function useGetMusic() {
       return;
     }
     try {
-      const res = await instance.get(`/songs`,{params:paging});
+      const res = await instance.get(`/songs`,{params:{...paging, size}});
       return res.data.data.content;
     } catch (err: any) {
       setError(err.response ? err.response.data : "Network error");

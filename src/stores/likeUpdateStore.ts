@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-interface LikeUpdate {
+export interface LikeUpdate {
   likeUpdate: boolean;
   setLikeUpdate: (update: boolean) => void;
 }

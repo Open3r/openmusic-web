@@ -11,7 +11,7 @@ const Header = () => {
 
   const { getUser } = useGetUser();
   const setUser = userStore((state) => state.setUser);
-  const [pageState, setPageState] = useState<"MAIN"|"UPLOAD"|"CHART"|"INCREASE"|"QUEUE"|"MYPAGE">("MAIN");
+  const [pageState, setPageState] = useState<"MAIN"|"SONG"|"CHART"|"PLAYLIST"|"ALBUM">("MAIN");
   const [searchText, setSearchText] = useState("");
 
   const location = useLocation();
@@ -43,20 +43,17 @@ const Header = () => {
     if(location.pathname === "/") {
       setPageState("MAIN");
     }
-    if(location.pathname === "/upload") {
-      setPageState("UPLOAD");
+    if(location.pathname === "/song") {
+      setPageState("SONG");
     }
-    if(location.pathname === "/chart") {
+    if(location.pathname === "/rank") {
       setPageState("CHART");
     }
-    if(location.pathname === "/increase") {
-      setPageState("INCREASE");
+    if(location.pathname === "/playlist") {
+      setPageState("PLAYLIST");
     }
-    if(location.pathname === "/queue") {
-      setPageState("QUEUE");
-    }
-    if (location.pathname === "/my-page") {
-      setPageState("MYPAGE");
+    if(location.pathname === "/album") {
+      setPageState("ALBUM");
     }
   },[location.pathname]);
 
@@ -89,43 +86,40 @@ const Header = () => {
             메인
           </S.Menu>
         </Link>
-        <S.Menu
-          style={
-            pageState === "CHART" ? { color: "#52A9F9" } : { color: "black" }
-          }
-        >
-          오픈차트
-        </S.Menu>
-        <Link to={"/upload"} style={{ textDecoration: "none" }}>
+        <Link to={"/rank"} style={{ textDecoration: "none" }}>
           <S.Menu
             style={
-              pageState === "UPLOAD" ? { color: "#52A9F9" } : { color: "black" }
+              pageState === "CHART" ? { color: "#52A9F9" } : { color: "black" }
+            }
+          >
+            오픈차트
+          </S.Menu>
+        </Link>
+        <Link to={"/song"} style={{ textDecoration: "none" }}>
+          <S.Menu
+            style={
+              pageState === "SONG" ? { color: "#52A9F9" } : { color: "black" }
             }
           >
             신곡
           </S.Menu>
         </Link>
-        <S.Menu
-          style={
-            pageState === "INCREASE" ? { color: "#52A9F9" } : { color: "black" }
-          }
-        >
-          급상승
-        </S.Menu>
-        <S.Menu
-          style={
-            pageState === "QUEUE" ? { color: "#52A9F9" } : { color: "black" }
-          }
-        >
-          재생목록
-        </S.Menu>
-        <Link to={"/my-page"} style={{ textDecoration: "none" }}>
+        <Link to={"/album"} style={{ textDecoration: "none" }}>
           <S.Menu
             style={
-              pageState === "MYPAGE" ? { color: "#52A9F9" } : { color: "black" }
+              pageState === "ALBUM" ? { color: "#52A9F9" } : { color: "black" }
             }
           >
-            마이페이지
+            앨범
+          </S.Menu>
+        </Link>
+        <Link to={"/playlist"} style={{ textDecoration: "none" }}>
+          <S.Menu
+            style={
+              pageState === "PLAYLIST" ? { color: "#52A9F9" } : { color: "black" }
+            }
+          >
+            플레이리스트
           </S.Menu>
         </Link>
       </S.MenuArea>

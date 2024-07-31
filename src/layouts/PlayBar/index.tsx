@@ -1,8 +1,6 @@
-import React, { useEffect, useRef, useCallback, useState } from "react";
-import { nowPlayingStore } from "../../stores/nowPlayingStore";
+import { useEffect, useRef, useCallback, useState } from "react";
 import { PlayTimeStore } from "../../stores/PlayTimeStore";
 import * as PB from "./style";
-import { playQueueStore } from "../../stores/playQueueStore";
 import { loopShuffleStore } from "../../stores/loopShuffleStore";
 import { PlayStateStore } from "../../stores/playStateStore";
 import useAudioControls from "../../hooks/useAudioControl";
@@ -24,13 +22,19 @@ import { paging } from "../../libs/axios/paging";
 import Like from '../../assets/imgs/like.svg';
 import Unlike from '../../assets/imgs/unlike.svg';
 import { likeUpdateStore } from "../../stores/likeUpdateStore";
+import { Song } from "../../interfaces/Song";
+import { songIdUpdate } from "../../stores/nowPlayingStore";
+import { queueUpdateStore } from "../../stores/queueStore";
+import { AxiosError } from "axios";
+import { recentUpdateStore } from "../../stores/recentStore";
+import NotificationService from "../../libs/notification/NotificationService";
+import { queueStateUpdateStore } from "../../stores/queueStateStore";
 
-const PlayBar: React.FC = () => {
+const PlayBar = () => {
   const playState = PlayStateStore((state) => state.playState);
   const setPlayState = PlayStateStore((state) => state.setPlayState);
 
-  const nowPlaying = nowPlayingStore((state) => state.nowPlaying);
-  const setNowPlaying = nowPlayingStore((state) => state.setNowPlaying);
+  const [nowPlaying, setNowPlaying] = useState<Song>();
 
   const updateCurrTime = PlayTimeStore((state) => state.updateCurrTime);
   const fullDuration = PlayTimeStore((state) => state.fullDuration);
@@ -43,10 +47,17 @@ const PlayBar: React.FC = () => {
   const update = playlistUpdateStore(state=>state.update);
   const setUpdate = playlistUpdateStore(state=>state.setUpdate);
 
-  const queue = playQueueStore((state) => state.queue);
-  const currIdx = queue.findIndex((song) => song.id === nowPlaying.id);
+  const queue = queueUpdateStore(state=>state.queueUpdate);
+  const [currIdx, setCurrIdx] = useState<number | undefined>(0);
 
   const setLikeUpdate = likeUpdateStore(state=>state.setLikeUpdate);
+
+  const setSongIdUpdate = songIdUpdate((state) => state.setSongIdUpdate);
+  const setQueueUpdate = queueUpdateStore((state) => state.setQueueUpdate);
+  const setRecentUpdate = recentUpdateStore((state) => state.setRecentUpdate);
+  const setQueueStateUpdate = queueStateUpdateStore(state=>state.setQueueStateUpdate);
+
+  const songId = songIdUpdate(state=>state.songId);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -62,7 +73,6 @@ const PlayBar: React.FC = () => {
   const [myPlaylists, setMyPlaylists] = useState<PlaylistType[]>();
   const [playlistModal, setPlaylistModal] = useState(false);
   const [likeLoading, setLikeLoading] = useState(false);
-  const [requested, setRequested] = useState(false);
 
   const { progress, time, updatePlayTime, handleMouseDown, currTime } = useProgress(audioRef, fullDuration);
 
@@ -74,20 +84,95 @@ const PlayBar: React.FC = () => {
     }
     return rand;
   }
-   
+
+  const myPlaylistReq = async () => {
+    await instance
+      .get("/users/me/playlists", { params: paging })
+      .then((res) => {
+        setMyPlaylists(res.data.data.content);
+      });
+  };
+
+  useEffect(() => {
+    myPlaylistReq();
+    setUpdate(false);
+  }, [update]);
+
+  const queueReq = async () => {
+    const res = await instance.get('users/me/queue');
+    setQueueUpdate(res.data.data);
+  }
+
+  useEffect(()=>{
+    queueReq();
+  },[]);
+
+  
+  
+  
+  const likeReq = async () => {
+    setLikeLoading(true);
+    if (!likeLoading) {
+      await instance
+        .post(`/songs/${nowPlaying?.id}/likes`)
+        .then((res) => {
+          setNowPlaying(res.data.data);
+          setLikeUpdate(true);
+        })
+        .finally(() => {
+          setLikeLoading(false);
+        });
+    }
+  };
+
+  const unlikeReq = async () => {
+    setLikeLoading(true);
+    if (!likeLoading) {
+      await instance
+        .delete(`/songs/${nowPlaying?.id}/likes`)
+        .then((res) => {
+          setNowPlaying(res.data.data);
+          setLikeUpdate(true);
+        })
+        .finally(() => {
+          setLikeLoading(false);
+        });
+    }
+  };
+
+  const nowPlayingReq = async () => {
+    if (songId !== 0) {
+      if (queue) {
+        const idx = queue.findIndex((song) => songId === song.id);
+        if (idx === -1) {
+          const res = await instance.get(`/songs/${songId}`);
+          setNowPlaying(res.data.data);
+          setCurrIdx(queue.length);
+        } else {
+          setCurrIdx(queue.length);
+          setNowPlaying(queue[idx]);
+          setCurrIdx(idx);
+        }
+        setPlayState(true);
+      }
+    }
+  };
+
+  useEffect(()=>{
+    nowPlayingReq();
+  },[queue]);
 
   const musicEndEvent = () => {
     if (loopState) {
       if (shuffleState) {
-        const rand = getRandom(0, queue.length - 1);
-        setNowPlaying(queue[rand]);
+        const rand = getRandom(0, queue?.length! - 1);
+        setNowPlaying(queue![rand]);
       } else {
         nextMusic();
       }
     }else{
       nextMusic();
     }
-    setRequested(false);
   };
 
 
@@ -100,7 +185,7 @@ const PlayBar: React.FC = () => {
 
   const playMusic = () => {
     if (audioRef.current) {
-      if (nowPlaying.title !== "") {
+      if (nowPlaying?.title !== "") {
         audioRef.current.play();
         setPlayState(true);
       }
@@ -115,34 +200,61 @@ const PlayBar: React.FC = () => {
   };
 
 
-  const prevMusic = () => {
-    if (currTime < 20) {
-      if (queue.length && currIdx > 0) {
-        setNowPlaying(queue[currIdx - 1]);
-      }else if (queue.length && currIdx === 0) {
-        setNowPlaying(queue[queue.length - 1]);
+  const playAnother = (song:Song) => {
+    instance
+      .post("/users/me/queue", { songId: song.id })
+      .then(() => {
+        instance.get("/users/me/queue").then((res) => {
+          setQueueUpdate(res.data.data);
+          setSongIdUpdate(song.id);
+          instance.post("/users/me/recents", { songId: song.id }).then(() => {
+            instance.get("/users/me/recents").then((res) => {
+              setRecentUpdate(res.data.data);
+            });
+          });
+        });
+      })
+      .catch((err: AxiosError) => {
+        if (err.response && err.response.status === 400) {
+          instance.get("/users/me/queue").then((res) => {
+            setQueueUpdate(res.data.data);
+            setSongIdUpdate(song.id);
+            instance
+              .post("/users/me/recents", { songId: song.id })
+              .then(() => {
+                instance.get("/users/me/recents").then((res) => {
+                  setRecentUpdate(res.data.data);
+                });
+              });
+          });
+        }
+      });
+  }
+
+  const nextMusic = () => {
+    if (currIdx !== undefined && queue && queue.length) {
+      console.log(currIdx,queue);
+      if (currIdx < queue.length - 1) {
+        playAnother(queue[currIdx + 1]);
+      } else if (currIdx === queue.length - 1) {
+        playAnother(queue[0]);
+      } else {
+        stopPlay();
       }
-      else{
-        initializeTime();
-      }
-    }else{
-      initializeTime();
     }
   };
 
-  const nextMusic = () => {
-    console.log(currIdx,queue.length - 1);
-    if (queue.length) {
-      if (currIdx < queue.length - 1) {
-        setNowPlaying(queue[currIdx + 1]);
-      } else if (loopState && currIdx === queue.length - 1) {
-        setNowPlaying(queue[0]);
-        if(audioRef.current) {
-          audioRef.current.play();
-        }
-      }else{
-        stopPlay();
+  const prevMusic = () => {
+    if (currTime < 20) {
+      if (queue && currIdx && queue.length && currIdx > 0) {
+        playAnother(queue[currIdx - 1]);
+      } else if (queue?.length && currIdx === 0) {
+        playAnother(queue[queue.length - 1]);
+      } else {
+        initializeTime();
       }
+    } else {
+      initializeTime();
     }
   };
 
@@ -221,12 +333,6 @@ const PlayBar: React.FC = () => {
     }
   }, [handleSpace]);
 
-  const musicReq = async () => {
-    console.log('musicRequested');
-    const res = await instance.get(`/songs/${nowPlaying.id}`);
-    setNowPlaying(res.data.data);
-    setRequested(true);
-  }
 
   useEffect(() => {
     if(initialRender) {
@@ -238,10 +344,7 @@ const PlayBar: React.FC = () => {
       updateCurrTime({ currTime: 0 });
       setInitialRender(false);
     }else{
-      if (nowPlaying.title && audioRef.current && playState) {
-        if(!requested) {
-          musicReq();
-        }
+      if (nowPlaying?.title && audioRef.current) {
         audioRef.current.play().catch((err) => {
           if (err instanceof DOMException) {
             setPlayState(false);
@@ -255,16 +358,6 @@ const PlayBar: React.FC = () => {
     }
   }, [nowPlaying]);
 
-  const myPlaylistReq = async () => {
-    await instance.get("/users/me/playlists",{params:paging}).then((res) => {
-      setMyPlaylists(res.data.data.content);
-    });
-  };
-
-  useEffect(()=>{
-    myPlaylistReq();
-    setUpdate(false);
-  },[update]);
 
   const handleAddPlaylistClick = useCallback(
     (e: MouseEvent) => {
@@ -286,35 +379,18 @@ const PlayBar: React.FC = () => {
     };
   }, [handleAddPlaylistClick]);
 
-  const likeReq = async () => {
-    setLikeLoading(true);
-    if(!likeLoading) {
-      await instance
-        .post(`/songs/${nowPlaying.id}/likes`)
-        .then((res) => {
-          setNowPlaying(res.data.data);
-          setLikeUpdate(true);
-        })
-        .finally(() => {
-          setLikeLoading(false);
-        });
-    }
-  } 
-
-  const unlikeReq = async () => {
-    setLikeLoading(true);
-    if (!likeLoading) {
-      await instance
-        .delete(`/songs/${nowPlaying.id}/likes`)
-        .then((res) => {
-          setNowPlaying(res.data.data);
-          setLikeUpdate(true);
-        })
-        .finally(() => {
-          setLikeLoading(false);
-        });
-    }
-  }; 
+  const addToQueue = async () => {
+    await instance.post('/users/me/queue',{songId})
+    .then(()=>{
+      NotificationService.success('재생목록에 곡이 추가되었습니다.');
+      setQueueStateUpdate(true);
+    })
+    .catch((err:AxiosError)=>{
+      if(err.response && err.response.status === 400) {
+        NotificationService.warn('이미 추가된 곡입니다.');
+      }
+    });
+  }
 
   return (
     <PB.PlayBarWrap>
@@ -324,28 +400,29 @@ const PlayBar: React.FC = () => {
       <PB.SongControlWrap>
         <PB.SongWrap>
           <audio
-            src={nowPlaying.url}
+            src={nowPlaying?.url}
             id="audio"
             onTimeUpdate={updatePlayTime}
             onEnded={musicEndEvent}
             ref={audioRef}
             onPause={stopPlay}
             onPlay={startPlay}
+            controlsList="nodownload"
           ></audio>
           <PB.AlbumCoverWrap>
             <PB.AlbumCover
               src={
-                nowPlaying.thumbnailUrl ||
+                nowPlaying?.thumbnailUrl ||
                 "https://static-00.iconduck.com/assets.00/music-notes-icon-2048x2046-o5kli2nk.png"
               }
-              alt={`${nowPlaying.id}`}
+              alt={`${nowPlaying?.id}`}
             />
           </PB.AlbumCoverWrap>
           <PB.MusicInfoWrap>
             <PB.Title>
-              {nowPlaying.title || "재생 중인 곡이 없습니다."}
+              {nowPlaying?.title || "재생 중인 곡이 없습니다."}
             </PB.Title>
-            <PB.Artist>{nowPlaying.artist.nickname}</PB.Artist>
+            <PB.Artist>{nowPlaying?.artist.nickname}</PB.Artist>
           </PB.MusicInfoWrap>
         </PB.SongWrap>
         <PB.PlayBtnsWrap>
@@ -358,7 +435,7 @@ const PlayBar: React.FC = () => {
           <PB.PlayBtn src={next} onClick={musicEndEvent} />
         </PB.PlayBtnsWrap>
         <PB.TimeIndicatorWrap>
-          {!nowPlaying.liked ? (
+          {!nowPlaying?.liked ? (
             <PB.StateIndicator
               src={Unlike}
               style={{ width: "3rem", height: "3rem" }}
@@ -398,9 +475,12 @@ const PlayBar: React.FC = () => {
                     item={item}
                     key={item.id}
                     type="playbar"
-                    songId={nowPlaying.id}
+                    songId={nowPlaying?.id}
                   />
                 ))}
+                <PB.AddToQueue onClick={addToQueue}>
+                  재생목록에 추가
+                </PB.AddToQueue>
               </PB.AddToPlaylistMain>
             </PB.AddToPlaylistWrap>
           ) : null}

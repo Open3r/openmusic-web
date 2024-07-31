@@ -1,51 +1,49 @@
-import { nowPlayingStore } from "../../stores/nowPlayingStore";
-import { playQueueStore } from "../../stores/playQueueStore";
 import * as S from "./style";
 import { Song } from "../../interfaces/Song";
-import { recentlyPlayStore } from "../../stores/recentlyPlayStore";
-import NotificationService from "../../libs/notification/NotificationService";
-import instance from "../../libs/axios/customAxios";
-import { PlayStateStore } from "../../stores/playStateStore";
 import Like from '../../assets/imgs/unlike.svg';
+import { songIdUpdate } from "../../stores/nowPlayingStore";
+import instance from "../../libs/axios/customAxios";
+import { queueUpdateStore } from "../../stores/queueStore";
+import { AxiosError } from "axios";
+import { recentUpdateStore } from "../../stores/recentStore";
+import NotificationService from "../../libs/notification/NotificationService";
 
 interface SongBoxProps extends Song {
   type: string;
-  rank?:number
+  rank?:number;
+  nowPlaying?:boolean;
 }
 
 const SongBox = (props: SongBoxProps) => {
-  const setNowPlaying = nowPlayingStore((state) => state.setNowPlaying);
-  const addSong = playQueueStore((state) => state.addSong);
-  const queue = playQueueStore((state) => state.queue);
-  const storeRecently = recentlyPlayStore((state) => state.storeRecently);
-  const recentlyPlayed = recentlyPlayStore((state) => state.recentlyPlayed);
-  const setPlaystate = PlayStateStore(state=>state.setPlayState);
+  const setSongIdUpdate = songIdUpdate(state=>state.setSongIdUpdate);
+  const setQueueUpdate = queueUpdateStore(state=>state.setQueueUpdate);
+  const setRecentUpdate = recentUpdateStore(state=>state.setRecentUpdate);
 
-  const isSongInQueue = (queue: Song[], newSong: Song): boolean => {
-    return queue.some((song) => song.id === newSong.id);
-  };
-
-
-
-  const addSongQueue = async () => {
-
-    const res = await instance.get(`/songs/${props.id}`);
-
-    const newSong = res.data.data;
-
-    setNowPlaying(newSong);
-
-    if (!isSongInQueue(queue, newSong)) {
-      addSong(newSong);
-    } else {
-      NotificationService.warn("이미 재생목록에 있는 곡입니다.");
-    }
-
-    if (!isSongInQueue(recentlyPlayed, newSong)) {
-      storeRecently(newSong);
-    }
-
-    setPlaystate(true);
+  const addSongQueue = () => {
+    instance.post('/users/me/queue',{songId:props.id}).then(()=>{
+      instance.get('/users/me/queue').then((res)=>{
+        setQueueUpdate(res.data.data);
+        setSongIdUpdate(props.id);
+        instance.post('/users/me/recents',{songId:props.id}).then(()=>{
+          instance.get('/users/me/recents').then((res)=>{
+            setRecentUpdate(res.data.data);
+          });
+        });
+      });
+    }).catch((err:AxiosError)=>{
+      if(err.response && err.response.status === 400) {
+        NotificationService.warn('재생목록에 존재합니다.')
+        instance.get("/users/me/queue").then((res) => {
+          setQueueUpdate(res.data.data);
+          setSongIdUpdate(props.id);
+          instance.post("/users/me/recents", { songId: props.id }).then(() => {
+            instance.get("/users/me/recents").then((res) => {
+              setRecentUpdate(res.data.data);
+            });
+          });
+        });
+      }
+    });
   };
 
   if (props.type === "square") {
@@ -107,9 +105,9 @@ const SongBox = (props: SongBoxProps) => {
             <S.RankSongArtist>{props.artist.nickname}</S.RankSongArtist>
           </S.RankSongInfoWrap>
           <S.RankSongAlbum>
-            {"example album".length > 7
-              ? "example album".slice(0, 7) + "..."
-              : "example album"}
+            {props.album.title.length > 7
+              ? props.album.title.slice(0, 7) + "..."
+              : props.album.title}
           </S.RankSongAlbum>
           <S.RankSongLikeWrap>
             <img src={Like} alt="" style={{ width: "2rem", height: "2rem" }} />
@@ -123,10 +121,16 @@ const SongBox = (props: SongBoxProps) => {
   }
   if (props.type === 'list') {
     return (
-      <S.ListMusic onClick={addSongQueue}>
-        <S.ListMusicHover>
-          <S.HoverWord>눌러서 재생</S.HoverWord>
-        </S.ListMusicHover>
+      <S.ListMusic onClick={addSongQueue} style={props.nowPlaying !== undefined && props.nowPlaying ? {background:'#F5F5F5'} : {}}>
+        {
+          props.nowPlaying !== undefined && !props.nowPlaying ? (
+            <S.ListMusicHover>
+              <S.HoverWord>눌러서 재생</S.HoverWord>
+            </S.ListMusicHover>
+          ) : (
+            null
+          )
+        }
         <S.ListNum>{props.rank !== undefined && props.rank + 1}</S.ListNum>
         <S.ListCover src={props.thumbnailUrl} />
         <S.ListMusicInfoWrap>
@@ -138,9 +142,9 @@ const SongBox = (props: SongBoxProps) => {
           <S.ListMusicArtist>{props.artist.nickname}</S.ListMusicArtist>
         </S.ListMusicInfoWrap>
         <S.ListMusicAlbum>
-          {"example album".length > 15
-            ? "example album".slice(0, 15) + "..."
-            : "example album"}
+          {props.album.title.length > 15
+            ? props.album.title.slice(0, 15) + "..."
+            : props.album.title}
         </S.ListMusicAlbum>
         <S.RankSongLikeWrap>
           <img src={Like} alt="" style={{ width: "2rem", height: "2rem" }} />

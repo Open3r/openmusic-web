@@ -38,7 +38,7 @@ instance.interceptors.response.use(
   (response) => {
     return response;
   },
-  async (error: AxiosError) => {
+  (error: AxiosError) => {
     const originalRequest = error.config as CustomAxiosRequestConfig;
 
     if (originalRequest.data instanceof FormData) {
@@ -50,31 +50,30 @@ instance.interceptors.response.use(
       originalRequest._retry = true;
       const refreshToken = getCookie("refreshToken");
       if (refreshToken) {
-        try {
-          const response = await axios.post(
-            `${import.meta.env.VITE_API_URL}/auth/reissue`,
-            {
-              refreshToken,
-            }
-          );
-          const newAccessToken = response.data.data.accessToken;
-          const newRefreshToken = response.data.data.refreshToken;
+        axios
+          .post(`${import.meta.env.VITE_API_URL}/auth/reissue`, {
+            refreshToken,
+          })
+          .then((response) => {
+            const newAccessToken = response.data.data.accessToken;
+            const newRefreshToken = response.data.data.refreshToken;
 
-          setCookie("accessToken", newAccessToken, { path: "/" });
-          setCookie("refreshToken", newRefreshToken, {
-            path: "/",
-            maxAge: "2600000",
-          });
-          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-        } catch (refreshError) {
-          setTimeout(()=>{
+            setCookie("accessToken", newAccessToken, { path: "/" });
+            setCookie("refreshToken", newRefreshToken, {
+              path: "/",
+              maxAge: "2600000",
+            });
+            originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+          })
+          .catch((refreshError) => {
             NotificationService.error("토큰이 만료되었습니다.");
-          },100);
-          window.location.href = "/login";
-          removeCookie("accessToken");
-          removeCookie("refreshToken");
-          return Promise.reject(refreshError);
-        }
+            setTimeout(() => {
+              window.location.href = "/login";
+            }, 100);
+            removeCookie("accessToken");
+            removeCookie("refreshToken");
+            return Promise.reject(refreshError);
+          });
       }
       return instance(originalRequest);
     }

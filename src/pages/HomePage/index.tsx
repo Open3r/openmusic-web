@@ -1,6 +1,5 @@
 import SongBox from "../../components/SongBox";
 import * as HS from "./style";
-import { recentlyPlayStore } from "../../stores/recentlyPlayStore";
 import useGetMusic from "../../hooks/useGetMusic";
 import { useEffect, useState } from "react";
 import { Song } from "../../interfaces/Song";
@@ -11,9 +10,11 @@ import { PlaylistType } from "../../interfaces/playlist";
 import PlaylistBox from "../../components/PlaylistBox";
 import { paging } from "../../libs/axios/paging";
 import { likeUpdateStore } from "../../stores/likeUpdateStore";
+import { useNavigate } from "react-router-dom";
+import { songIdUpdate } from "../../stores/nowPlayingStore";
+import { recentUpdateStore } from "../../stores/recentStore";
 
 const HomePage = () => {
-  const recentlyPlayed = recentlyPlayStore((state)=>state.recentlyPlayed);
   const [songList, setSongList] = useState<Song[]>();
   const [songRank, setSongRank] = useState<Song[]>();
   const [myPlaylists,setMyPlaylists] = useState<PlaylistType[]>();
@@ -21,17 +22,32 @@ const HomePage = () => {
 
   const likeUpdate = likeUpdateStore(state=>state.likeUpdate);
   const setLikeUpdate = likeUpdateStore((state) => state.setLikeUpdate);
+  const setSongIdUpdate = songIdUpdate(state=>state.setSongIdUpdate);
+  const recentUpdate = recentUpdateStore(state=>state.recentUpdate);
+  const setRecentUpdate = recentUpdateStore(state=>state.setRecentUpdate);
 
+  const navigate = useNavigate();
 
-  const RecentSongList = recentlyPlayed.reverse().slice(0,4);
   
+  const getLastPlayed = () => {
+    instance.get("/users/me/recents").then((res) => {
+      console.log(res.data.data);
+      setRecentUpdate(res.data.data.slice(0,4));
+      if (res.data.data[0]) {
+        setSongIdUpdate(res.data.data[0].id);
+      }
+    });
+  };
+  useEffect(() => {
+    getLastPlayed();
+  }, []);
 
   const { getMusic } = useGetMusic();
   const { getRank } = useGetRank();
 
   const musicReq = async () => {
     try{
-      const res = await getMusic();
+      const res = await getMusic(10);
       setSongList(res);
       const rank = await getRank(3);
       setSongRank(rank);
@@ -49,7 +65,8 @@ const HomePage = () => {
   };
 
   const playlistReq = async () => {
-    await instance.get("/playlists",{params:paging}).then((res) => {
+    await instance.get("/playlists",{params:paging})
+    .then((res) => {
       setPlaylists(res.data.data.content);
     });
   };
@@ -63,6 +80,7 @@ const HomePage = () => {
     myPlaylistReq();
     playlistReq();
     musicReq();
+    getLastPlayed();
   },[]);
 
   useEffect(()=>{
@@ -72,14 +90,18 @@ const HomePage = () => {
     }
   },[likeUpdate]);
 
+  const moveTo = (target:string) => {
+    navigate(`/${target}`);
+  }
+
   return (
     <HS.Canvas>
       <HS.ChartSectionWrap>
         <HS.RecentlyListenWrap>
           <HS.SectionTitle>최근 들은 곡 {">"}</HS.SectionTitle>
           <HS.RecentlyListenBox>
-            {RecentSongList.length > 0 ? (
-              RecentSongList.map((content, idx) => (
+            {recentUpdate && recentUpdate.length > 0 ? (
+              recentUpdate.map((content, idx) => (
                 <SongBox
                   title={content.title}
                   artist={content.artist}
@@ -92,7 +114,8 @@ const HomePage = () => {
                   scope={content.scope}
                   liked={content.liked}
                   likeCount={content.likeCount}
-                ></SongBox>
+                  album={content.album}
+                />
               ))
             ) : (
               <HS.NoSongAlert>최근들은 곡이 없습니다.</HS.NoSongAlert>
@@ -100,27 +123,31 @@ const HomePage = () => {
           </HS.RecentlyListenBox>
         </HS.RecentlyListenWrap>
         <HS.RankWrap>
-          <HS.SectionTitle>오픈차트 {">"}</HS.SectionTitle>
+          <HS.SectionTitle
+            onClick={() => {
+              moveTo("rank");
+            }}
+          >
+            오픈차트 {">"}
+          </HS.SectionTitle>
           <HS.RankBox>
-            {songRank
-              ?.sort(() => Math.random() - 0.5)
-              .slice(0, 3)
-              .map((content, idx) => (
-                <SongBox
-                  title={content.title}
-                  artist={content.artist}
-                  id={content.id}
-                  key={idx}
-                  rank={idx}
-                  url={content.url}
-                  thumbnailUrl={content.thumbnailUrl}
-                  type={"rank"}
-                  genre={content.genre}
-                  scope={content.scope}
-                  liked={content.liked}
-                  likeCount={content.likeCount}
-                ></SongBox>
-              ))}
+            {songRank?.map((content, idx) => (
+              <SongBox
+                title={content.title}
+                artist={content.artist}
+                id={content.id}
+                key={idx}
+                rank={idx}
+                url={content.url}
+                thumbnailUrl={content.thumbnailUrl}
+                type={"rank"}
+                genre={content.genre}
+                scope={content.scope}
+                liked={content.liked}
+                likeCount={content.likeCount}
+                album={content.album}
+              />
+            ))}
           </HS.RankBox>
         </HS.RankWrap>
       </HS.ChartSectionWrap>
@@ -140,12 +167,19 @@ const HomePage = () => {
               scope={content.scope}
               liked={content.liked}
               likeCount={content.likeCount}
-            ></SongBox>
+              album={content.album}
+            />
           ))}
         </HS.BoxWrap>
       </HS.SectionWrap>
       <HS.SectionWrap>
-        <HS.SectionTitle>오픈플레이리스트 {">"}</HS.SectionTitle>
+        <HS.SectionTitle
+          onClick={() => {
+            moveTo("playlist");
+          }}
+        >
+          플레이리스트 {">"}
+        </HS.SectionTitle>
         <HS.BoxWrap>
           {playlists?.map((content) => (
             <PlaylistBox item={content} key={content.id} type="box" />
@@ -153,7 +187,13 @@ const HomePage = () => {
         </HS.BoxWrap>
       </HS.SectionWrap>
       <HS.SectionWrap>
-        <HS.SectionTitle>최신곡 {">"}</HS.SectionTitle>
+        <HS.SectionTitle
+          onClick={() => {
+            moveTo("song");
+          }}
+        >
+          최신곡 {">"}
+        </HS.SectionTitle>
         <HS.BoxWrap>
           {songList?.map((content, idx) => (
             <SongBox
@@ -168,12 +208,19 @@ const HomePage = () => {
               scope={content.scope}
               liked={content.liked}
               likeCount={content.likeCount}
-            ></SongBox>
+              album={content.album}
+            />
           ))}
         </HS.BoxWrap>
       </HS.SectionWrap>
       <HS.SectionWrap>
-        <HS.SectionTitle>나의 플레이리스트 {">"}</HS.SectionTitle>
+        <HS.SectionTitle
+          onClick={() => {
+            moveTo("my-page");
+          }}
+        >
+          나의 플레이리스트 {">"}
+        </HS.SectionTitle>
         <HS.BoxWrap>
           {myPlaylists?.map((content) => (
             <PlaylistBox item={content} key={content.id} type="box" />

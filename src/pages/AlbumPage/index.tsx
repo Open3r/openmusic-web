@@ -4,12 +4,11 @@ import { useEffect, useState } from 'react';
 import instance from '../../libs/axios/customAxios';
 import PlPlay from "../../assets/imgs/plPlay.svg";
 import SongBox from '../../components/SongBox';
-import { playQueueStore } from '../../stores/playQueueStore';
-import { nowPlayingStore } from '../../stores/nowPlayingStore';
-import NotificationService from '../../libs/notification/NotificationService';
 import { AlbumType } from '../../interfaces/album';
 import Like from "../../assets/imgs/like.svg";
 import Unlike from "../../assets/imgs/unlike.svg";
+import { songIdUpdate } from '../../stores/nowPlayingStore';
+import { queueUpdateStore } from '../../stores/queueStore';
 
 const AlbumPage = () => {
 
@@ -17,10 +16,9 @@ const AlbumPage = () => {
   const [loading, setLoading] = useState(false);
   const [likeLoading, setLikeLoading] = useState(false);
 
-  const clearQueue = playQueueStore(state=>state.clearQueue);
-  const addSong = playQueueStore(state=>state.addSong);
-
-  const setNowPlaying = nowPlayingStore(state=>state.setNowPlaying);
+  const updateSongId = songIdUpdate((state) => state.setSongIdUpdate);
+  const setQueueUpdate = queueUpdateStore((state) => state.setQueueUpdate);
+  const queue = queueUpdateStore((state) => state.queueUpdate); 
 
   const param = useParams();
 
@@ -43,34 +41,25 @@ const AlbumPage = () => {
   },[]);
 
   const copyToQueue = () => {
-    if(detail?.songs.length === 0) {
-      NotificationService.error('빈 앨범 입니다.');
-      return
+    instance.delete("/users/me/queue").then(() => {
+      if (detail) {
+        instance.post("/users/me/queue/album", {
+          albumId: detail.id,
+        });
+        setQueueUpdate(detail.songs);
+        if (detail.songs) {
+          updateSongId(detail.songs[0].id);
+        }
+      }
+    });
+  };
+
+  useEffect(() => {
+    console.log(queue);
+    if (detail && detail.songs) {
+      updateSongId(detail.songs[0].id);
     }
-    clearQueue();
-    detail?.songs.map((item)=>{
-      addSong(item);
-    });
-    setNowPlaying({
-      artist: {
-        id: detail?.songs[0].artist.id!,
-        nickname: detail?.songs[0].artist.nickname!,
-        avatarUrl: detail?.songs[0].artist.avatarUrl!,
-        email: detail?.songs[0].artist.email!,
-        role: detail?.songs[0].artist.role!,
-        status: detail?.songs[0].artist.status!,
-        provider:detail?.songs[0].artist.provider!
-      },
-      title: detail?.songs[0].title!,
-      id: detail?.songs[0].id!,
-      url: detail?.songs[0].url!,
-      thumbnailUrl: detail?.songs[0].thumbnailUrl!,
-      liked: detail?.songs[0].liked!,
-      likeCount: detail?.songs[0].likeCount!,
-      scope: detail?.songs[0].scope!,
-      genre: detail?.songs[0].genre!,
-    });
-  }
+  }, [queue]);
 
   const likeReq = async () => {
     setLikeLoading(true);
@@ -182,6 +171,7 @@ const AlbumPage = () => {
                 liked={item.liked}
                 likeCount={item.likeCount}
                 rank={idx}
+                album={item.album}
               />
             ))
           ) : (

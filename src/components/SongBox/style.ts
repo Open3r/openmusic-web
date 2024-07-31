@@ -141,7 +141,7 @@ const RankSongWrap = styled.div`
   padding: 0 1rem;
 `
 const RankSongLikeWrap = styled.div`
-  width:4rem;
+  width:calc(5% + 4rem);
   height:7rem;
   display:flex;
   justify-content:center;
@@ -250,7 +250,7 @@ const ListMusicInfoWrap = styled.div`
   box-sizing:border-box;
 `
 export const ListMusicAlbum = styled.div`
-  width:55%;
+  width:50%;
   height:90%;
   display:flex;
   align-items:center;

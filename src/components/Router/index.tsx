@@ -12,6 +12,12 @@ import AlbumPage from "../../pages/AlbumPage";
 import ArtistPage from "../../pages/ArtistPage";
 import NotFoundPage from "../../pages/NotFondPage";
 import { SearchPage } from "../../pages/SearchPage";
+import RankPage from "../../pages/RankPage";
+import QueuePage from "../../pages/QueuePage";
+import RecentPage from "../../pages/RecentPage";
+import NewSongPage from "../../pages/NewSongPage";
+import NewAlbumPage from "../../pages/NewAlbumPage";
+import NewPlaylistPage from "../../pages/NewPlaylistPage";
 
 const Router = () => {
   const location = useLocation();
@@ -36,7 +42,6 @@ const Router = () => {
     <div style={{ overflow: "hidden" }}>
       <AnimatePresence mode="wait">
         {" "}
-        {/* Updated from exitBeforeEnter to mode="wait" */}
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<Layout />}>
             <Route index element={<HomePage />} />
@@ -45,7 +50,13 @@ const Router = () => {
             <Route path="/upload" element={<UploadPage />} />
             <Route path="/my-page" element={<MyPage />} />
             <Route path="/artist/:id" element={<ArtistPage />} />
-            <Route path="/search/:keyword" element={<SearchPage/>} /> 
+            <Route path="/search/:keyword" element={<SearchPage />} />
+            <Route path="/rank" element={<RankPage />} />
+            <Route path="/queue" element={<QueuePage />} />
+            <Route path="/recent" element={<RecentPage />} />
+            <Route path="/song" element={<NewSongPage />} />
+            <Route path="/album" element={<NewAlbumPage />} />
+            <Route path="/playlist" element={<NewPlaylistPage />} />
             <Route path="/*" element={<NotFoundPage />} />
           </Route>
           <Route

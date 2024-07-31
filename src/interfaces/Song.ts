@@ -1,4 +1,5 @@
 
+import { AlbumTypeNoSong } from "./album";
 import { User } from "./User";
 
 export interface Song {
@@ -11,4 +12,5 @@ export interface Song {
   likeCount:number;
   genre:string;
   scope:string;
+  album:AlbumTypeNoSong;
 }
