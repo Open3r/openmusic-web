@@ -15,6 +15,7 @@ const SideMenu = () => {
   const shadow = useRef<HTMLDivElement | null>(null);
   const [menuState, setMenuState] = useState(false);
   const user = userStore(state=>state.user);
+  const setUser = userStore(state=>state.setUser);
   const navigate = useNavigate();
 
   const menuOnOff = () => {
@@ -36,8 +37,18 @@ const SideMenu = () => {
   const logout = () => {
     removeCookie('accessToken');
     removeCookie('refreshToken');
+    setUser({
+      id:0,
+      nickname:'',
+      email:'',
+      provider:'',
+      status:'',
+      genres:[],
+      avatarUrl:'',
+      role:''
+    })
     NotificationService.success('로그아웃 되었습니다.');
-    navigate('/login');
+    navigate('/intro');
   }
 
   return (

@@ -6,5 +6,5 @@ export interface User {
   avatarUrl: string;
   role: string;
   status: string;
-  
+  genres: string[];
 }

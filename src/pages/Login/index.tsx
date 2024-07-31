@@ -4,7 +4,7 @@ import * as S from "./style";
 import { useNavigate } from "react-router-dom";
 import { setCookie } from "../../libs/cookies/cookie";
 import NotificationService from "../../libs/notification/NotificationService";
-import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
+import Google from '../../assets/imgs/google.svg';
 
 const Login = () => {
   const { login, loading } = useLogin();
@@ -80,9 +80,13 @@ const Login = () => {
     setChecked(!checked);
   };
 
+  const googleLogin = () => {
+    const redirectUri = encodeURIComponent(
+      "http://localhost:5173/callback/google"
+    );
+    window.location.href = `https://accounts.google.com/o/oauth2/auth?client_id=342167564331-ac40i5tr38b3v3ete4hd4kq69u41hcdf.apps.googleusercontent.com&redirect_uri=${redirectUri}&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email`;
+  };
 
-  const clientId =
-    "251821039592-jvfk5ffen9707fvtpsbj27tal6eo1m40.apps.googleusercontent.com";
 
   return (
     <S.Canvas>
@@ -142,18 +146,23 @@ const Login = () => {
           <S.SeperWord>간편로그인</S.SeperWord>
           <S.SeperLine></S.SeperLine>
         </S.SeperWrap>
-        <GoogleOAuthProvider clientId={clientId}>
-          <GoogleLogin
-            onSuccess={(credentialResponse) => {
-              console.log(credentialResponse);
-            }}
-            onError={() => {
-              console.error("Failed Login..");
-            }}
-            useOneTap
-            width={"500px"}
-          />
-        </GoogleOAuthProvider>
+        <div
+          style={{
+            width: "90%",
+            height: "4rem",
+            borderRadius: "1rem",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            border: "0.1rem solid #ccc",
+            fontSize: "1.5rem",
+            cursor: "pointer",
+          }}
+          onClick={googleLogin}
+        >
+          <img src={Google} style={{width:'2rem',height:'2rem',marginRight:'1rem',boxSizing:'border-box'}} alt="" />
+          구글로그인
+        </div>
       </S.LoginWrap>
     </S.Canvas>
   );

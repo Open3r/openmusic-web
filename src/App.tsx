@@ -4,6 +4,7 @@ import CustomToastContainer from "./libs/notification/CustomToastContainer";
 import Router from "./components/Router";
 import Header from "./layouts/Header";
 import PlayBar from "./layouts/PlayBar";
+import { isMobile } from "react-device-detect";
 
 function App() {
   const [headerHideLayout, setHeaderHideLayout] = useState(false);
@@ -11,30 +12,47 @@ function App() {
   const location = useLocation();
 
   useEffect(() => {
-    const hidePaths = ["/login", "/signup", "/verify"];
+    const hidePaths = ["/login", "/signup", "/verify", "/intro", "/genre", "/callback/google"];
     setHeaderHideLayout(hidePaths.includes(location.pathname));
   }, [location.pathname]);
 
   useEffect(() => {
-    const hidePaths = ["/login", "/signup", "/verify", "/upload"];
+    const hidePaths = [
+      "/login",
+      "/signup",
+      "/verify",
+      "/upload",
+      "/intro",
+      "/genre",
+      "/callback/google",
+    ];
     setPlayBarHideLayout(hidePaths.includes(location.pathname));
   }, [location.pathname]);
 
   return (
     <>
-      <CustomToastContainer />
-      <Router />
-      {!headerHideLayout && (
-        <>
-          <Header />
-        </>
-      )}
-      {!playBarHideLayout && (
-        <>
-          <PlayBar />
-        </>
-      )}
+      {
+        !isMobile ? (
+          <>
+            <CustomToastContainer />
+            <Router />
+            {!headerHideLayout && (
+              <>
+                <Header />
+              </>
+            )}
+            {!playBarHideLayout && (
+              <>
+                <PlayBar />
+              </>
+            )}
+          </>
+        ) : (
+          <h1>모바일 입니다.</h1>
+        )
+      }
     </>
+    
   );
 }
 

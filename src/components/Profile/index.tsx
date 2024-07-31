@@ -6,6 +6,8 @@ import instance from '../../libs/axios/customAxios';
 import { UserStore } from '../../stores/userStore';
 import EditNickname from '../../assets/imgs/EditNickname.svg';
 import NotificationService from '../../libs/notification/NotificationService';
+import { useNavigate } from 'react-router-dom';
+import { AxiosError } from 'axios';
 
 interface ProfileComp extends UserStore {
   type:string;
@@ -16,6 +18,7 @@ const Profile = ({user,setUser,type}:ProfileComp) => {
   const [submitLoading, setSubmitLoading] = useState(false);
   const [editNickname, setEditNickname] = useState(false);
   const [editPassword, setEditPassword] = useState(false);
+  const [signOut,setSignOut] = useState(false);
   
   const [newPassword, setNewPassword] = useState("");
   const [password, setPassword] = useState("");
@@ -25,6 +28,8 @@ const Profile = ({user,setUser,type}:ProfileComp) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const { fileUpload, loading } = useFileUpload();
+
+  const navigate = useNavigate();
 
   const handleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -71,14 +76,22 @@ const Profile = ({user,setUser,type}:ProfileComp) => {
     setNewPassword(e.target.value);
   };
 
+  const handleSignOut = () => {
+    setSignOut(!signOut);
+    setEditNickname(false);
+    setEditPassword(false);
+  }
+
   const handleEditNicknameArea = () => {
     setEditNickname(!editNickname);
     setEditPassword(false);
+    setSignOut(false);
   }
 
   const handleEditPasswordArea = () => {
     setEditPassword(!editPassword);
     setEditNickname(false);
+    setSignOut(false);
   };
 
   const submit = async () => {
@@ -145,6 +158,22 @@ const Profile = ({user,setUser,type}:ProfileComp) => {
     }else{
       NotificationService.warn('비밀번호는 영문, 숫자, 특수문자 포함 8글자이어야 합니다.')
     }
+  }
+
+  const signOutReq = async () => {
+    await instance.delete('/auth/signout',{data: { 
+      password
+    },
+    withCredentials: true})
+    .then(()=>{
+      NotificationService.success('탈퇴 성공');
+      navigate('/intro');
+    })
+    .catch((err:AxiosError)=>{
+      if(err.response && err.response.status === 400) {
+        NotificationService.error('비밀번호가 틀립니다.');
+      }
+    });
   }
 
   if(type==='mypage') {
@@ -267,6 +296,37 @@ const Profile = ({user,setUser,type}:ProfileComp) => {
             onClick={handleEditPasswordArea}
           >
             비밀번호 변경
+          </S.Addiction>
+        )}
+        {signOut ? (
+          <S.EditWrap style={{ height: "12rem" }}>
+            <S.EditInput
+              type="password"
+              placeholder="비밀번호"
+              onChange={handlePassword}
+            />
+            <p style={{color:'red'}}>*정말로 회원 탈퇴하시겠습니까?</p>
+            <S.ButtonWrap>
+              <S.EditSubmit
+                onClick={signOutReq}
+                disabled={submitLoading}
+              >
+                {submitLoading ? "탈퇴중..." : "탈퇴"}
+              </S.EditSubmit>
+              <S.EditSubmit
+                onClick={handleSignOut}
+                style={{ backgroundColor: "gray" }}
+              >
+                취소
+              </S.EditSubmit>
+            </S.ButtonWrap>
+          </S.EditWrap>
+        ) : (
+          <S.Addiction
+            style={{ cursor: "pointer", color: "red" }}
+            onClick={handleSignOut}
+          >
+            회원탈퇴
           </S.Addiction>
         )}
       </S.Container>

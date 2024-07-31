@@ -15,6 +15,7 @@ export const userStore = create<UserStore>((set) => ({
     email: "",
     status: "",
     role: "",
+    genres:[]
   },
   setUser: (user: User) => set(() => ({ user })),
 }));

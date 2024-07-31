@@ -18,6 +18,9 @@ import RecentPage from "../../pages/RecentPage";
 import NewSongPage from "../../pages/NewSongPage";
 import NewAlbumPage from "../../pages/NewAlbumPage";
 import NewPlaylistPage from "../../pages/NewPlaylistPage";
+import LandingPage from "../../pages/LandingPage";
+import GenreChoosePage from "../../pages/GenreChoosePage";
+import { GoogleCallback } from "../../pages/Callback/Google";
 
 const Router = () => {
   const location = useLocation();
@@ -41,7 +44,6 @@ const Router = () => {
   return (
     <div style={{ overflow: "hidden" }}>
       <AnimatePresence mode="wait">
-        {" "}
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<Layout />}>
             <Route index element={<HomePage />} />
@@ -57,6 +59,7 @@ const Router = () => {
             <Route path="/song" element={<NewSongPage />} />
             <Route path="/album" element={<NewAlbumPage />} />
             <Route path="/playlist" element={<NewPlaylistPage />} />
+            <Route path="/callback/google" element={<GoogleCallback/>} />
             <Route path="/*" element={<NotFoundPage />} />
           </Route>
           <Route
@@ -95,6 +98,32 @@ const Router = () => {
                 variants={pageVariants}
               >
                 <Verify />
+              </motion.div>
+            }
+          />
+          <Route
+            path="/genre"
+            element={
+              <motion.div
+                initial="initial"
+                animate="in"
+                exit="out"
+                variants={pageVariants}
+              >
+                <GenreChoosePage />
+              </motion.div>
+            }
+          />
+          <Route
+            path="/intro"
+            element={
+              <motion.div
+                initial="initial"
+                animate="in"
+                exit="out"
+                variants={pageVariants}
+              >
+                <LandingPage />
               </motion.div>
             }
           />

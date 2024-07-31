@@ -29,6 +29,7 @@ import { AxiosError } from "axios";
 import { recentUpdateStore } from "../../stores/recentStore";
 import NotificationService from "../../libs/notification/NotificationService";
 import { queueStateUpdateStore } from "../../stores/queueStateStore";
+import { getCookie } from "../../libs/cookies/cookie";
 
 const PlayBar = () => {
   const playState = PlayStateStore((state) => state.playState);
@@ -74,6 +75,8 @@ const PlayBar = () => {
   const [playlistModal, setPlaylistModal] = useState(false);
   const [likeLoading, setLikeLoading] = useState(false);
 
+  const accessToken = getCookie('accessToken');
+
   const { progress, time, updatePlayTime, handleMouseDown, currTime } = useProgress(audioRef, fullDuration);
 
   const getRandom = (min: number, max: number) => {
@@ -94,8 +97,10 @@ const PlayBar = () => {
   };
 
   useEffect(() => {
-    myPlaylistReq();
-    setUpdate(false);
+    if(accessToken) {
+      myPlaylistReq();
+      setUpdate(false);
+    } 
   }, [update]);
 
   const queueReq = async () => {
@@ -104,7 +109,9 @@ const PlayBar = () => {
   }
 
   useEffect(()=>{
-    queueReq();
+    if(accessToken) {
+      queueReq();
+    }
   },[]);
 
   
@@ -159,7 +166,9 @@ const PlayBar = () => {
   };
 
   useEffect(()=>{
-    nowPlayingReq();
+    if(accessToken){
+      nowPlayingReq();
+    }
   },[queue]);
 
   const musicEndEvent = () => {

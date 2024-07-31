@@ -6,22 +6,36 @@ import useGetUser from "../../hooks/useGetUser";
 import { userStore } from "../../stores/userStore";
 import { useEffect, useState } from "react";
 import NotificationService from "../../libs/notification/NotificationService";
+import { getCookie } from "../../libs/cookies/cookie";
 
 const Header = () => {
 
   const { getUser } = useGetUser();
   const setUser = userStore((state) => state.setUser);
+  const user = userStore(state=>state.user);
   const [pageState, setPageState] = useState<"MAIN"|"SONG"|"CHART"|"PLAYLIST"|"ALBUM">("MAIN");
   const [searchText, setSearchText] = useState("");
+
+  const accessToken = getCookie('accessToken');
 
   const location = useLocation();
   const navigate = useNavigate();
 
   const userReq = async () => {
-    await getUser().then((res)=>{
-      setUser(res.data);
-    });
+    if(accessToken){
+      await getUser().then((res) => {
+        setUser(res.data);
+      });
+    }
   };
+
+  useEffect(()=>{
+    if(user && user.nickname !== '' && user.genres){
+      if(user.genres.length === 0) {
+        navigate('/genre');
+      }
+    }
+  },[user])
 
   useEffect(() => {
     userReq();

@@ -19,6 +19,7 @@ const HomePage = () => {
   const [songRank, setSongRank] = useState<Song[]>();
   const [myPlaylists,setMyPlaylists] = useState<PlaylistType[]>();
   const [playlists, setPlaylists] = useState<PlaylistType[]>();
+  const [recommendation, setRecommendation] = useState<Song[]>();
 
   const likeUpdate = likeUpdateStore(state=>state.likeUpdate);
   const setLikeUpdate = likeUpdateStore((state) => state.setLikeUpdate);
@@ -76,11 +77,17 @@ const HomePage = () => {
     setSongRank(res);
   }
 
+  const recommendationReq = async () => {
+    const res = await instance.get('/users/me/recommendations',{params:{...paging,size:20}});
+    setRecommendation(res.data.data.content);
+  } 
+
   useEffect(()=>{
     myPlaylistReq();
     playlistReq();
     musicReq();
     getLastPlayed();
+    recommendationReq();
   },[]);
 
   useEffect(()=>{
@@ -152,9 +159,9 @@ const HomePage = () => {
         </HS.RankWrap>
       </HS.ChartSectionWrap>
       <HS.SectionWrap>
-        <HS.SectionTitle>당신을 위한 추천 {">"}</HS.SectionTitle>
+        <HS.SectionTitle style={{cursor:'default'}}>당신을 위한 추천</HS.SectionTitle>
         <HS.BoxWrap>
-          {songList?.map((content, idx) => (
+          {recommendation?.map((content, idx) => (
             <SongBox
               title={content.title}
               artist={content.artist}

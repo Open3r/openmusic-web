@@ -55,7 +55,7 @@ const NewPlaylistPage = () => {
           </S.PlaylistWrap>
         ) : (
           <h1 style={{ color: "gray", textAlign: "center" }}>
-            플레이리스트이 없습니다
+            플레이리스트가 없습니다
           </h1>
         )}
       </S.Main>
