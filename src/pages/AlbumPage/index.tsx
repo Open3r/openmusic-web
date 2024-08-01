@@ -9,6 +9,7 @@ import Like from "../../assets/imgs/like.svg";
 import Unlike from "../../assets/imgs/unlike.svg";
 import { songIdUpdate } from '../../stores/nowPlayingStore';
 import { queueUpdateStore } from '../../stores/queueStore';
+import Logo from '../../assets/imgs/logo_color.png';
 
 const AlbumPage = () => {
 
@@ -104,11 +105,7 @@ const AlbumPage = () => {
       </S.CoverArea>
       <S.Main>
         <S.PageTitleWrap>
-          <S.AlbumDescription>
-            {
-              detail?.description
-            }
-          </S.AlbumDescription>
+          <S.AlbumDescription>{detail?.description}</S.AlbumDescription>
           <S.AlbumInfoWrap>
             <S.PageTitle>
               By{" "}
@@ -180,7 +177,24 @@ const AlbumPage = () => {
           )}
         </S.SongList>
         <S.CreditWrap>
-          크레딧
+          <span>
+            uploaded :{" "}
+            {detail?.createdAt[0] +
+              "/" +
+              detail?.createdAt[1] +
+              "/" +
+              detail?.createdAt[2]}
+          </span>
+          <span>created by {detail?.artist.nickname}</span>
+          <span style={{display:'flex',alignItems:'center'}}>
+            serviced by{" "}
+            <img
+              src={Logo}
+              alt=""
+              style={{ height: "2rem", width: "2rem", marginLeft: "0.5rem" }}
+            />
+          </span>
+          <span>all copyright is on {detail?.artist.nickname}</span>
         </S.CreditWrap>
       </S.Main>
     </S.Container>

@@ -121,6 +121,14 @@ export const CreditWrap = styled.div`
   display:flex;
   flex-direction:column;
   justify-content:center;
+  margin:0 auto;
+  color:gray;
+  padding: 1rem;
+  box-sizing:border-box;
+  &>span {
+    font-size:1.4rem;
+    margin-bottom:0.5rem;
+  }
 `
 
 const rotate = keyframes`
