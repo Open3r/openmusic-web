@@ -18,7 +18,6 @@ const NewAlbumPage = () => {
       const res = await instance.get("/albums", {
         params: { ...paging, size: 50 },
       });
-      console.log(res);
       setDetail(res.data.data.content);
     } finally {
       if (loadingTimeout) {

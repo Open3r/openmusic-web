@@ -102,38 +102,6 @@ const SeperWord = styled.span`
   top:-1rem;
   text-align:center;
 `
-const SocialLoginWrap = styled.div`
-  width:90%;
-  height:5rem;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  box-sizing:border-box;
-  border:0.3rem solid #52A9F9;
-  background-color: rgba(255,255,255,0.7);
-  padding: 0 1rem;
-  border-radius:0.5rem;
-  &:active{
-    border:0.3rem solid #558bbd;
-  }
-`
-const SocialIcon = styled.img`
-  width:3rem;
-  height:3rem;
-  overflow:hidden;
-  border-radius:4rem;
-`
-const SocialLogin = styled.div`
-  width:calc(100% - 4rem);
-  height:4rem;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  font-size:2rem;
-  cursor: pointer;
-  color:#558bbd;
-  display : flex;
-`
 const FindMeWrap = styled.div`
   width:90%;
   height:3rem;
@@ -164,9 +132,6 @@ export {
   SeperWrap,
   SeperLine,
   SeperWord,
-  SocialLoginWrap,
-  SocialIcon,
-  SocialLogin,
   FindMeWrap,
   FindMeText
 }

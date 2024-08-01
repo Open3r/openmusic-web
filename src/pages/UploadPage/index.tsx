@@ -81,7 +81,6 @@ const UploadPage = () => {
           return updatedSongs;
         });
       }catch(err:any){
-        console.log(err);
         if(err.response.status === 413) {
           NotificationService.warn('파일 크기가 너무 큽니다.');
         }else{

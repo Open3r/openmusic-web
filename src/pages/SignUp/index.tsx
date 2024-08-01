@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import google from "../../assets/imgs/google.svg";
+import Google from "../../assets/imgs/google.svg";
 import * as SS from "./style";
 import { SignUpInfoStore } from "../../stores/signUpInfoStore";
 import { useNavigate } from "react-router-dom";
@@ -222,10 +222,22 @@ const SignUp = () => {
           <SS.SeperWord>간편회원가입</SS.SeperWord>
           <SS.SeperLine></SS.SeperLine>
         </SS.SeperWrap>
-        <SS.SocialLoginWrap>
-          <SS.SocialIcon src={google} />
-          <SS.SocialLogin>구글로 로그인</SS.SocialLogin>
-        </SS.SocialLoginWrap>
+          <div
+            style={{
+              width: "90%",
+              height: "4rem",
+              borderRadius: "1rem",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              border: "0.1rem solid #ccc",
+              fontSize: "1.5rem",
+              cursor: "pointer",
+            }}
+          >
+            <img src={Google} style={{width:'2rem',height:'2rem',marginRight:'1rem',boxSizing:'border-box'}} alt="" />
+            구글로그인
+          </div>
       </SS.LoginWrap>
     </SS.Canvas>
   );

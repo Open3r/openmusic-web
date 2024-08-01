@@ -17,7 +17,6 @@ const NewPlaylistPage = () => {
       const res = await instance.get("/playlists", {
         params: { ...paging, size: 50 },
       });
-      console.log(res);
       setDetail(res.data.data.content);
     } finally {
       if (loadingTimeout) {

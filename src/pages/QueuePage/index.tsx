@@ -21,9 +21,7 @@ const QueuePage = () => {
   );
 
 
-  const updateSongId = songIdUpdate((state) => state.setSongIdUpdate);
   const songId = songIdUpdate(state=>state.songId);
-  const queue = queueUpdateStore((state) => state.queueUpdate);
   const setQueueUpdate = queueUpdateStore((state)=>state.setQueueUpdate);
 
 
@@ -49,15 +47,6 @@ const QueuePage = () => {
       detailQueueReq();
     }
   }, [queueStateUpdate]);
-
-
-  useEffect(() => {
-    console.log(queue);
-    if (detail && detail) {
-      updateSongId(detail[0].id);
-      console.log(songId);
-    }
-  }, [queue]);
 
 
   const deleteSong = async (songId: number) => {
@@ -116,7 +105,7 @@ const QueuePage = () => {
                   key={item.id}
                   url={item.url}
                   thumbnailUrl={item.thumbnailUrl}
-                  type={"list"}
+                  type={"queue"}
                   genre={item.genre}
                   scope={item.scope}
                   liked={item.liked}

@@ -201,11 +201,7 @@ const ListMusic = styled.div`
   height: 10rem;
   display: flex;
   position: relative;
-  &:hover :first-of-type {
-    opacity: 0.4;
-  }
   align-items:center;
-  border-bottom: 0.1rem solid #ccc;
 `;
 const ListMusicHover = styled.div`
   position:absolute;

@@ -55,7 +55,6 @@ const AlbumPage = () => {
   };
 
   useEffect(() => {
-    console.log(queue);
     if (detail && detail.songs) {
       updateSongId(detail.songs[0].id);
     }
@@ -180,6 +179,9 @@ const AlbumPage = () => {
             </h1>
           )}
         </S.SongList>
+        <S.CreditWrap>
+          크레딧
+        </S.CreditWrap>
       </S.Main>
     </S.Container>
   );

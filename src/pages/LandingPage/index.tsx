@@ -40,6 +40,25 @@ const LandingPage = () => {
 
   return (
     <S.Container bg={MockUp}>
+      <S.Header>
+        <S.H1>
+          <img src={Logo} alt="" style={{ marginRight: "1rem",width:'4rem' }} />
+          <span
+            style={{
+              color: "#F1F1F1",
+              fontSize: "1.5rem",
+              fontWeight: "300",
+              marginLeft: "1rem",
+            }}
+          >
+            당신만의 작은 음악관
+          </span>
+        </S.H1>
+        <S.HeaderButtonWrap>
+          <S.HeaderLogin to="/login">Login</S.HeaderLogin>
+          <S.HeaderSignIn to="/signup">Sign up</S.HeaderSignIn>
+        </S.HeaderButtonWrap>
+      </S.Header>
       <S.First>
         <img src={Logo} alt="" style={{ marginRight: "1rem" }} />
         오픈뮤직, 당신만의 작은 음악관.
@@ -56,8 +75,14 @@ const LandingPage = () => {
         />
       </S.First>
       <S.Second>
-        <span style={{ marginLeft: "25rem" }}>
-          안전하게<br/>확실하게<br/>정확하게.
+        <span>
+          안전하게
+          <br />
+          <br />
+          확실하게
+          <br />
+          <br />
+          정확하게
         </span>
         <S.MobileMockUp
           ref={mobileMockRef3}
@@ -70,8 +95,10 @@ const LandingPage = () => {
         <img src={Logo} alt="" />
         지금 시작해보세요!
         <S.navigateWrap>
-          <S.Navigate to='/signup'>Sign up</S.Navigate>
-          <S.Navigate style={{color:'#52a9f9'}} to='/login'>Login</S.Navigate>
+          <S.Navigate to="/signup">Sign up</S.Navigate>
+          <S.Navigate style={{ color: "#52a9f9" }} to="/login">
+            Login
+          </S.Navigate>
         </S.navigateWrap>
       </S.Third>
     </S.Container>

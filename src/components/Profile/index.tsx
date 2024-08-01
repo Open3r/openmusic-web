@@ -1,29 +1,29 @@
-import { useEffect, useRef, useState } from 'react'
-import * as S from './style'
-import useFileUpload from '../../hooks/useFileUpload';
-import Uploading from '../../assets/imgs/uploading.svg';
-import instance from '../../libs/axios/customAxios';
-import { UserStore } from '../../stores/userStore';
-import EditNickname from '../../assets/imgs/EditNickname.svg';
-import NotificationService from '../../libs/notification/NotificationService';
-import { useNavigate } from 'react-router-dom';
-import { AxiosError } from 'axios';
+import { useEffect, useRef, useState } from "react";
+import * as S from "./style";
+import useFileUpload from "../../hooks/useFileUpload";
+import Uploading from "../../assets/imgs/uploading.svg";
+import instance from "../../libs/axios/customAxios";
+import { UserStore } from "../../stores/userStore";
+import EditNickname from "../../assets/imgs/EditNickname.svg";
+import NotificationService from "../../libs/notification/NotificationService";
+import { useNavigate } from "react-router-dom";
+import { AxiosError } from "axios";
 
 interface ProfileComp extends UserStore {
-  type:string;
+  type: string;
 }
 
-const Profile = ({user,setUser,type}:ProfileComp) => {
+const Profile = ({ user, setUser, type }: ProfileComp) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [submitLoading, setSubmitLoading] = useState(false);
   const [editNickname, setEditNickname] = useState(false);
   const [editPassword, setEditPassword] = useState(false);
-  const [signOut,setSignOut] = useState(false);
-  
+  const [signOut, setSignOut] = useState(false);
+
   const [newPassword, setNewPassword] = useState("");
   const [password, setPassword] = useState("");
   const [avatar, setNewAvatar] = useState("");
-  const [nickname,setNickname] = useState("")
+  const [nickname, setNickname] = useState("");
 
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -33,22 +33,21 @@ const Profile = ({user,setUser,type}:ProfileComp) => {
 
   const handleModal = () => {
     setIsModalOpen(!isModalOpen);
-  }
+  };
 
-  useEffect(()=>{
-    if(isModalOpen){
+  useEffect(() => {
+    if (isModalOpen) {
       if (inputRef.current) {
         inputRef.current.click();
       }
     }
-  },[isModalOpen]);
+  }, [isModalOpen]);
 
   const OpenInput = () => {
-    if(inputRef.current){
+    if (inputRef.current) {
       inputRef.current.click();
     }
-  }
-
+  };
 
   const handleFileChange = async () => {
     if (
@@ -64,9 +63,9 @@ const Profile = ({user,setUser,type}:ProfileComp) => {
     }
   };
 
-  const handleNickname = (e:React.ChangeEvent<HTMLInputElement>) => {
+  const handleNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNickname(e.target.value);
-  }
+  };
 
   const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
@@ -80,13 +79,13 @@ const Profile = ({user,setUser,type}:ProfileComp) => {
     setSignOut(!signOut);
     setEditNickname(false);
     setEditPassword(false);
-  }
+  };
 
   const handleEditNicknameArea = () => {
     setEditNickname(!editNickname);
     setEditPassword(false);
     setSignOut(false);
-  }
+  };
 
   const handleEditPasswordArea = () => {
     setEditPassword(!editPassword);
@@ -97,46 +96,50 @@ const Profile = ({user,setUser,type}:ProfileComp) => {
   const submit = async () => {
     let submitNickname = user.nickname;
     let submitAvatar = user.avatarUrl;
-    if(nickname.trim() !== "") {
-      if(nickname.trim().length > 0 && nickname.trim().length < 4) {
-        NotificationService.warn('아이디는 4글자 이상이어야 합니다.');
+    if (nickname.trim() !== "") {
+      if (nickname.trim().length > 0 && nickname.trim().length < 4) {
+        NotificationService.warn("아이디는 4글자 이상이어야 합니다.");
         return;
-      }else{
+      } else {
         submitNickname = nickname.trim();
       }
     }
-    if(avatar !== "") {
+    if (avatar !== "") {
       submitAvatar = avatar;
     }
     setSubmitLoading(true);
-    await instance.patch('/users/me',{
-      nickname:submitNickname,
-      avatarUrl:submitAvatar,
-      currentPassword:password,
-    }).then((res)=>{
-      setUser(res.data.data);
-      setIsModalOpen(false);
-      setEditNickname(false);
-      NotificationService.success('변경 성공');
-    }).catch((err)=>{
-      if (
-        err.response &&
-        err.response.data.code === "USER_PASSWORD_NOT_MATCH"
-      ) {
-        NotificationService.error("비밀번호가 틀립니다.");
-      }
-    }).finally(()=>{
-      setSubmitLoading(false);
-    });
-  }
+    await instance
+      .patch("/users/me", {
+        nickname: submitNickname,
+        avatarUrl: submitAvatar,
+        currentPassword: password,
+      })
+      .then((res) => {
+        setUser(res.data.data);
+        setIsModalOpen(false);
+        setEditNickname(false);
+        NotificationService.success("변경 성공");
+      })
+      .catch((err) => {
+        if (
+          err.response &&
+          err.response.data.code === "USER_PASSWORD_NOT_MATCH"
+        ) {
+          NotificationService.error("비밀번호가 틀립니다.");
+        }
+      })
+      .finally(() => {
+        setSubmitLoading(false);
+      });
+  };
 
   const passwordChangeSubmit = async () => {
     const regex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/;
-    if(regex.test(newPassword)) {
+    if (regex.test(newPassword)) {
       setSubmitLoading(true);
       await instance
         .patch("/users/me", {
-          password:newPassword,
+          password: newPassword,
           currentPassword: password,
         })
         .then((res) => {
@@ -155,28 +158,33 @@ const Profile = ({user,setUser,type}:ProfileComp) => {
         .finally(() => {
           setSubmitLoading(false);
         });
-    }else{
-      NotificationService.warn('비밀번호는 영문, 숫자, 특수문자 포함 8글자이어야 합니다.')
+    } else {
+      NotificationService.warn(
+        "비밀번호는 영문, 숫자, 특수문자 포함 8글자이어야 합니다."
+      );
     }
-  }
+  };
 
   const signOutReq = async () => {
-    await instance.delete('/auth/signout',{data: { 
-      password
-    },
-    withCredentials: true})
-    .then(()=>{
-      NotificationService.success('탈퇴 성공');
-      navigate('/intro');
-    })
-    .catch((err:AxiosError)=>{
-      if(err.response && err.response.status === 400) {
-        NotificationService.error('비밀번호가 틀립니다.');
-      }
-    });
-  }
+    await instance
+      .delete("/auth/signout", {
+        data: {
+          password,
+        },
+        withCredentials: true,
+      })
+      .then(() => {
+        NotificationService.success("탈퇴 성공");
+        navigate("/intro");
+      })
+      .catch((err: AxiosError) => {
+        if (err.response && err.response.status === 400) {
+          NotificationService.error("비밀번호가 틀립니다.");
+        }
+      });
+  };
 
-  if(type==='mypage') {
+  if (type === "mypage") {
     return (
       <S.Container>
         <S.Avatar avatarUrl={user.avatarUrl}>
@@ -246,58 +254,66 @@ const Profile = ({user,setUser,type}:ProfileComp) => {
           />
         </S.Nickname>
         {editNickname ? (
-          <S.EditWrap>
+          <S.EditWrap
+            style={user.provider === "GOOGLE" ? { height: "10rem" } : {}}
+          >
             <S.EditInput
               type="text"
               placeholder="새로운 닉네임"
               onChange={handleNickname}
             />
-            <S.EditInput
-              type="password"
-              placeholder="비밀번호"
-              onChange={handlePassword}
-            />
+            {user.provider !== "GOOGLE" && (
+              <S.EditInput
+                type="password"
+                placeholder="비밀번호"
+                onChange={handlePassword}
+              />
+            )}
             <S.EditSubmit onClick={submit} disabled={submitLoading}>
               {submitLoading ? "변경중..." : "변경"}
             </S.EditSubmit>
           </S.EditWrap>
         ) : null}
         <S.Addiction>{user.email}</S.Addiction>
-        {editPassword ? (
-          <S.EditWrap style={{ height: "20rem" }}>
-            <S.EditInput
-              type="password"
-              placeholder="새로운 비밀번호"
-              onChange={handleNewPassword}
-            />
-            <S.EditInput
-              type="password"
-              placeholder="비밀번호"
-              onChange={handlePassword}
-            />
-            <S.ButtonWrap>
-              <S.EditSubmit
-                onClick={passwordChangeSubmit}
-                disabled={submitLoading}
-              >
-                {submitLoading ? "변경중..." : "변경"}
-              </S.EditSubmit>
-              <S.EditSubmit
+        {user.provider !== "GOOGLE" ? (
+          <>
+            {editPassword ? (
+              <S.EditWrap style={{ height: "20rem" }}>
+                <S.EditInput
+                  type="password"
+                  placeholder="새로운 비밀번호"
+                  onChange={handleNewPassword}
+                />
+                <S.EditInput
+                  type="password"
+                  placeholder="비밀번호"
+                  onChange={handlePassword}
+                />
+                <S.ButtonWrap>
+                  <S.EditSubmit
+                    onClick={passwordChangeSubmit}
+                    disabled={submitLoading}
+                  >
+                    {submitLoading ? "변경중..." : "변경"}
+                  </S.EditSubmit>
+                  <S.EditSubmit
+                    onClick={handleEditPasswordArea}
+                    style={{ backgroundColor: "gray" }}
+                  >
+                    취소
+                  </S.EditSubmit>
+                </S.ButtonWrap>
+              </S.EditWrap>
+            ) : (
+              <S.Addiction
+                style={{ cursor: "pointer", textDecoration: "underline" }}
                 onClick={handleEditPasswordArea}
-                style={{ backgroundColor: "gray" }}
               >
-                취소
-              </S.EditSubmit>
-            </S.ButtonWrap>
-          </S.EditWrap>
-        ) : (
-          <S.Addiction
-            style={{ cursor: "pointer", textDecoration: "underline" }}
-            onClick={handleEditPasswordArea}
-          >
-            비밀번호 변경
-          </S.Addiction>
-        )}
+                비밀번호 변경
+              </S.Addiction>
+            )}
+          </>
+        ) : null}
         {signOut ? (
           <S.EditWrap style={{ height: "12rem" }}>
             <S.EditInput
@@ -305,12 +321,9 @@ const Profile = ({user,setUser,type}:ProfileComp) => {
               placeholder="비밀번호"
               onChange={handlePassword}
             />
-            <p style={{color:'red'}}>*정말로 회원 탈퇴하시겠습니까?</p>
+            <p style={{ color: "red" }}>*정말로 회원 탈퇴하시겠습니까?</p>
             <S.ButtonWrap>
-              <S.EditSubmit
-                onClick={signOutReq}
-                disabled={submitLoading}
-              >
+              <S.EditSubmit onClick={signOutReq} disabled={submitLoading}>
                 {submitLoading ? "탈퇴중..." : "탈퇴"}
               </S.EditSubmit>
               <S.EditSubmit
@@ -332,17 +345,15 @@ const Profile = ({user,setUser,type}:ProfileComp) => {
       </S.Container>
     );
   }
-  if(type === 'artist'){
+  if (type === "artist") {
     return (
       <S.Container>
         <S.Avatar avatarUrl={user.avatarUrl}></S.Avatar>
-        <S.Nickname>
-          {user.nickname}
-        </S.Nickname>
+        <S.Nickname>{user.nickname}</S.Nickname>
         <S.Addiction>{user.email}</S.Addiction>
       </S.Container>
-    )
+    );
   }
-}
+};
 
-export default Profile
+export default Profile;

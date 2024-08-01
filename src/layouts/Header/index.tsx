@@ -74,7 +74,7 @@ const Header = () => {
   return (
     <S.Canvas>
       <S.SearchArea>
-        <S.Logo src={logo} />
+        <S.Logo src={logo} onClick={()=>{navigate('/')}}/>
         <S.SearchWrap>
           <S.Search
             type="search"

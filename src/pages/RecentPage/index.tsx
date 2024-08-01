@@ -4,16 +4,11 @@ import SongBox from "../../components/SongBox";
 import { Song } from "../../interfaces/Song";
 import Banner from "../../assets/imgs/Rank.jpeg";
 import instance from "../../libs/axios/customAxios";
-import { songIdUpdate } from "../../stores/nowPlayingStore";
-import { queueUpdateStore } from "../../stores/queueStore";
 import Logo from "../../assets/imgs/logo_color.png";
 
 const RecentPage = () => {
   const [detail, setDetail] = useState<Song[]>();
   const [loading, setLoading] = useState(false);
-
-  const updateSongId = songIdUpdate((state) => state.setSongIdUpdate);
-  const queue = queueUpdateStore((state) => state.queueUpdate);
 
 
   const detailRecentReq = async () => {
@@ -33,14 +28,6 @@ const RecentPage = () => {
   useEffect(() => {
     detailRecentReq();
   }, []);
-
-
-  useEffect(() => {
-    console.log(queue);
-    if (detail) {
-      updateSongId(detail[0].id);
-    }
-  }, [queue]);
 
   return (
     <S.Container>

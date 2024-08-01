@@ -114,7 +114,6 @@ export const SongInput = styled.div`
 
 export const SongTitleInput = styled.input`
   border:none;
-  border-bottom: 0.1rem solid #ccc;
   font-size:2rem;
   padding:1rem;
   outline:none;

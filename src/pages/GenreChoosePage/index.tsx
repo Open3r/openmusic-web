@@ -28,7 +28,7 @@ const GenreChoosePage = () => {
     }
   }
 
-  const submit = async () => {
+  const submit = () => {
     setLoading(true);
     genre.map((item)=>{
       if(item !== "SWING_JAZZ") {
@@ -39,7 +39,6 @@ const GenreChoosePage = () => {
       setUser(res.data.data);
     });
     setLoading(false);
-    NotificationService.success('장르 저장 완료');
     window.location.href = '/';
   }
 

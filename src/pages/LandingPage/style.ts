@@ -95,3 +95,52 @@ export const Navigate = styled(Link)`
   color:#F1F1F1;
   cursor: pointer;
 `
+
+export const Header = styled.div`
+  width:100%;
+  height:5rem;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  position:fixed;
+  top:0;
+  left:0;
+  background-color:rgba(0,0,0,0.2);
+  z-index:999;
+  padding: 0 2rem;
+  box-sizing:border-box;
+`
+export const H1 = styled.h1`
+  font-size:3rem;
+  color:#52a9f9;
+  display:flex;
+  align-items:center;
+`
+
+export const HeaderButtonWrap = styled.div`
+  width:20rem;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+`
+
+export const HeaderLogin = styled(Link)`
+  background:none;
+  border:0.1rem #52a9f9 solid;
+  outline:none;
+  font-size:1.5rem;
+  padding: 0.7rem 2rem;
+  text-decoration:none;
+  color:#52a9f9;
+`
+
+export const HeaderSignIn = styled(Link)`
+  background: none;
+  border: 0.1rem #CCC solid;
+  outline: none;
+  font-size: 1.5rem;
+  padding: 0.7rem 2rem;
+  text-decoration: none;
+  color: #CCC;
+`;

@@ -13,7 +13,6 @@ export const Title = styled.div`
   width:100%;
   height:12rem;
   box-sizing:border-box;
-  border-bottom: 0.1rem solid #ccc;
   margin-bottom:1rem;
 `
 export const Main = styled.div`

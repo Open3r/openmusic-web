@@ -119,7 +119,7 @@ const SongBox = (props: SongBoxProps) => {
       </S.Rank>
     );
   }
-  if (props.type === 'list') {
+  if (props.type === 'queue') {
     return (
       <S.ListMusic onClick={addSongQueue} style={props.nowPlaying !== undefined && props.nowPlaying ? {background:'#F5F5F5'} : {}}>
         {
@@ -131,6 +131,37 @@ const SongBox = (props: SongBoxProps) => {
             null
           )
         }
+        <S.ListNum>{props.rank !== undefined && props.rank + 1}</S.ListNum>
+        <S.ListCover src={props.thumbnailUrl} />
+        <S.ListMusicInfoWrap>
+          <S.ListMusicTitle>
+            {props.title.length > 35
+              ? props.title.slice(0, 35) + "..."
+              : props.title}
+          </S.ListMusicTitle>
+          <S.ListMusicArtist>{props.artist.nickname}</S.ListMusicArtist>
+        </S.ListMusicInfoWrap>
+        <S.ListMusicAlbum>
+          {props.album.title.length > 15
+            ? props.album.title.slice(0, 15) + "..."
+            : props.album.title}
+        </S.ListMusicAlbum>
+        <S.RankSongLikeWrap>
+          <img src={Like} alt="" style={{ width: "2rem", height: "2rem" }} />
+          <span style={{ marginLeft: "0.5rem", fontSize: "1.3rem" }}>
+            {props.likeCount}
+          </span>
+        </S.RankSongLikeWrap>
+      </S.ListMusic>
+    );
+  }
+
+  if (props.type === "list") {
+    return (
+      <S.ListMusic onClick={addSongQueue}>
+        <S.ListMusicHover>
+          <S.HoverWord>눌러서 재생</S.HoverWord>
+        </S.ListMusicHover>
         <S.ListNum>{props.rank !== undefined && props.rank + 1}</S.ListNum>
         <S.ListCover src={props.thumbnailUrl} />
         <S.ListMusicInfoWrap>

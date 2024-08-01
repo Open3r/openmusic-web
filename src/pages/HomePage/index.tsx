@@ -11,7 +11,6 @@ import PlaylistBox from "../../components/PlaylistBox";
 import { paging } from "../../libs/axios/paging";
 import { likeUpdateStore } from "../../stores/likeUpdateStore";
 import { useNavigate } from "react-router-dom";
-import { songIdUpdate } from "../../stores/nowPlayingStore";
 import { recentUpdateStore } from "../../stores/recentStore";
 
 const HomePage = () => {
@@ -23,7 +22,6 @@ const HomePage = () => {
 
   const likeUpdate = likeUpdateStore(state=>state.likeUpdate);
   const setLikeUpdate = likeUpdateStore((state) => state.setLikeUpdate);
-  const setSongIdUpdate = songIdUpdate(state=>state.setSongIdUpdate);
   const recentUpdate = recentUpdateStore(state=>state.recentUpdate);
   const setRecentUpdate = recentUpdateStore(state=>state.setRecentUpdate);
 
@@ -32,11 +30,7 @@ const HomePage = () => {
   
   const getLastPlayed = () => {
     instance.get("/users/me/recents").then((res) => {
-      console.log(res.data.data);
       setRecentUpdate(res.data.data.slice(0,4));
-      if (res.data.data[0]) {
-        setSongIdUpdate(res.data.data[0].id);
-      }
     });
   };
   useEffect(() => {

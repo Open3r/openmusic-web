@@ -114,6 +114,14 @@ export const SongList = styled.div`
   margin: 0 auto;
   justify-content:center;
 `
+export const CreditWrap = styled.div`
+  width:60%;
+  background-color:#F3F3F3;
+  min-height:5rem;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+`
 
 const rotate = keyframes`
   from {

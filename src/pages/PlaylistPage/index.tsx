@@ -134,7 +134,6 @@ const PlaylistPage = () => {
   }
 
   useEffect(()=>{
-    console.log(queue);
     if(detail && detail.songs){
       updateSongId(detail.songs[0].id);
     }

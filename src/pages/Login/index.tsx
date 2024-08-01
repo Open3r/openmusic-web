@@ -80,11 +80,14 @@ const Login = () => {
     setChecked(!checked);
   };
 
-  const googleLogin = () => {
+  const googleLogin = async () => {
     const redirectUri = encodeURIComponent(
       "http://localhost:5173/callback/google"
     );
-    window.location.href = `https://accounts.google.com/o/oauth2/auth?client_id=342167564331-ac40i5tr38b3v3ete4hd4kq69u41hcdf.apps.googleusercontent.com&redirect_uri=${redirectUri}&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email`;
+    
+    window.location.href = 
+      `https://accounts.google.com/o/oauth2/auth?client_id=342167564331-ac40i5tr38b3v3ete4hd4kq69u41hcdf.apps.googleusercontent.com&redirect_uri=${redirectUri}&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email`;
+
   };
 
 

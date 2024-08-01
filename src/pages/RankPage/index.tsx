@@ -52,7 +52,6 @@ const RankPage = () => {
   };
 
   useEffect(() => {
-    console.log(queue);
     if (detail) {
       updateSongId(detail[0].id);
     }
