@@ -2,9 +2,7 @@ import * as S from "./style";
 import { useEffect, useState } from "react";
 import SongBox from "../../components/SongBox";
 import { Song } from "../../interfaces/Song";
-import Banner from "../../assets/imgs/Rank.jpeg";
 import instance from "../../libs/axios/customAxios";
-import Logo from "../../assets/imgs/logo_color.png";
 
 const RecentPage = () => {
   const [detail, setDetail] = useState<Song[]>();
@@ -37,7 +35,7 @@ const RecentPage = () => {
         </S.LoadingShadow>
       ) : null}
       <S.CoverArea>
-        <S.CoverImg src={Banner} />
+        <S.CoverImg src="/assets/imgs/Rank.jpeg" />
         <S.InfoWrap>
           <S.Title>최근 재생한 노래</S.Title>
         </S.InfoWrap>
@@ -48,7 +46,7 @@ const RecentPage = () => {
             <S.PageTitle>
               Analyzed By{" "}
               <img
-                src={Logo}
+                src="/assets/imgs/logo_color.png"
                 alt=""
                 style={{ height: "3rem", width: "3rem", marginLeft: "1rem" }}
               />

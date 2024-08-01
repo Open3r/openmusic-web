@@ -1,10 +1,6 @@
 import { useEffect, useRef } from "react";
 import * as S from "./style";
-import MockUp from "../../assets/imgs/MockUp.png";
-import Logo from "../../assets/imgs/logo_color.png";
-import MobileMock from "../../assets/imgs/MobileMock.png";
-import MobileMock2 from "../../assets/imgs/MobileMock2.png";
-import MobileMock3 from "../../assets/imgs/MobileMock3.png";
+
 
 const LandingPage = () => {
   const mobileMockRef1 = useRef<HTMLImageElement>(null);
@@ -39,10 +35,14 @@ const LandingPage = () => {
   }, []);
 
   return (
-    <S.Container bg={MockUp}>
+    <S.Container bg="/assets/imgs/MockUp.png">
       <S.Header>
         <S.H1>
-          <img src={Logo} alt="" style={{ marginRight: "1rem",width:'4rem' }} />
+          <img
+            src="/assets/imgs/logo_color.png"
+            alt=""
+            style={{ marginRight: "1rem", width: "4rem" }}
+          />
           <span
             style={{
               color: "#F1F1F1",
@@ -60,16 +60,20 @@ const LandingPage = () => {
         </S.HeaderButtonWrap>
       </S.Header>
       <S.First>
-        <img src={Logo} alt="" style={{ marginRight: "1rem" }} />
+        <img
+          src="/assets/imgs/logo_color.png"
+          alt=""
+          style={{ marginRight: "1rem" }}
+        />
         오픈뮤직, 당신만의 작은 음악관.
         <S.MobileMockUp
           ref={mobileMockRef1}
-          src={MobileMock}
+          src="/assets/imgs/MobileMock.png"
           className="hidden"
         />
         <S.MobileMockUp
           ref={mobileMockRef2}
-          src={MobileMock2}
+          src="/assets/imgs/MobileMock2.png"
           style={{ top: "0rem", right: "8rem", zIndex: "998" }}
           className="hidden"
         />
@@ -86,13 +90,13 @@ const LandingPage = () => {
         </span>
         <S.MobileMockUp
           ref={mobileMockRef3}
-          src={MobileMock3}
+          src="/assets/imgs/MobileMock3.png"
           style={{ zIndex: "998", top: "2rem", left: "20rem" }}
           className="hidden"
         />
       </S.Second>
       <S.Third>
-        <img src={Logo} alt="" />
+        <img src="/assets/imgs/logo_color.png" alt="" />
         지금 시작해보세요!
         <S.navigateWrap>
           <S.Navigate to="/signup">Sign up</S.Navigate>

@@ -1,6 +1,5 @@
 import * as S from "./style";
 import { Song } from "../../interfaces/Song";
-import Like from '../../assets/imgs/unlike.svg';
 import { songIdUpdate } from "../../stores/nowPlayingStore";
 import instance from "../../libs/axios/customAxios";
 import { queueUpdateStore } from "../../stores/queueStore";
@@ -110,7 +109,7 @@ const SongBox = (props: SongBoxProps) => {
               : props.album.title}
           </S.RankSongAlbum>
           <S.RankSongLikeWrap>
-            <img src={Like} alt="" style={{ width: "2rem", height: "2rem" }} />
+            <img src="/assets/imgs/unlike.svg" alt="" style={{ width: "2rem", height: "2rem" }} />
             <span style={{ marginLeft: "0.5rem", fontSize: "1.3rem" }}>
               {props.likeCount}
             </span>
@@ -147,7 +146,7 @@ const SongBox = (props: SongBoxProps) => {
             : props.album.title}
         </S.ListMusicAlbum>
         <S.RankSongLikeWrap>
-          <img src={Like} alt="" style={{ width: "2rem", height: "2rem" }} />
+          <img src='/assets/imgs/unlike.svg' alt="" style={{ width: "2rem", height: "2rem" }} />
           <span style={{ marginLeft: "0.5rem", fontSize: "1.3rem" }}>
             {props.likeCount}
           </span>
@@ -178,7 +177,7 @@ const SongBox = (props: SongBoxProps) => {
             : props.album.title}
         </S.ListMusicAlbum>
         <S.RankSongLikeWrap>
-          <img src={Like} alt="" style={{ width: "2rem", height: "2rem" }} />
+          <img src='/assets/imgs/unlike.svg' alt="" style={{ width: "2rem", height: "2rem" }} />
           <span style={{ marginLeft: "0.5rem", fontSize: "1.3rem" }}>
             {props.likeCount}
           </span>

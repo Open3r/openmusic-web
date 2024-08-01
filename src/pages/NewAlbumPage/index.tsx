@@ -1,5 +1,4 @@
 import * as S from './style';
-import Logo from '../../assets/imgs/logo_color.png';
 import { AlbumType } from '../../interfaces/album';
 import { useEffect, useState } from 'react';
 import instance from '../../libs/axios/customAxios';
@@ -41,7 +40,7 @@ const NewAlbumPage = () => {
       <S.Main>
         <S.Title>
           <img
-            src={Logo}
+            src="/assets/imgs/logo_color.png"
             alt=""
             style={{ height: "4rem", width: "4rem", marginRight: "2rem" }}
           />
@@ -50,11 +49,13 @@ const NewAlbumPage = () => {
         {detail?.length && detail.length > 0 ? (
           <S.AlbumWrap>
             {detail?.map((item) => (
-              <AlbumBox item={item} key={item.id} type='list'/>
+              <AlbumBox item={item} key={item.id} type="list" />
             ))}
           </S.AlbumWrap>
         ) : (
-          <h1 style={{ color: "gray", textAlign: "center" }}>앨범이 없습니다</h1>
+          <h1 style={{ color: "gray", textAlign: "center" }}>
+            앨범이 없습니다
+          </h1>
         )}
       </S.Main>
     </S.Container>

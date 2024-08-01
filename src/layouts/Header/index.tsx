@@ -1,6 +1,4 @@
 import * as S from "./style";
-import searchBtn from '../../assets/imgs/search.svg';
-import logo from '../../assets/imgs/logo_color.png';
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import useGetUser from "../../hooks/useGetUser";
 import { userStore } from "../../stores/userStore";
@@ -76,7 +74,7 @@ const Header = () => {
   return (
     <S.Canvas>
       <S.SearchArea>
-        <S.Logo src={logo} onClick={()=>{navigate('/')}}/>
+        <S.Logo src='/assets/imgs/logo_color.png' onClick={()=>{navigate('/')}}/>
         <S.SearchWrap>
           <S.Search
             type="search"
@@ -89,7 +87,7 @@ const Header = () => {
               }
             }}
           />
-          <S.SearchBtn src={searchBtn} onClick={search} />
+          <S.SearchBtn src='/assets/imgs/search.svg' onClick={search} />
         </S.SearchWrap>
       </S.SearchArea>
       <S.MenuArea>

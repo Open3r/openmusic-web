@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import check from '../../assets/imgs/check.svg'
 import { Link } from "react-router-dom";
 
 const Canvas = styled.div`
@@ -97,11 +96,14 @@ const CustomChkbox = styled.span<{ checked: boolean }>`
   display: inline-block;
   width: 2rem;
   height: 2rem;
-  border: 0.1rem solid #52A9F9;
+  border: 0.1rem solid #52a9f9;
   border-radius: 3rem;
-  background: ${props => props.checked ? `url(${check}) no-repeat center` : 'transparent'};
+  background: ${(props) =>
+    props.checked
+      ? 'url(/assets/imgs/check.svg) no-repeat center'
+      : "transparent"};
   cursor: pointer;
-  background-size:contain;
+  background-size: contain;
 `;
 const ChkboxContainer = styled.label`
   display: inline-block;

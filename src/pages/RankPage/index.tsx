@@ -1,14 +1,11 @@
 import * as S from "./style";
 import { useEffect, useState } from "react";
-import PlPlay from "../../assets/imgs/plPlay.svg";
 import SongBox from "../../components/SongBox";
 import useGetRank from "../../hooks/useGetRank";
 import { Song } from "../../interfaces/Song";
-import Banner from '../../assets/imgs/Rank.jpeg'
 import instance from "../../libs/axios/customAxios";
 import { songIdUpdate } from "../../stores/nowPlayingStore";
 import { queueUpdateStore } from "../../stores/queueStore";
-import Logo from '../../assets/imgs/logo_color.png';
 
 const RankPage = () => {
   const [detail, setDetail] = useState<Song[]>();
@@ -66,11 +63,11 @@ const RankPage = () => {
         </S.LoadingShadow>
       ) : null}
       <S.CoverArea>
-        <S.CoverImg src={Banner} />
+        <S.CoverImg src="/assets/imgs/Rank.jpeg" />
         <S.InfoWrap>
           <S.Title>오픈차트</S.Title>
         </S.InfoWrap>
-        <S.PlayBtn src={PlPlay} onClick={copyToQueue} />
+        <S.PlayBtn src="/assets/imgs/plPlay.svg" onClick={copyToQueue} />
       </S.CoverArea>
       <S.Main>
         <S.PageTitleWrap>
@@ -78,7 +75,7 @@ const RankPage = () => {
             <S.PageTitle>
               Analyzed By{" "}
               <img
-                src={Logo}
+                src="/assets/imgs/logo_color.png"
                 alt=""
                 style={{ height: "3rem", width: "3rem", marginLeft: "1rem" }}
               />

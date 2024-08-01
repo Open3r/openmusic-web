@@ -1,10 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import * as S from "./style";
 import useFileUpload from "../../hooks/useFileUpload";
-import Uploading from "../../assets/imgs/uploading.svg";
 import instance from "../../libs/axios/customAxios";
 import { UserStore } from "../../stores/userStore";
-import EditNickname from "../../assets/imgs/EditNickname.svg";
 import NotificationService from "../../libs/notification/NotificationService";
 import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
@@ -205,7 +203,7 @@ const Profile = ({ user, setUser, type }: ProfileComp) => {
                       ? avatar == ""
                         ? user.avatarUrl
                         : avatar
-                      : Uploading
+                      : "/assets/imgs/uploading.svg"
                   }
                 >
                   <S.AvatarHover onClick={OpenInput}>
@@ -248,7 +246,7 @@ const Profile = ({ user, setUser, type }: ProfileComp) => {
         <S.Nickname>
           {user.nickname}
           <img
-            src={EditNickname}
+            src="/assets/imgs/EditNickname.svg"
             style={{ height: "3rem", cursor: "pointer" }}
             onClick={handleEditNicknameArea}
           />

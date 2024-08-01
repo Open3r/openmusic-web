@@ -3,18 +3,10 @@ import * as S from './style';
 import { useEffect, useRef, useState } from 'react';
 import { PlaylistType } from '../../interfaces/playlist';
 import instance from '../../libs/axios/customAxios';
-import PlPlay from "../../assets/imgs/plPlay.svg";
 import SongBox from '../../components/SongBox';
 import NotificationService from '../../libs/notification/NotificationService';
 import { userStore } from '../../stores/userStore';
-import EditPlaylist from "../../assets/imgs/EditNickname.svg";
 import useFileUpload from '../../hooks/useFileUpload';
-import AlbumCoverImg from "../../assets/imgs/uploadAlbumCover.svg";
-import Uploading from "../../assets/imgs/uploading.svg";
-import X from "../../assets/imgs/X.svg";
-import DeleteSong from "../../assets/imgs/deleteSong.svg";
-import Like from '../../assets/imgs/like.svg';
-import Unlike from '../../assets/imgs/unlike.svg';
 import { playlistUpdateStore } from '../../stores/playlistUpdateStore';
 import { songIdUpdate } from '../../stores/nowPlayingStore';
 import { queueUpdateStore } from '../../stores/queueStore';
@@ -209,7 +201,7 @@ const PlaylistPage = () => {
         <S.InfoWrap>
           <S.Title>{detail?.title}</S.Title>
         </S.InfoWrap>
-        <S.PlayBtn src={PlPlay} onClick={copyToQueue} />
+        <S.PlayBtn src="/assets/imgs/plPlay.svg" onClick={copyToQueue} />
       </S.CoverArea>
       <S.Main>
         <S.PageTitleWrap>
@@ -225,7 +217,7 @@ const PlaylistPage = () => {
           <S.SongCount>{detail?.songs.length} songs</S.SongCount>
           {user.id === detail?.artist.id ? (
             <img
-              src={EditPlaylist}
+              src="/assets/imgs/EditNickname.svg"
               alt=""
               style={{ height: "3rem", cursor: "pointer", marginLeft: "1rem" }}
               onClick={handleModal}
@@ -233,7 +225,7 @@ const PlaylistPage = () => {
           ) : null}
           {!detail?.liked ? (
             <img
-              src={Unlike}
+              src="/assets/imgs/unlike.svg"
               style={{
                 width: "3rem",
                 height: "3rem",
@@ -244,7 +236,7 @@ const PlaylistPage = () => {
             />
           ) : (
             <img
-              src={Like}
+              src="/assets/imgs/like.svg"
               style={{
                 width: "3rem",
                 height: "3rem",
@@ -286,7 +278,7 @@ const PlaylistPage = () => {
                 {user.id === detail.artist.id ? (
                   <S.DeleteSong>
                     <img
-                      src={DeleteSong}
+                      src="/assets/imgs/deleteSong.svg"
                       style={{ cursor: "pointer", width: "2rem" }}
                       alt=""
                       onClick={() => {
@@ -310,7 +302,7 @@ const PlaylistPage = () => {
             <S.ModalTitle>
               플레이리스트 수정
               <img
-                src={X}
+                src="/assets/imgs/X.svg"
                 style={{ height: "2rem", width: "2rem", cursor: "pointer" }}
                 onClick={handleModal}
               />
@@ -321,8 +313,8 @@ const PlaylistPage = () => {
                   !loading
                     ? playlistCover
                       ? playlistCover
-                      : AlbumCoverImg
-                    : Uploading
+                      : "/assets/imgs/uploadAlbumCover.svg"
+                    : "/assets/imgs/uploading.svg"
                 }
                 onClick={handlePlaylistCover}
               >

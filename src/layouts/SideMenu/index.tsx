@@ -4,10 +4,7 @@ import { userStore } from "../../stores/userStore";
 import { removeCookie } from "../../libs/cookies/cookie";
 import NotificationService from "../../libs/notification/NotificationService";
 import { useNavigate } from "react-router-dom";
-import Mypage from '../../assets/imgs/mypage.svg';
-import Uplaod from '../../assets/imgs/Vector.svg';
-import Queue from "../../assets/imgs/Vector-1.svg";
-import Recent from "../../assets/imgs/Vector-2.svg";
+
 
 const SideMenu = () => {
   const sideMenu = useRef<HTMLDivElement | null>(null);
@@ -64,19 +61,19 @@ const SideMenu = () => {
           <S.Nickname>{user.nickname}</S.Nickname>
         </S.ProfileWrap>
         <S.Menu to="/my-page">
-          <img src={Mypage} alt="" />
+          <img src="/assets/imgs/mypage.svg" alt="" />
           마이페이지
         </S.Menu>
         <S.Menu to="/upload">
-          <img src={Uplaod} alt="" />
+          <img src="/assets/imgs/Vector.svg" alt="" />
           앨범 업로드
         </S.Menu>
         <S.Menu to="/queue">
-          <img src={Queue} alt="" />
+          <img src="/assets/imgs/Vector-1.svg" alt="" />
           재생목록
         </S.Menu>
         <S.Menu to="/recent">
-          <img src={Recent} alt="" />
+          <img src="/assets/imgs/Vector-2.svg" alt="" />
           최근 재생한 노래
         </S.Menu>
         <S.LogOut onClick={logout}>로그아웃</S.LogOut>

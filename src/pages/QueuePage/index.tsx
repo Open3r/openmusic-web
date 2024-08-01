@@ -3,10 +3,8 @@ import { useEffect, useState } from "react";
 import instance from "../../libs/axios/customAxios";
 import SongBox from "../../components/SongBox";
 import NotificationService from "../../libs/notification/NotificationService";
-import DeleteSong from "../../assets/imgs/deleteSong.svg";
 import { songIdUpdate } from "../../stores/nowPlayingStore";
 import { queueUpdateStore } from "../../stores/queueStore";
-import Logo from "../../assets/imgs/logo_color.png";
 import { Song } from "../../interfaces/Song";
 import { queueStateUpdateStore } from "../../stores/queueStateStore";
 
@@ -84,7 +82,7 @@ const QueuePage = () => {
           <S.PageTitle>
             Analyzed By{" "}
             <img
-              src={Logo}
+              src="/assets/imgs/logo_color.png"
               alt=""
               style={{ height: "3rem", width: "3rem", marginLeft: "1rem" }}
             />
@@ -116,7 +114,7 @@ const QueuePage = () => {
                 />
                 <S.DeleteSong>
                   <img
-                    src={DeleteSong}
+                    src="/assets/imgs/deleteSong.svg"
                     style={{ cursor: "pointer", width: "2rem" }}
                     alt=""
                     onClick={() => {

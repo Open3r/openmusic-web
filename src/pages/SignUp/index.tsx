@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import Google from "../../assets/imgs/google.svg";
 import * as SS from "./style";
 import { SignUpInfoStore } from "../../stores/signUpInfoStore";
 import { useNavigate } from "react-router-dom";
@@ -255,7 +254,7 @@ const SignUp = () => {
           onClick={googleLogin}
         >
           <img
-            src={Google}
+            src="/assets/imgs/google.svg"
             style={{
               width: "2rem",
               height: "2rem",

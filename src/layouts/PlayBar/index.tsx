@@ -5,22 +5,11 @@ import { loopShuffleStore } from "../../stores/loopShuffleStore";
 import { PlayStateStore } from "../../stores/playStateStore";
 import useAudioControls from "../../hooks/useAudioControl";
 import useProgress from "../../hooks/useProgress";
-import next from "../../assets/imgs/next.svg";
-import play from "../../assets/imgs/play.svg";
-import pause from "../../assets/imgs/pause.svg";
-import prev from "../../assets/imgs/prev.svg";
-import shuffle from "../../assets/imgs/shuffleOn.svg";
-import unShuffle from "../../assets/imgs/shuffleOff.svg";
-import loop from "../../assets/imgs/repeatOn.svg";
-import unloop from "../../assets/imgs/repeatOff.svg";
-import playlistPlus from '../../assets/imgs/playlistPlus.svg';
 import { PlaylistType } from "../../interfaces/playlist";
 import instance from "../../libs/axios/customAxios";
 import PlaylistBox from "../../components/PlaylistBox";
 import { playlistUpdateStore } from "../../stores/playlistUpdateStore";
 import { paging } from "../../libs/axios/paging";
-import Like from '../../assets/imgs/like.svg';
-import Unlike from '../../assets/imgs/unlike.svg';
 import { likeUpdateStore } from "../../stores/likeUpdateStore";
 import { Song } from "../../interfaces/Song";
 import { songIdUpdate } from "../../stores/nowPlayingStore";
@@ -436,31 +425,31 @@ const PlayBar = () => {
           </PB.MusicInfoWrap>
         </PB.SongWrap>
         <PB.PlayBtnsWrap>
-          <PB.PlayBtn src={prev} onClick={prevMusic} />
+          <PB.PlayBtn src="/assets/imgs/prev.svg" onClick={prevMusic} />
           {playState ? (
-            <PB.PlayBtn src={pause} onClick={pauseMusic} />
+            <PB.PlayBtn src="/assets/imgs/pause.svg" onClick={pauseMusic} />
           ) : (
-            <PB.PlayBtn src={play} onClick={playMusic} />
+            <PB.PlayBtn src="/assets/imgs/play.svg" onClick={playMusic} />
           )}
-          <PB.PlayBtn src={next} onClick={musicEndEvent} />
+          <PB.PlayBtn src="/assets/imgs/next.svg" onClick={musicEndEvent} />
         </PB.PlayBtnsWrap>
         <PB.TimeIndicatorWrap>
           {!nowPlaying?.liked ? (
             <PB.StateIndicator
-              src={Unlike}
+              src="/assets/imgs/unlike.svg"
               style={{ width: "3rem", height: "3rem" }}
               onClick={likeReq}
             />
           ) : (
             <PB.StateIndicator
-              src={Like}
+              src="/assets/imgs/like.svg"
               style={{ width: "3rem", height: "3rem" }}
               onClick={unlikeReq}
             />
           )}
 
           <PB.StateIndicator
-            src={playlistPlus}
+            src="/assets/imgs/playlistPlay.svg"
             style={{ width: "3rem", height: "3rem" }}
             className="addBtn playlist"
           />
@@ -495,14 +484,26 @@ const PlayBar = () => {
             </PB.AddToPlaylistWrap>
           ) : null}
           {loopState ? (
-            <PB.StateIndicator src={loop} onClick={swapLoopState} />
+            <PB.StateIndicator
+              src="/assets/imgs/repeatOn.svg"
+              onClick={swapLoopState}
+            />
           ) : (
-            <PB.StateIndicator src={unloop} onClick={swapLoopState} />
+            <PB.StateIndicator
+              src="/assets/imgs/repeatOff.svg"
+              onClick={swapLoopState}
+            />
           )}
           {shuffleState ? (
-            <PB.StateIndicator src={shuffle} onClick={swapShuffleState} />
+            <PB.StateIndicator
+              src="/assets/imgs/suffleOn.svg"
+              onClick={swapShuffleState}
+            />
           ) : (
-            <PB.StateIndicator src={unShuffle} onClick={swapShuffleState} />
+            <PB.StateIndicator
+              src="/assets/imgs/shuffleOff.svg"
+              onClick={swapShuffleState}
+            />
           )}
           <PB.StateIndicator
             src={volIndicator}

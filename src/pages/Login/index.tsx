@@ -4,7 +4,6 @@ import * as S from "./style";
 import { useNavigate } from "react-router-dom";
 import { getCookie, removeCookie, setCookie } from "../../libs/cookies/cookie";
 import NotificationService from "../../libs/notification/NotificationService";
-import Google from '../../assets/imgs/google.svg';
 
 const Login = () => {
   const { login, loading } = useLogin();
@@ -171,7 +170,16 @@ const Login = () => {
           }}
           onClick={googleLogin}
         >
-          <img src={Google} style={{width:'2rem',height:'2rem',marginRight:'1rem',boxSizing:'border-box'}} alt="" />
+          <img
+            src="/assets/imgs/google.svg"
+            style={{
+              width: "2rem",
+              height: "2rem",
+              marginRight: "1rem",
+              boxSizing: "border-box",
+            }}
+            alt=""
+          />
           구글로그인
         </div>
       </S.LoginWrap>

@@ -2,14 +2,10 @@ import { useParams } from 'react-router-dom';
 import * as S from './style';
 import { useEffect, useState } from 'react';
 import instance from '../../libs/axios/customAxios';
-import PlPlay from "../../assets/imgs/plPlay.svg";
 import SongBox from '../../components/SongBox';
 import { AlbumType } from '../../interfaces/album';
-import Like from "../../assets/imgs/like.svg";
-import Unlike from "../../assets/imgs/unlike.svg";
 import { songIdUpdate } from '../../stores/nowPlayingStore';
 import { queueUpdateStore } from '../../stores/queueStore';
-import Logo from '../../assets/imgs/logo_color.png';
 
 const AlbumPage = () => {
 
@@ -101,7 +97,7 @@ const AlbumPage = () => {
         <S.InfoWrap>
           <S.Title>{detail?.title}</S.Title>
         </S.InfoWrap>
-        <S.PlayBtn src={PlPlay} onClick={copyToQueue} />
+        <S.PlayBtn src="/assets/imgs/plPlay.svg" onClick={copyToQueue} />
       </S.CoverArea>
       <S.Main>
         <S.PageTitleWrap>
@@ -119,7 +115,7 @@ const AlbumPage = () => {
             <S.SongCount>{detail?.songs.length} songs</S.SongCount>
             {!detail?.liked ? (
               <img
-                src={Unlike}
+                src="/assets/imgs/unlike.svg"
                 style={{
                   width: "3rem",
                   height: "3rem",
@@ -130,7 +126,7 @@ const AlbumPage = () => {
               />
             ) : (
               <img
-                src={Like}
+                src="/assets/imgs/like.svg"
                 style={{
                   width: "3rem",
                   height: "3rem",
@@ -186,10 +182,10 @@ const AlbumPage = () => {
               detail?.createdAt[2]}
           </span>
           <span>created by {detail?.artist.nickname}</span>
-          <span style={{display:'flex',alignItems:'center'}}>
+          <span style={{ display: "flex", alignItems: "center" }}>
             serviced by{" "}
             <img
-              src={Logo}
+              src="/assets/imgs/logo_color.png"
               alt=""
               style={{ height: "2rem", width: "2rem", marginLeft: "0.5rem" }}
             />

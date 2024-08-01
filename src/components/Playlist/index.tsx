@@ -1,11 +1,7 @@
 import * as S from "./style";
 import { PlaylistType } from "../../interfaces/playlist";
 import PlaylistBox from "../PlaylistBox";
-import Plus from "../../assets/imgs/plus.svg";
-import X from "../../assets/imgs/X.svg";
 import { useRef, useState } from "react";
-import AlbumCoverImg from "../../assets/imgs/uploadAlbumCover.svg";
-import Uploading from "../../assets/imgs/uploading.svg";
 import useFileUpload from "../../hooks/useFileUpload";
 import instance from "../../libs/axios/customAxios";
 import NotificationService from "../../libs/notification/NotificationService";
@@ -95,7 +91,7 @@ const Playlist = ({
           <PlaylistBox type="default" key={item.id} item={item} />
         ))}
         <S.AddPlaylist onClick={handleModal}>
-          <img src={Plus} />
+          <img src="/assets/imgs/plus.svg" />
         </S.AddPlaylist>
       </S.Main>
       {isModalOpen ? (
@@ -104,7 +100,7 @@ const Playlist = ({
             <S.ModalTitle>
               플레이리스트 생성
               <img
-                src={X}
+                src="/assets/imgs/X.svg"
                 style={{ height: "2rem", width: "2rem", cursor: "pointer" }}
                 onClick={handleModal}
               />
@@ -115,8 +111,8 @@ const Playlist = ({
                   !loading
                     ? playlistCover
                       ? playlistCover
-                      : AlbumCoverImg
-                    : Uploading
+                      : "/assets/imgs/uploadAlbumCover.svg"
+                    : '/assets/imgs/uploading.svg'
                 }
                 onClick={handlePlaylistCover}
               >
@@ -139,7 +135,9 @@ const Playlist = ({
               </S.PlaylistScope>
             </S.PlaylistInputWrap>
             <S.PlaylistBtnWrap>
-              <S.PlaylistBtn onClick={submit} disabled={submitLoading}>{submitLoading ? "생성중..." : "생성"}</S.PlaylistBtn>
+              <S.PlaylistBtn onClick={submit} disabled={submitLoading}>
+                {submitLoading ? "생성중..." : "생성"}
+              </S.PlaylistBtn>
             </S.PlaylistBtnWrap>
           </S.Modal>
         </S.CreatModalWrap>

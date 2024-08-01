@@ -1,12 +1,7 @@
 import { useRef, useState } from "react";
 import * as S from "./style";
-import AlbumCoverImg from "../../assets/imgs/uploadAlbumCover.svg";
-import BeforeUpload from "../../assets/imgs/songUpload.svg";
-import AfterUpload from "../../assets/imgs/uploadChk.svg";
 import { UploadSong } from "../../interfaces/uploadSong";
 import useAlbumUpload from "../../hooks/useAlbumUpload";
-import DeleteSong from "../../assets/imgs/deleteSong.svg";
-import PlusBtn from "../../assets/imgs/plus.svg";
 import NotificationService from "../../libs/notification/NotificationService";
 import { useNavigate } from "react-router-dom";
 import useFileUpload from "../../hooks/useFileUpload";
@@ -127,19 +122,16 @@ const UploadPage = () => {
 
   return (
     <S.Canvas>
-      {
-        loading ? (
-          <S.LoadingShadow>
-            <S.Spinner>
-            </S.Spinner>
-          </S.LoadingShadow>
-        ) : (null)
-      }
+      {loading ? (
+        <S.LoadingShadow>
+          <S.Spinner></S.Spinner>
+        </S.LoadingShadow>
+      ) : null}
       <S.SongInfoWrap>
         <S.AlbumCoverInput
           onClick={handleAlbumCover}
           $albumCover={
-            albumCover ? albumCover : AlbumCoverImg
+            albumCover ? albumCover : "/assets/imgs/uploadAlbumCover.svg"
           }
         >
           <input
@@ -194,7 +186,10 @@ const UploadPage = () => {
         <S.AlbumMetaLabel style={{ margin: "4rem 0 1rem 0" }}>
           앨범설명
         </S.AlbumMetaLabel>
-        <S.AlbumDescription placeholder="250자 이내" onChange={handleAlbumDescription}/>
+        <S.AlbumDescription
+          placeholder="250자 이내"
+          onChange={handleAlbumDescription}
+        />
       </S.SongInfoWrap>
       <div
         style={{
@@ -224,9 +219,9 @@ const UploadPage = () => {
               >
                 <S.SongFileInput
                   $file={
-                      item.url
-                        ? AfterUpload
-                        : BeforeUpload
+                    item.url
+                      ? "/assets/imgs/uploadChk.svg"
+                      : "/assets/imgs/songUpload.svg"
                   }
                   onClick={() => handleMusic(idx)}
                 >
@@ -238,7 +233,7 @@ const UploadPage = () => {
                   />
                 </S.SongFileInput>
                 <img
-                  src={DeleteSong}
+                  src="/assets/imgs/deleteSong.svg"
                   onClick={() => {
                     removeSong(idx);
                   }}
@@ -251,7 +246,7 @@ const UploadPage = () => {
             </S.SongInput>
           ))}
           <S.AddSong onClick={addSong}>
-            <img src={PlusBtn} />
+            <img src="/assets/imgs/plus.svg" />
           </S.AddSong>
         </S.SongInputArea>
         <S.UploadBtn onClick={submit} disabled={uploadLoading}>

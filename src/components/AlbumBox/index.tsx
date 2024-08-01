@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 import { AlbumType } from '../../interfaces/album'
-import Like from '../../assets/imgs/unlike.svg';
 import * as S from './style'
 
 const AlbumBox = ({item,type}:{item:AlbumType,type:string}) => {
@@ -46,7 +45,7 @@ const AlbumBox = ({item,type}:{item:AlbumType,type:string}) => {
           <S.ListAlbumMeta>
             <S.AlbumSongCount>{item.songs.length} songs</S.AlbumSongCount>
             <S.ListAlbumLikeWrap>
-              <img src={Like} alt="" />
+              <img src='/assets/imgs/unlike.svg' alt="" />
               <span style={{fontSize:'1.5rem',color:'gray',marginLeft:'0.5rem'}}>{item.likeCount}</span>
             </S.ListAlbumLikeWrap>
           </S.ListAlbumMeta>

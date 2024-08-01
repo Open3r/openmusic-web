@@ -1,5 +1,4 @@
 import * as S from "./style";
-import Logo from "../../assets/imgs/logo_color.png";
 import { useEffect, useState } from "react";
 import instance from "../../libs/axios/customAxios";
 import { paging } from "../../libs/axios/paging";
@@ -40,7 +39,7 @@ const NewPlaylistPage = () => {
       <S.Main>
         <S.Title>
           <img
-            src={Logo}
+            src="/assets/imgs/logo_color.png"
             alt=""
             style={{ height: "4rem", width: "4rem", marginRight: "2rem" }}
           />
@@ -49,7 +48,7 @@ const NewPlaylistPage = () => {
         {detail?.length && detail.length > 0 ? (
           <S.PlaylistWrap>
             {detail?.map((item) => (
-              <PlaylistBox item={item} type="default" key={item.id}/>
+              <PlaylistBox item={item} type="default" key={item.id} />
             ))}
           </S.PlaylistWrap>
         ) : (

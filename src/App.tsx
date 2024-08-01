@@ -5,7 +5,6 @@ import Router from "./components/Router";
 import Header from "./layouts/Header";
 import PlayBar from "./layouts/PlayBar";
 import { isMobile } from "react-device-detect";
-import Logo from "./assets/imgs/logo_color.png";
 
 function App() {
   const [headerHideLayout, setHeaderHideLayout] = useState(false);
@@ -65,7 +64,11 @@ function App() {
             height: "50rem",
           }}
         >
-          <img src={Logo} alt="" style={{ marginBottom: "2rem" }} />
+          <img
+            src="/assets/imgs/logo_color.png"
+            alt=""
+            style={{ marginBottom: "2rem" }}
+          />
           <h1
             style={{
               fontSize: "3rem",
