@@ -6,7 +6,6 @@ import Header from "./layouts/Header";
 import PlayBar from "./layouts/PlayBar";
 import { isMobile } from "react-device-detect";
 import Logo from "./assets/imgs/logo_color.png";
-import Mock from "./assets/imgs/MockUp.png";
 
 function App() {
   const [headerHideLayout, setHeaderHideLayout] = useState(false);
