@@ -35,7 +35,7 @@ const GenreChoosePage = () => {
         instance.post('/users/me/genres',{genre:item});
       }
     });
-    instance.get('/user/me').then((res)=>{
+    instance.get('/users/me').then((res)=>{
       setUser(res.data.data);
     });
     setLoading(false);
