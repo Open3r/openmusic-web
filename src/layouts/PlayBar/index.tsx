@@ -449,7 +449,7 @@ const PlayBar = () => {
           )}
 
           <PB.StateIndicator
-            src="/assets/imgs/playlistPlay.svg"
+            src="/assets/imgs/playlistPlus.svg"
             style={{ width: "3rem", height: "3rem" }}
             className="addBtn playlist"
           />
