@@ -17,7 +17,7 @@ function useGetMusic() {
       return;
     }
     try {
-      const res = await instance.get(`/songs`,{params:{...paging, size}});
+      const res = await instance.get(`/songs/latest`,{params:{...paging, size}});
       return res.data.data.content;
     } catch (err: any) {
       setError(err.response ? err.response.data : "Network error");

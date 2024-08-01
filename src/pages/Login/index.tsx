@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import useLogin from "../../hooks/useLogin";
 import * as S from "./style";
 import { useNavigate } from "react-router-dom";
-import { setCookie } from "../../libs/cookies/cookie";
+import { getCookie, removeCookie, setCookie } from "../../libs/cookies/cookie";
 import NotificationService from "../../libs/notification/NotificationService";
 import Google from '../../assets/imgs/google.svg';
 
@@ -12,6 +12,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
   const navigate = useNavigate();
+  const accessToken = getCookie('accessToken');
 
   const handleEmail = (e: any) => {
     setEmail(e.target.value);
@@ -31,6 +32,13 @@ const Login = () => {
       warnMessage.innerHTML = "";
     }
   }, [email, pw]);
+
+  useEffect(() => {
+    if (accessToken) {
+      removeCookie("accessToken");
+      removeCookie("refreshToken");
+    }
+  }, []);
 
   const submit = async () => {
     if (email.length > 0 && pw.length > 0) {

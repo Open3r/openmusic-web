@@ -5,6 +5,7 @@ import { SignUpInfoStore } from "../../stores/signUpInfoStore";
 import { useNavigate } from "react-router-dom";
 import useVerify from "../../hooks/useVerify";
 import NotificationService from "../../libs/notification/NotificationService";
+import { getCookie, removeCookie } from "../../libs/cookies/cookie";
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
@@ -18,10 +19,19 @@ const SignUp = () => {
   const storeNickname = SignUpInfoStore((state) => state.storeNickname);
 
   const { verify, loading } = useVerify();
+  
+  const accessToken = getCookie('accessToken');
 
   const handleEmail = (e: any) => {
     setEmail(e.target.value);
   };
+
+  useEffect(()=>{
+    if(accessToken){
+      removeCookie('accessToken');
+      removeCookie('refreshToken');
+    }
+  },[]);
 
   useEffect(() => {
     const validateInput = (

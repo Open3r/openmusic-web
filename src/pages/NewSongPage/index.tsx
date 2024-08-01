@@ -8,7 +8,7 @@ import instance from "../../libs/axios/customAxios";
 import { songIdUpdate } from "../../stores/nowPlayingStore";
 import { queueUpdateStore } from "../../stores/queueStore";
 import Logo from "../../assets/imgs/logo_color.png";
-import { paging } from "../../libs/axios/paging";
+import useGetMusic from "../../hooks/useGetMusic";
 
 const NewSongPage = () => {
   const [detail, setDetail] = useState<Song[]>();
@@ -18,13 +18,15 @@ const NewSongPage = () => {
   const setQueueUpdate = queueUpdateStore((state) => state.setQueueUpdate);
   const queue = queueUpdateStore((state) => state.queueUpdate);
 
+  const { getMusic } = useGetMusic();
+
 
   const detailRankReq = async () => {
     let loadingTimeout: ReturnType<typeof setTimeout> | undefined;
     try {
       loadingTimeout = setTimeout(() => setLoading(true), 5000);
-      const res = await instance.get('/songs/latest',{params:{...paging, size:100}});
-      setDetail(res.data.data.content);
+      const res = await getMusic(100);
+      setDetail(res);
     } finally {
       if (loadingTimeout) {
         clearTimeout(loadingTimeout);
