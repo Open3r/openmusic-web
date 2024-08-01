@@ -77,6 +77,7 @@ export const SearchPage = () => {
               scope={content.scope}
               liked={content.liked}
               likeCount={content.likeCount}
+              album={content.album}
             />
           ))}
         </S.SongResultWrap>
@@ -93,7 +94,7 @@ export const SearchPage = () => {
         <S.SectionTitle>앨범</S.SectionTitle>
         <S.AlbumResultWrap>
           {albumResult?.map((content) => (
-            <AlbumBox item={content} key={content.id} />
+            <AlbumBox item={content} key={content.id} type='default'/>
           ))}
         </S.AlbumResultWrap>
       </S.AlbumResultArea>

@@ -57,8 +57,6 @@ const PlayBar = () => {
   const setQueueUpdate = queueUpdateStore((state) => state.setQueueUpdate);
   const setRecentUpdate = recentUpdateStore((state) => state.setRecentUpdate);
   const setQueueStateUpdate = queueStateUpdateStore(state=>state.setQueueStateUpdate);
-  const recent = recentUpdateStore(state=>state.recentUpdate);
-  const [initialRecent, setInitialRecent] = useState(true);
 
   const songId = songIdUpdate(state=>state.songId);
 

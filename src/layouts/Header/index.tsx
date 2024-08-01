@@ -26,6 +26,8 @@ const Header = () => {
       await getUser().then((res) => {
         setUser(res.data);
       });
+    }else{
+      navigate('/intro');
     }
   };
 

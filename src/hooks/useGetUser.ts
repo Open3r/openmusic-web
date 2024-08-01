@@ -12,7 +12,7 @@ function useGetUser() {
     setLoading(true);
     setError(null);
     if (refreshToken == undefined) {
-      navigate("/login");
+      navigate("/intro");
       return;
     }
     try {

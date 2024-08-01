@@ -82,7 +82,7 @@ const Login = () => {
 
   const googleLogin = async () => {
     const redirectUri = encodeURIComponent(
-      "http://localhost:5173/callback/google"
+      `${import.meta.env.VITE_WEB_URL}/callback/google`
     );
     
     window.location.href = 

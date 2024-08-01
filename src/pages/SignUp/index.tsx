@@ -134,6 +134,14 @@ const SignUp = () => {
     }
   };
 
+  const googleLogin = async () => {
+    const redirectUri = encodeURIComponent(
+      `${import.meta.env.VITE_WEB_URL}/callback/google`
+    );
+
+    window.location.href = `https://accounts.google.com/o/oauth2/auth?client_id=342167564331-ac40i5tr38b3v3ete4hd4kq69u41hcdf.apps.googleusercontent.com&redirect_uri=${redirectUri}&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email`;
+  };
+
   return (
     <SS.Canvas>
       <SS.LoginWrap>
@@ -222,22 +230,32 @@ const SignUp = () => {
           <SS.SeperWord>간편회원가입</SS.SeperWord>
           <SS.SeperLine></SS.SeperLine>
         </SS.SeperWrap>
-          <div
+        <div
+          style={{
+            width: "90%",
+            height: "4rem",
+            borderRadius: "1rem",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            border: "0.1rem solid #ccc",
+            fontSize: "1.5rem",
+            cursor: "pointer",
+          }}
+          onClick={googleLogin}
+        >
+          <img
+            src={Google}
             style={{
-              width: "90%",
-              height: "4rem",
-              borderRadius: "1rem",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              border: "0.1rem solid #ccc",
-              fontSize: "1.5rem",
-              cursor: "pointer",
+              width: "2rem",
+              height: "2rem",
+              marginRight: "1rem",
+              boxSizing: "border-box",
             }}
-          >
-            <img src={Google} style={{width:'2rem',height:'2rem',marginRight:'1rem',boxSizing:'border-box'}} alt="" />
-            구글로그인
-          </div>
+            alt=""
+          />
+          구글로그인
+        </div>
       </SS.LoginWrap>
     </SS.Canvas>
   );

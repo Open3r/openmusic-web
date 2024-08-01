@@ -13,7 +13,7 @@ function useGetMusic() {
     setLoading(true);
     setError(null);
     if (refreshToken == undefined) {
-      navigate("/login");
+      navigate("/intro");
       return;
     }
     try {

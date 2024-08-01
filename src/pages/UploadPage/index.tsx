@@ -34,8 +34,8 @@ const UploadPage = () => {
   };
 
   const handleMusic = (i: number) => {
-    if (musicRefs.current[i]) {
-      musicRefs.current[i].click();
+    if (musicRefs.current[i] !== null) {
+      musicRefs.current[i]!.click();
     }
   };
 

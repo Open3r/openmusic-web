@@ -20,7 +20,8 @@ const ArtistPage = () => {
     status:'',
     provider:'',
     role:'',
-    avatarUrl:''
+    avatarUrl:'',
+    genres:[]
   });
   const param = useParams();
 
