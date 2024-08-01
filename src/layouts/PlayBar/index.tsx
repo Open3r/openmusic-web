@@ -496,7 +496,7 @@ const PlayBar = () => {
           )}
           {shuffleState ? (
             <PB.StateIndicator
-              src="/assets/imgs/suffleOn.svg"
+              src="/assets/imgs/shuffleOn.svg"
               onClick={swapShuffleState}
             />
           ) : (

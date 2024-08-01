@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 export const Container = styled.div`
   width: 100%;
-  height: calc(100vh - 22rem);
+  min-height: calc(100vh - 22rem);
   margin-bottom: 10rem;
   position: relative;
   -ms-overflow-style: none; /* IE and Edge */

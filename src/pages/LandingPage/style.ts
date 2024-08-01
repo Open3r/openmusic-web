@@ -61,6 +61,7 @@ export const Second = styled.div`
   font-weight: bold;
   scroll-snap-align: start;
   position: relative;
+  overflow-y:scroll;
 `;
 
 export const Third = styled.div`

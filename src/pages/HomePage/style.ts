@@ -1,15 +1,11 @@
 import styled from "@emotion/styled";
 
-const Canvas = styled.div`
-  width: 140rem;
-  margin: 0 auto;
-  height: calc(100vh - 22rem);
+const Conatainer = styled.div`
   margin-bottom: 10rem;
   margin-top: 12rem;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  overflow-y:scroll;
+  width: 100%;
+  height: calc(100vh - 22rem);
+  overflow-y: scroll;
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
   &::-webkit-scrollbar {
@@ -17,11 +13,32 @@ const Canvas = styled.div`
   }
 `;
 
+const Canvas = styled.div`
+  width: 140rem;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+`;
+
 const ChartSectionWrap = styled.div`
   width:100%;
   display:flex;
   justify-content:space-between;
 `
+
+const Banner = styled.div`
+  width: 84rem;
+  height: 12rem;
+  margin-top:3rem;
+  border:0.1rem solid #f1f1f1;
+  overflow:hidden;
+`
+const BannerImage = styled.img`
+  width: 100%;
+  height: auto;
+  cursor: pointer;
+`;
 
 const SectionWrap = styled.div`
   width:64rem;
@@ -73,7 +90,7 @@ const RankWrap = styled.div`
 `
 const RankBox = styled.div`
   width: 100%;
-  height:21rem;
+  height:35rem;
   border-radius:1rem;
   overflow:hidden;
   display:flex;
@@ -86,6 +103,38 @@ const NoSongAlert = styled.h1`
   color:#ccc;
 `
 
+export const Footer = styled.div`
+  width:100%;
+  height:25rem;
+  background-color:#F1F1F1;
+  border-top:0.1rem solid #E5E5E5;
+  padding: 2rem;
+  box-sizing:border-box;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  &>p{
+    color:#ccc;
+    margin-bottom:0.5rem;
+    align-self:flex-end;
+  }
+  font-size:1.5rem;
+`
+export const Credit = styled.div`
+  margin-right:5rem;
+`
+export const MemberList = styled.li`
+  margin-bottom:0.5rem;
+`
+export const Member = styled.a`
+  color:#ccc;
+  text-decoration:none;
+  font-size:1.6rem;
+  &:hover{
+    text-decoration:underline;
+  }
+`
+
 export {
   BoxWrap,
   Canvas,
@@ -96,5 +145,8 @@ export {
   RecentlyListenWrap,
   RankWrap,
   RankBox,
-  NoSongAlert
+  NoSongAlert,
+  Banner,
+  BannerImage,
+  Conatainer
 }

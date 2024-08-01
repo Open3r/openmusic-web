@@ -35,7 +35,7 @@ const RecentPage = () => {
         </S.LoadingShadow>
       ) : null}
       <S.CoverArea>
-        <S.CoverImg src="/assets/imgs/Rank.jpeg" />
+        <S.CoverImg src="/assets/imgs/banner.png" />
         <S.InfoWrap>
           <S.Title>최근 재생한 노래</S.Title>
         </S.InfoWrap>

@@ -5,6 +5,7 @@ export const Canvas = styled.div`
   height:12rem;
   background:white;
   border-bottom:0.1rem solid #ccc;
+  box-sizing:border-box;
   display:flex;
   flex-direction:column;
   position:fixed;
@@ -24,9 +25,18 @@ export const MenuArea = styled.div`
   height:4rem;
   display:flex;
   align-items:center;
-  justify-content:flex-start;
-  padding:0 5rem;
+  justify-content:space-between;
+  padding:0 2rem;
+  box-sizing:border-box;
 `
+export const MenuWrap = styled.div`
+  width: 60rem;
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+`;
+
 export const SearchWrap = styled.div`
   width:60rem;
   height:4rem;

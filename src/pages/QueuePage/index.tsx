@@ -72,7 +72,7 @@ const QueuePage = () => {
         </S.LoadingShadow>
       ) : null}
       <S.CoverArea>
-        <S.CoverImg src="" />
+        <S.CoverImg src="/assets/imgs/banner.png" />
         <S.InfoWrap>
           <S.Title>재생목록</S.Title>
         </S.InfoWrap>

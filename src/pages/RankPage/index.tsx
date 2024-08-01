@@ -63,7 +63,7 @@ const RankPage = () => {
         </S.LoadingShadow>
       ) : null}
       <S.CoverArea>
-        <S.CoverImg src="/assets/imgs/Rank.jpeg" />
+        <S.CoverImg src="/assets/imgs/banner.png" />
         <S.InfoWrap>
           <S.Title>오픈차트</S.Title>
         </S.InfoWrap>

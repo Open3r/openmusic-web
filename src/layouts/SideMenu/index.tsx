@@ -8,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 
 const SideMenu = () => {
   const sideMenu = useRef<HTMLDivElement | null>(null);
-  const onOffBtn = useRef<HTMLImageElement | null>(null);
   const shadow = useRef<HTMLDivElement | null>(null);
   const [menuState, setMenuState] = useState(false);
   const user = userStore(state=>state.user);
@@ -16,15 +15,13 @@ const SideMenu = () => {
   const navigate = useNavigate();
 
   const menuOnOff = () => {
-    if (sideMenu.current && onOffBtn.current && shadow.current) {
+    if (sideMenu.current && shadow.current) {
       if (!menuState) {
-        sideMenu.current.style.left = "0rem";
-        onOffBtn.current.style.left = "30.5rem";
+        sideMenu.current.style.right = "0rem";
         shadow.current.style.display = 'block';
         setMenuState(true);
       } else {
-        sideMenu.current.style.left = "-30rem";
-        onOffBtn.current.style.left = "0.5rem";
+        sideMenu.current.style.right = "-30rem";
         shadow.current.style.display = 'none'; 
         setMenuState(false);
       }
@@ -50,12 +47,11 @@ const SideMenu = () => {
 
   return (
     <>
-      <S.MenuOnBtn
-        onClick={menuOnOff}
-        ref={onOffBtn}
-        className="sideMenu"
-      ></S.MenuOnBtn>
-      <S.Container ref={sideMenu} className="sideMenu">
+      <S.Hamburger src="/assets/imgs/Hamburger.svg" onClick={menuOnOff}/>
+      <S.Container ref={sideMenu}>
+        <S.closeWrap>
+          <img src="/assets/imgs/MenuClose.svg" alt="" style={{width:'3rem',height:'3rem',cursor:'pointer'}} onClick={menuOnOff}/>
+        </S.closeWrap>
         <S.ProfileWrap>
           <S.Avatar src={user.avatarUrl} />
           <S.Nickname>{user.nickname}</S.Nickname>
@@ -78,7 +74,7 @@ const SideMenu = () => {
         </S.Menu>
         <S.LogOut onClick={logout}>로그아웃</S.LogOut>
       </S.Container>
-      <S.shadow className="shadow" ref={shadow} onClick={menuOnOff}></S.shadow>
+      <S.shadow ref={shadow} onClick={menuOnOff}></S.shadow>
     </>
   );
 };
