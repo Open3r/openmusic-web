@@ -30,7 +30,7 @@ export const Hamburger = styled.img`
   position:fixed;
   top:4rem;
   right:2rem;
-  z-index:100000;
+  z-index:10;
 `;
 
 export const shadow = styled.div`

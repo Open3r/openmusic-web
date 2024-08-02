@@ -8,11 +8,14 @@ import instance from '../../libs/axios/customAxios';
 import SongBox from '../../components/SongBox';
 import PlaylistBox from '../../components/PlaylistBox';
 import AlbumBox from '../../components/AlbumBox';
+import { User } from '../../interfaces/User';
+import UserBox from '../../components/UserBox';
 
 export const SearchPage = () => {
   const [songResult, setSongResult] = useState<Song[]>();
   const [playlistResult, setPlaylistResult] = useState<PlaylistType[]>();
   const [albumResult, setAlbumResult] = useState<AlbumType[]>();
+  const [artistResult, setArtistResult] = useState<User[]>();
 
   const param = useParams();
 
@@ -23,7 +26,7 @@ export const SearchPage = () => {
 
   const playlistSearchReq = async () => {
     const res = await instance.get("/playlists/search", {
-      params: { query: param.keyword },
+      params: { query: param.keyword},
     });
     setPlaylistResult(res.data.data.content);
   };
@@ -35,10 +38,18 @@ export const SearchPage = () => {
     setAlbumResult(res.data.data.content);
   };
 
+  const artistSearchReq = async () => {
+    const res = await instance.get("/users/search", {
+      params: { query: param.keyword },
+    });
+    setArtistResult(res.data.data.content);
+  };
+
   useEffect(()=>{
     songSearchReq();
     playlistSearchReq();
     albumSearchReq();
+    artistSearchReq();
   },[]);
 
   return (
@@ -58,10 +69,10 @@ export const SearchPage = () => {
           ·
         </span>
         <S.ResultCount>
-          앨범 <span style={{ color: "#52A9F9" }}>{songResult?.length}</span> 개
+          앨범 <span style={{ color: "#52A9F9" }}>{albumResult?.length}</span> 개
         </S.ResultCount>
       </S.ResultCountWrap>
-      <S.SongResultArea>
+      <S.SectionArea>
         <S.SectionTitle style={{ marginBottom: "2rem" }}>노래</S.SectionTitle>
         <S.SongResultWrap>
           {songResult?.map((content, idx) => (
@@ -81,23 +92,31 @@ export const SearchPage = () => {
             />
           ))}
         </S.SongResultWrap>
-      </S.SongResultArea>
-      <S.PlaylistResultArea>
+      </S.SectionArea>
+      <S.SectionArea>
         <S.SectionTitle>플레이리스트</S.SectionTitle>
         <S.PlaylistResultWrap>
           {playlistResult?.map((content) => (
             <PlaylistBox type="default" key={content.id} item={content} />
           ))}
         </S.PlaylistResultWrap>
-      </S.PlaylistResultArea>
-      <S.AlbumResultArea>
+      </S.SectionArea>
+      <S.SectionArea>
         <S.SectionTitle>앨범</S.SectionTitle>
         <S.AlbumResultWrap>
           {albumResult?.map((content) => (
             <AlbumBox item={content} key={content.id} type='default'/>
           ))}
         </S.AlbumResultWrap>
-      </S.AlbumResultArea>
+      </S.SectionArea>
+      <S.SectionArea>
+        <S.SectionTitle>아티스트</S.SectionTitle>
+        <S.ArtistResultWrap>
+          {artistResult?.map((content)=>(
+            <UserBox user={content} key={content.id}/>
+          ))}
+        </S.ArtistResultWrap>
+      </S.SectionArea>
     </S.Container>
   );
 }

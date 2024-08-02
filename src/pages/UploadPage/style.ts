@@ -4,7 +4,7 @@ import styled from "@emotion/styled";
 
 export const Canvas = styled.div`
   width: 100%;
-  height: calc(100vh - 12rem);
+  height: calc(100vh - 22rem);
   margin-top: 12rem;
   display: flex;
   align-items:center;
@@ -17,7 +17,7 @@ export const SongInfoWrap = styled.div`
   width: 30rem;
   height: 100%;
   box-sizing: border-box;
-  padding: 3rem 0;
+  padding-top: 3rem;
   display:flex;
   flex-direction:column;
 `;
@@ -25,8 +25,8 @@ export const SongInfoWrap = styled.div`
 export const AlbumCoverInput = styled.div<{ $albumCover: string }>`
   background: url(${(props) => props.$albumCover}) center no-repeat;
   background-size: cover;
-  width: 15rem;
-  height: 15rem;
+  width: 20rem;
+  height: 20rem;
   border-radius: 3rem;
   cursor: pointer;
 
@@ -66,7 +66,7 @@ export const AlbumMetaSelect = styled.select`
 export const AlbumDescription = styled.textarea`
   font-size:1.5rem;
   width:100%;
-  height:calc(100% - 40rem);
+  height:calc(100% - 45rem);
   resize:none;
   border:0.1rem solid #ccc;
   outline:none;

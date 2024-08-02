@@ -28,7 +28,6 @@ function App() {
       "/login",
       "/signup",
       "/verify",
-      "/upload",
       "/intro",
       "/genre",
       "/callback/google",

@@ -22,7 +22,7 @@ export const SectionTitle = styled.h1`
   align-items:center;
   border-bottom: 0.1rem #F1F1F1 solid;
 `
-export const SongResultArea = styled.div`
+export const SectionArea = styled.div`
   width:70%;
   margin: 0 auto;
 `
@@ -42,10 +42,6 @@ export const SongResultWrap = styled.div`
   margin-bottom:5rem;
 `;
 
-export const PlaylistResultArea = styled.div`
-  width:70%;
-  margin: 0 auto;
-` 
 export const PlaylistResultWrap = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -58,10 +54,6 @@ export const PlaylistResultWrap = styled.div`
   margin-bottom:5rem;
 `;
 
-export const AlbumResultArea = styled.div`
-  width: 70%;
-  margin: 0 auto;
-`; 
 export const AlbumResultWrap = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
@@ -73,6 +65,19 @@ export const AlbumResultWrap = styled.div`
   gap: 3rem;
   margin-bottom:5rem;
 `;
+
+export const ArtistResultWrap = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  padding: 1rem;
+  padding-top: 2rem;
+  grid-auto-rows: 30rem;
+  box-sizing: border-box;
+  grid-gap: 3rem;
+  gap: 3rem;
+  margin-bottom: 5rem;
+`;
+
 
 export const ResultCountWrap = styled.div`
   width:70%;

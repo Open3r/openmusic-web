@@ -67,6 +67,7 @@ const RecentlyListenBox = styled.div`
   display:flex;
   flex-wrap:wrap;
   justify-content:space-between;
+  overflow-y:hidden;
 `
 
 const BoxWrap = styled.div`
@@ -127,13 +128,44 @@ export const MemberList = styled.li`
   margin-bottom:0.5rem;
 `
 export const Member = styled.a`
-  color:#ccc;
-  text-decoration:none;
-  font-size:1.6rem;
-  &:hover{
-    text-decoration:underline;
+  color: #a7a7a7;
+  text-decoration: none;
+  font-size: 1.6rem;
+  &:hover {
+    text-decoration: underline;
   }
-`
+`;
+export const DotsWrapper = styled.div`
+  position: absolute;
+  bottom: 10px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  ul {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  li {
+    margin: 0 5px;
+    button {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #ccc;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      &:before {
+        display: none;
+      }
+    }
+    &.slick-active button {
+      background: #52a9f9;
+    }
+  }
+`;
 
 export {
   BoxWrap,

@@ -1,53 +1,49 @@
-import { useEffect, useState } from 'react';
-import * as S from './style';
-import NotificationService from '../../libs/notification/NotificationService';
-import instance from '../../libs/axios/customAxios';
-import { useNavigate } from 'react-router-dom';
-import { userStore } from '../../stores/userStore';
+import { useEffect, useState } from "react";
+import * as S from "./style";
+import NotificationService from "../../libs/notification/NotificationService";
+import instance from "../../libs/axios/customAxios";
+import { userStore } from "../../stores/userStore";
 
 const GenreChoosePage = () => {
-
-  const [genre,setGenre] = useState<string[]>([]);
+  const [genre, setGenre] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const user = userStore(state=>state.user);
-  const setUser = userStore(state=>state.setUser);
+  const user = userStore((state) => state.user);
+  const setUser = userStore((state) => state.setUser);
 
-  const navigate = useNavigate();
-
-  const pushToGenre = (e:any) => {
-    if(genre.length < 4) {
-      const genreTarget = e.target.className.split(" ")[0];
-      if (!genre.includes(genreTarget)) {
+  const pushToGenre = (e: any) => {
+    const genreTarget = e.target.className.split(" ")[0];
+    if (!genre.includes(genreTarget)) {
+      if (genre.length < 4) {
         setGenre([...genre, genreTarget]);
       } else {
-        setGenre(genre.filter((gen) => gen !== genreTarget));
+        NotificationService.warn("장르 선택은 4개가 최대입니다.");
       }
-    }else{
-      NotificationService.warn('장르 선택은 4개가 최대입니다.')
+    } else {
+      setGenre(genre.filter((gen) => gen !== genreTarget));
     }
-  }
+  };
 
   const submit = () => {
     setLoading(true);
-    genre.map((item)=>{
-      if(item !== "SWING_JAZZ") {
-        instance.post('/users/me/genres',{genre:item});
+    genre.map((item) => {
+      if (item !== "SWING_JAZZ") {
+        instance.post("/users/me/genres", { genre: item }).then(() => {
+          instance.get("/users/me").then((res) => {
+            console.log(res.data.data);
+            setUser(res.data.data);
+          });
+        });
       }
     });
-    instance.get('/users/me').then((res)=>{
-      setUser(res.data.data);
-    });
     setLoading(false);
-    window.location.href = '/';
-  }
+  };
 
-
-  useEffect(()=>{
-    if(user && user.genres && user.genres.length > 0) {
-      navigate('/');
+  useEffect(() => {
+    if (user && user.genres && user.genres.length > 0) {
+      window.location.href = "/";
     }
-  },[user]);
+  }, [user]);
 
   return (
     <S.Container>
@@ -265,6 +261,6 @@ const GenreChoosePage = () => {
       </S.Main>
     </S.Container>
   );
-}
+};
 
-export default GenreChoosePage
+export default GenreChoosePage;

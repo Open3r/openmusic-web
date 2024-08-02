@@ -11,9 +11,9 @@ const RankPage = () => {
   const [detail, setDetail] = useState<Song[]>();
   const [loading, setLoading] = useState(false);
 
-  const updateSongId = songIdUpdate((state) => state.setSongIdUpdate);
   const setQueueUpdate = queueUpdateStore((state) => state.setQueueUpdate);
   const queue = queueUpdateStore((state) => state.queueUpdate);
+  const setSongIdUpdate = songIdUpdate((state) => state.setSongIdUpdate);
 
   const { getRank } = useGetRank();
 
@@ -35,24 +35,26 @@ const RankPage = () => {
     detailRankReq();
   }, []);
 
-  
+
+
   const copyToQueue = () => {
+    setSongIdUpdate(0);
     instance.delete("/users/me/queue").then(() => {
-      if (detail) {
-        instance.post("/users/me/queue/ranking");
-        setQueueUpdate(detail);
-        if (detail) {
-          updateSongId(detail[0].id);
-        }
-      }
+      instance.get("/users/me/queue").then((res) => {
+        console.log(res.data.data);
+        setQueueUpdate(res.data.data);
+      });
     });
   };
 
   useEffect(() => {
-    if (detail) {
-      updateSongId(detail[0].id);
+    if (queue.length === 0 && detail) {
+      instance.post("/users/me/queue/ranking");
+      setQueueUpdate(detail);
+      setSongIdUpdate(detail[0].id);
     }
   }, [queue]);
+
 
 
   return (

@@ -29,6 +29,12 @@ const Profile = ({ user, setUser, type }: ProfileComp) => {
 
   const navigate = useNavigate();
 
+  useEffect(()=>{
+    if(user.provider === 'GOOGLE') {
+      setPassword('oauth2:google');
+    }
+  },[]);
+
   const handleModal = () => {
     setIsModalOpen(!isModalOpen);
   };

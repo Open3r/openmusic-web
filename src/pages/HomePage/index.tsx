@@ -34,7 +34,7 @@ const HomePage = () => {
 
   const getLastPlayed = () => {
     instance.get("/users/me/recents").then((res) => {
-      setRecentUpdate(res.data.data.slice(0, 3));
+      setRecentUpdate(res.data.data);
     });
   };
 
@@ -48,6 +48,8 @@ const HomePage = () => {
     getBanners();
   }, []);
 
+  
+
   const { getMusic } = useGetMusic();
   const { getRank } = useGetRank();
 
@@ -55,7 +57,7 @@ const HomePage = () => {
     try {
       const res = await getMusic(10);
       setSongList(res);
-      const rank = await getRank(3);
+      const rank = await getRank(5);
       setSongRank(rank);
     } catch (err) {
       NotificationService.error("네트워크 에러");
@@ -114,6 +116,11 @@ const HomePage = () => {
     autoplay: true,
     autoplaySpeed: 5000,
     arrows: false,
+    appendDots: (dots:React.ReactNode) => (
+      <HS.DotsWrapper>
+        <ul> {dots} </ul>
+      </HS.DotsWrapper>
+    ),
   };
 
   return (
@@ -130,22 +137,24 @@ const HomePage = () => {
             </HS.SectionTitle>
             <HS.RecentlyListenBox>
               {recentUpdate && recentUpdate.length > 0 ? (
-                recentUpdate.map((content, idx) => (
-                  <SongBox
-                    title={content.title}
-                    artist={content.artist}
-                    id={content.id}
-                    key={idx}
-                    url={content.url}
-                    thumbnailUrl={content.thumbnailUrl}
-                    type={"history"}
-                    genre={content.genre}
-                    scope={content.scope}
-                    liked={content.liked}
-                    likeCount={content.likeCount}
-                    album={content.album}
-                  />
-                ))
+                recentUpdate
+                  .slice(0, 4)
+                  .map((content, idx) => (
+                    <SongBox
+                      title={content.title}
+                      artist={content.artist}
+                      id={content.id}
+                      key={idx}
+                      url={content.url}
+                      thumbnailUrl={content.thumbnailUrl}
+                      type={"history"}
+                      genre={content.genre}
+                      scope={content.scope}
+                      liked={content.liked}
+                      likeCount={content.likeCount}
+                      album={content.album}
+                    />
+                  ))
               ) : (
                 <HS.NoSongAlert>최근들은 곡이 없습니다.</HS.NoSongAlert>
               )}
@@ -341,7 +350,7 @@ const HomePage = () => {
       <HS.Footer>
         <div style={{ display: "flex" }}>
           <HS.Credit>
-            <h1 style={{ color: "#D9D9D9", fontSize: "2.2rem" }}>OPENERS</h1>
+            <h1 style={{ color: "#a7a7a7", fontSize: "2.2rem" }}>OPENERS</h1>
             <ul style={{ listStyle: "none", padding: "0" }}>
               <HS.MemberList>
                 <HS.Member href="https://github.com/cher1shRXD" target="_blank">
@@ -355,7 +364,7 @@ const HomePage = () => {
               </HS.MemberList>
               <HS.MemberList>
                 <HS.Member href="https://github.com/kmj5004" target="_blank">
-                  김민재 (android)
+                  김민재 (Android)
                 </HS.Member>
               </HS.MemberList>
               <HS.MemberList>
@@ -376,7 +385,7 @@ const HomePage = () => {
             </ul>
           </HS.Credit>
           <HS.Credit>
-            <h1 style={{ color: "#D9D9D9", fontSize: "2.2rem" }}>Contacts</h1>
+            <h1 style={{ color: "#a7a7a7", fontSize: "2.2rem" }}>Contacts</h1>
             <ul style={{ listStyle: "none", padding: "0" }}>
               <HS.MemberList>
                 <HS.Member href="tel:01048901466">
@@ -400,7 +409,7 @@ const HomePage = () => {
             </ul>
           </HS.Credit>
           <HS.Credit>
-            <h1 style={{ color: "#D9D9D9", fontSize: "2.2rem" }}>
+            <h1 style={{ color: "#a7a7a7", fontSize: "2.2rem" }}>
               개인정보 처리 방침
             </h1>
             <ul style={{ listStyle: "none", padding: "0" }}>
@@ -417,7 +426,7 @@ const HomePage = () => {
         </div>
 
         <p>
-          Copyrights&copy;2024 
+          Copyrights&copy;2024
           <span
             style={{ color: "#52a9f9", display: "flex", alignItems: "center" }}
           >

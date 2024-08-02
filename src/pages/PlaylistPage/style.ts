@@ -112,7 +112,6 @@ export const PlaylistSongWrap = styled.div`
 export const DeleteSong = styled.div`
   width:5rem;
   height:10rem;
-  border-bottom:0.1rem solid #ccc;
   display:flex;
   justify-content:center;
   align-items:center;

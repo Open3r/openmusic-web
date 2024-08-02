@@ -35,9 +35,9 @@ const PlaylistPage = () => {
   const { fileUpload, loading } = useFileUpload();
   const setUpdate = playlistUpdateStore(state=>state.setUpdate);
   
-  const updateSongId = songIdUpdate(state=>state.setSongIdUpdate);
   const setQueueUpdate = queueUpdateStore(state=>state.setQueueUpdate);
   const queue = queueUpdateStore((state) => state.queueUpdate);
+  const setSongIdUpdate = songIdUpdate((state) => state.setSongIdUpdate);
 
   const navigate = useNavigate();
 
@@ -111,25 +111,28 @@ const PlaylistPage = () => {
     }
   },[update]);
 
+
   const copyToQueue = () => {
-    instance.delete('/users/me/queue').then(()=>{
-      if(detail) {
-        instance.post("/users/me/queue/playlist", {
-          playlistId: detail.id,
-        });
-        setQueueUpdate(detail.songs);
-        if (detail.songs) {
-          updateSongId(detail.songs[0].id);
-        }
+    setSongIdUpdate(0);
+    instance.delete('/users/me/queue')
+      .then(()=>{
+        instance.get('/users/me/queue').then((res)=>{
+          setQueueUpdate(res.data.data);
+        })
       }
-    });
+    );
   }
 
   useEffect(()=>{
-    if(detail && detail.songs){
-      updateSongId(detail.songs[0].id);
+    if(queue.length === 0 && detail) {
+      instance.post("/users/me/queue/playlist", {
+        playlistId: detail.id,
+      });
+      setQueueUpdate(detail.songs);
+      setSongIdUpdate(detail.songs[0].id);
     }
   },[queue]);
+
 
   const deletePlaylist = async () => {
     let loadingTimeout: ReturnType<typeof setTimeout> | undefined;

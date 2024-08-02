@@ -85,6 +85,9 @@ const PlayBar = () => {
       });
   };
 
+  useEffect(()=>{
+  },[queue]);
+
   useEffect(() => {
     if(accessToken) {
       myPlaylistReq();
@@ -157,21 +160,25 @@ const PlayBar = () => {
   useEffect(()=>{
     if(accessToken){
       nowPlayingReq();
-    }
-  },[queue]);
-
-  const musicEndEvent = () => {
-    if (loopState) {
-      if (shuffleState) {
-        const rand = getRandom(0, queue?.length! - 1);
-        setNowPlaying(queue![rand]);
+      if (initialRender) {
+        initializeTime();
+        setPlayState(false);
+        if (audioRef.current) {
+          audioRef.current.pause();
+        }
+        updateCurrTime({ currTime: 0 });
+        setInitialRender(false);
       } else {
-        nextMusic();
+        if (songId && audioRef.current) {
+          audioRef.current.oncanplaythrough = () => {
+            if (audioRef.current) {
+              audioRef.current.play();
+            }
+          };
+        }
       }
-    }else{
-      nextMusic();
     }
-  };
+  },[songId]);
 
 
   const initializeTime = () => {
@@ -231,13 +238,21 @@ const PlayBar = () => {
 
   const nextMusic = () => {
     if (currIdx !== undefined && queue && queue.length) {
-      console.log(currIdx,queue);
       if (currIdx < queue.length - 1) {
-        playAnother(queue[currIdx + 1]);
-      } else if (currIdx === queue.length - 1) {
-        playAnother(queue[0]);
-      } else {
-        stopPlay();
+        if(shuffleState){
+          playAnother(queue[getRandom(0,queue.length - 1)]);
+        }else{
+          playAnother(queue[currIdx + 1]);
+        }
+      }
+      if (currIdx === queue.length - 1) {
+        if(loopState) {
+          if(shuffleState) {
+            playAnother(queue[getRandom(0, queue.length - 1)]);
+          }else{
+            playAnother(queue[0]);
+          }
+        }
       }
     }
   };
@@ -332,32 +347,6 @@ const PlayBar = () => {
   }, [handleSpace]);
 
 
-  useEffect(() => {
-    if(initialRender) {
-      initializeTime();
-      setPlayState(false);
-      if (audioRef.current) {
-        audioRef.current.pause();
-      }
-      updateCurrTime({ currTime: 0 });
-      setInitialRender(false);
-    }else{
-      if (nowPlaying?.title && audioRef.current) {
-        audioRef.current.play().catch((err) => {
-          if (err instanceof DOMException) {
-            setPlayState(false);
-            if (audioRef.current) {
-              audioRef.current.pause();
-            }
-            updateCurrTime({ currTime: 0 });
-          }
-        });
-      }
-    }
-  }, [nowPlaying]);
-
-
-
   const handleAddPlaylistClick = useCallback(
     (e: MouseEvent) => {
       if ((e.target as HTMLElement).className.includes("playlist")) {
@@ -402,7 +391,7 @@ const PlayBar = () => {
             src={nowPlaying?.url}
             id="audio"
             onTimeUpdate={updatePlayTime}
-            onEnded={musicEndEvent}
+            onEnded={nextMusic}
             ref={audioRef}
             onPause={stopPlay}
             onPlay={startPlay}
@@ -431,7 +420,7 @@ const PlayBar = () => {
           ) : (
             <PB.PlayBtn src="/assets/imgs/play.svg" onClick={playMusic} />
           )}
-          <PB.PlayBtn src="/assets/imgs/next.svg" onClick={musicEndEvent} />
+          <PB.PlayBtn src="/assets/imgs/next.svg" onClick={nextMusic} />
         </PB.PlayBtnsWrap>
         <PB.TimeIndicatorWrap>
           {!nowPlaying?.liked ? (

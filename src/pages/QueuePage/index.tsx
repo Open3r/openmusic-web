@@ -29,6 +29,7 @@ const QueuePage = () => {
       loadingTimeout = setTimeout(() => setPageLoading(true), 5000);
       const res = await instance.get(`/users/me/queue`);
       setDetail(res.data.data);
+      setQueueUpdate(res.data.data)
     } finally {
       if (loadingTimeout) clearTimeout(loadingTimeout);
       setPageLoading(false);
@@ -45,6 +46,7 @@ const QueuePage = () => {
       detailQueueReq();
     }
   }, [queueStateUpdate]);
+
 
 
   const deleteSong = async (songId: number) => {

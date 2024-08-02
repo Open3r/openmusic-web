@@ -120,16 +120,19 @@ const SongBox = (props: SongBoxProps) => {
   }
   if (props.type === 'queue') {
     return (
-      <S.ListMusic onClick={addSongQueue} style={props.nowPlaying !== undefined && props.nowPlaying ? {background:'#F5F5F5'} : {}}>
-        {
-          props.nowPlaying !== undefined && !props.nowPlaying ? (
-            <S.ListMusicHover>
-              <S.HoverWord>눌러서 재생</S.HoverWord>
-            </S.ListMusicHover>
-          ) : (
-            null
-          )
+      <S.ListMusic
+        onClick={addSongQueue}
+        style={
+          props.nowPlaying !== undefined && props.nowPlaying
+            ? { background: "#F5F5F5" }
+            : {}
         }
+      >
+        {props.nowPlaying !== undefined && !props.nowPlaying ? (
+          <S.ListMusicHover>
+            <S.HoverWord>눌러서 재생</S.HoverWord>
+          </S.ListMusicHover>
+        ) : null}
         <S.ListNum>{props.rank !== undefined && props.rank + 1}</S.ListNum>
         <S.ListCover src={props.thumbnailUrl} />
         <S.ListMusicInfoWrap>
@@ -146,7 +149,11 @@ const SongBox = (props: SongBoxProps) => {
             : props.album.title}
         </S.ListMusicAlbum>
         <S.RankSongLikeWrap>
-          <img src='/assets/imgs/unlike.svg' alt="" style={{ width: "2rem", height: "2rem" }} />
+          <img
+            src="/assets/imgs/unlike.svg"
+            alt=""
+            style={{ width: "2rem", height: "2rem" }}
+          />
           <span style={{ marginLeft: "0.5rem", fontSize: "1.3rem" }}>
             {props.likeCount}
           </span>
