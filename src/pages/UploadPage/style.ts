@@ -118,6 +118,7 @@ export const SongTitleInput = styled.input`
   padding:1rem;
   outline:none;
   width:50%;
+  border-bottom:0.1rem #F1F1F1 solid;
 `
 export const SongFileInput = styled.div<{$file:string}>`
   background: url(${(props) => props.$file}) center no-repeat;

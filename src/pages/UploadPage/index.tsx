@@ -187,7 +187,7 @@ const UploadPage = () => {
           앨범설명
         </S.AlbumMetaLabel>
         <S.AlbumDescription
-          placeholder="250자 이내"
+          placeholder="앨범 설명을 입력하세요."
           onChange={handleAlbumDescription}
         />
       </S.SongInfoWrap>

@@ -11,7 +11,7 @@ const useAlbumUpload = () => {
     if (
       data.coverUrl === undefined ||
       data.songs.length === 0 ||
-      data.title === "" ||
+      data.title.trim() === "" ||
       data.description === ""
     ) {
       setUploadLoading(false);
@@ -32,11 +32,17 @@ const useAlbumUpload = () => {
         }
       });
       if(isAllSongFilled) {
-        const res = await instance.post("/albums", data);
-        return res;
+        try{
+          const res = await instance.post("/albums", data);
+          return res;
+        }catch(err){
+          NotificationService.error('네트워크');
+        }finally{
+          setUploadLoading(false);
+        }
       }
-      setUploadLoading(false);
     }
+    setUploadLoading(false);
   };
 
   return {
