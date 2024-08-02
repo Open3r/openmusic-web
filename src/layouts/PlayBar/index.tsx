@@ -157,7 +157,6 @@ const PlayBar = () => {
 
   useEffect(()=>{
     if(accessToken){
-      console.log('왜 안돼');
       nowPlayingReq();
       if (initialRender) {
         initializeTime();

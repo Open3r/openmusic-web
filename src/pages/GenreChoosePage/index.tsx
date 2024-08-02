@@ -30,7 +30,6 @@ const GenreChoosePage = () => {
       if (item !== "SWING_JAZZ") {
         instance.post("/users/me/genres", { genre: item }).then(() => {
           instance.get("/users/me").then((res) => {
-            console.log(res.data.data);
             setUser(res.data.data);
           });
         });

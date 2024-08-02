@@ -41,7 +41,6 @@ const RankPage = () => {
     setSongIdUpdate({songIdentify:0});
     instance.delete("/users/me/queue").then(() => {
       instance.get("/users/me/queue").then((res) => {
-        console.log(res.data.data);
         setQueueUpdate(res.data.data);
       });
     });
