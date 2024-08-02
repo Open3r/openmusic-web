@@ -112,7 +112,7 @@ const QueuePage = () => {
                   likeCount={item.likeCount}
                   rank={idx}
                   album={item.album}
-                  nowPlaying={item.id === songId ? true : false}
+                  nowPlaying={item.id === songId.songIdentify ? true : false}
                 />
                 <S.DeleteSong>
                   <img

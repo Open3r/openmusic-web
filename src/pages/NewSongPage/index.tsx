@@ -37,7 +37,7 @@ const NewSongPage = () => {
   }, []);
 
   const copyToQueue = () => {
-    setSongIdUpdate(0);
+    setSongIdUpdate({songIdentify:0});
     instance.delete("/users/me/queue").then(() => {
       instance.get("/users/me/queue").then((res) => {
         setQueueUpdate(res.data.data);
@@ -49,7 +49,7 @@ const NewSongPage = () => {
     if (queue.length === 0 && detail) {
       instance.post("/users/me/queue/latest");
       setQueueUpdate(detail);
-      setSongIdUpdate(detail[0].id);
+      setSongIdUpdate({songIdentify:detail[0].id});
     }
   }, [queue]);
 

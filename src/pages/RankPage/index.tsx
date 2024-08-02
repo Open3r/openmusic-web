@@ -38,7 +38,7 @@ const RankPage = () => {
 
 
   const copyToQueue = () => {
-    setSongIdUpdate(0);
+    setSongIdUpdate({songIdentify:0});
     instance.delete("/users/me/queue").then(() => {
       instance.get("/users/me/queue").then((res) => {
         console.log(res.data.data);
@@ -51,7 +51,7 @@ const RankPage = () => {
     if (queue.length === 0 && detail) {
       instance.post("/users/me/queue/ranking");
       setQueueUpdate(detail);
-      setSongIdUpdate(detail[0].id);
+      setSongIdUpdate({songIdentify:detail[0].id});
     }
   }, [queue]);
 

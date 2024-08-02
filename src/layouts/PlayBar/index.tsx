@@ -85,8 +85,6 @@ const PlayBar = () => {
       });
   };
 
-  useEffect(()=>{
-  },[queue]);
 
   useEffect(() => {
     if(accessToken) {
@@ -140,9 +138,9 @@ const PlayBar = () => {
   };
 
   const nowPlayingReq = async () => {
-    if (songId !== 0) {
+    if (songId.songIdentify !== 0) {
       if (queue) {
-        const idx = queue.findIndex((song) => songId === song.id);
+        const idx = queue.findIndex((song) => songId.songIdentify === song.id);
         if (idx === -1) {
           const res = await instance.get(`/songs/${songId}`);
           setNowPlaying(res.data.data);
@@ -159,6 +157,7 @@ const PlayBar = () => {
 
   useEffect(()=>{
     if(accessToken){
+      console.log('왜 안돼');
       nowPlayingReq();
       if (initialRender) {
         initializeTime();
@@ -170,6 +169,8 @@ const PlayBar = () => {
         setInitialRender(false);
       } else {
         if (songId && audioRef.current) {
+          updateCurrTime({ currTime: 0 });
+          initializeTime();
           audioRef.current.oncanplaythrough = () => {
             if (audioRef.current) {
               audioRef.current.play();
@@ -211,7 +212,7 @@ const PlayBar = () => {
       .then(() => {
         instance.get("/users/me/queue").then((res) => {
           setQueueUpdate(res.data.data);
-          setSongIdUpdate(song.id);
+          setSongIdUpdate({songIdentify:song.id});
           instance.post("/users/me/recents", { songId: song.id }).then(() => {
             instance.get("/users/me/recents").then((res) => {
               setRecentUpdate(res.data.data);
@@ -223,7 +224,7 @@ const PlayBar = () => {
         if (err.response && err.response.status === 400) {
           instance.get("/users/me/queue").then((res) => {
             setQueueUpdate(res.data.data);
-            setSongIdUpdate(song.id);
+            setSongIdUpdate({songIdentify:song.id});
             instance
               .post("/users/me/recents", { songId: song.id })
               .then(() => {

@@ -22,7 +22,7 @@ const SongBox = (props: SongBoxProps) => {
     instance.post('/users/me/queue',{songId:props.id}).then(()=>{
       instance.get('/users/me/queue').then((res)=>{
         setQueueUpdate(res.data.data);
-        setSongIdUpdate(props.id);
+        setSongIdUpdate({songIdentify:props.id});
         instance.post('/users/me/recents',{songId:props.id}).then(()=>{
           instance.get('/users/me/recents').then((res)=>{
             setRecentUpdate(res.data.data);
@@ -34,7 +34,7 @@ const SongBox = (props: SongBoxProps) => {
         NotificationService.warn('재생목록에 존재합니다.')
         instance.get("/users/me/queue").then((res) => {
           setQueueUpdate(res.data.data);
-          setSongIdUpdate(props.id);
+          setSongIdUpdate({songIdentify:props.id});
           instance.post("/users/me/recents", { songId: props.id }).then(() => {
             instance.get("/users/me/recents").then((res) => {
               setRecentUpdate(res.data.data);

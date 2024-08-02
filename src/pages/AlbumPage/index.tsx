@@ -39,7 +39,7 @@ const AlbumPage = () => {
   
 
   const copyToQueue = () => {
-    setSongIdUpdate(0);
+    setSongIdUpdate({songIdentify:0});
     instance.delete("/users/me/queue").then(() => {
       instance.get("/users/me/queue").then((res) => {
         setQueueUpdate(res.data.data);
@@ -53,7 +53,7 @@ const AlbumPage = () => {
         albumId: detail.id,
       });
       setQueueUpdate(detail.songs);
-      setSongIdUpdate(detail.songs[0].id);
+      setSongIdUpdate({songIdentify:detail.songs[0].id});
     }
   }, [queue]);
 
