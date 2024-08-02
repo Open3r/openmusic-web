@@ -77,7 +77,7 @@ const ProgressBar = styled.div<ProgressProps>`
   border-radius:0 2rem 2rem 0;
 `
 const PlayBtnsWrap = styled.div`
-  width:calc(100%-60rem);
+  width:calc(100% - 60rem);
   height:100%;
   display:flex;
   align-items:center;
@@ -97,15 +97,15 @@ const TimeIndicator = styled.div`
   align-self:flex-start;
 `
 const PlayBtn = styled.img`
-  width:4rem;
-  height:4rem;
-  margin: 0 2rem;
+  width:3rem;
+  height:3rem;
+  margin: 0 1.5rem;
   cursor: pointer;
 `
 const StateIndicator = styled.img`
-  width:4rem;
-  height:4rem;
-  margin-left:2rem;
+  width:3rem;
+  height:3rem;
+  margin-left:1.5rem;
   cursor:pointer;
 `
 const VolumeControllerWrap = styled.div`

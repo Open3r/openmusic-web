@@ -20,6 +20,7 @@ html {
     display: none; /* Chrome, Safari, Opera*/
   }
   overflow-x: hidden;
+  min-width: 100vw;
 }
 p,
 h1,

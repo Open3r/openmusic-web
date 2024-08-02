@@ -36,7 +36,7 @@ const useAlbumUpload = () => {
           const res = await instance.post("/albums", data);
           return res;
         }catch(err){
-          NotificationService.error('네트워크');
+          NotificationService.error('네트워크 에러');
         }finally{
           setUploadLoading(false);
         }

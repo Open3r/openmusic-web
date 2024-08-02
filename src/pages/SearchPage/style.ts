@@ -4,7 +4,8 @@ export const Container = styled.div`
   width: 100%;
   height: calc(100vh - 22rem);
   margin-top: 12rem;
-  margin-bottom: 10rem;
+  margin-bottom: 10rem
+;
   padding-top: 3rem;
   box-sizing: border-box;
   overflow-y: scroll;

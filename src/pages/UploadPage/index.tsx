@@ -107,7 +107,7 @@ const UploadPage = () => {
         description: albumDescription
       });
       if(res !== undefined) {
-        NotificationService.success("업로드 성공");
+        NotificationService.success("업로드 요청 성공");
         navigate("/");
       }
     } catch (err) {

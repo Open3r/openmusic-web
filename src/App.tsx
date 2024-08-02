@@ -12,6 +12,7 @@ function App() {
   const location = useLocation();
 
   useEffect(() => {
+    console.clear();
     const hidePaths = [
       "/login",
       "/signup",
@@ -21,17 +22,6 @@ function App() {
       "/callback/google",
     ];
     setHeaderHideLayout(hidePaths.includes(location.pathname));
-  }, [location.pathname]);
-
-  useEffect(() => {
-    const hidePaths = [
-      "/login",
-      "/signup",
-      "/verify",
-      "/intro",
-      "/genre",
-      "/callback/google",
-    ];
     setPlayBarHideLayout(hidePaths.includes(location.pathname));
   }, [location.pathname]);
 

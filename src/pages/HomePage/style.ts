@@ -1,7 +1,9 @@
 import styled from "@emotion/styled";
 
 const Conatainer = styled.div`
-  margin-bottom: 10rem;
+  margin-bottom: 10rem
+
+;
   margin-top: 12rem;
   width: 100%;
   height: calc(100vh - 22rem);
