@@ -22,7 +22,7 @@ const useAlbumUpload = () => {
     } else {
       let isAllSongFilled = false;
       data.songs.forEach((item) => {
-        if (item.title === "" && item.url === "") {
+        if (item.title === "" || item.url === "") {
           NotificationService.warn(
             "음악 파일 또는 제목이 입력되지 않았습니다."
           );
