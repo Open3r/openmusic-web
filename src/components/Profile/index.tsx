@@ -222,11 +222,13 @@ const Profile = ({ user, setUser, type }: ProfileComp) => {
                     onChange={handleFileChange}
                   />
                 </S.AvatarPreview>
-                <S.EditInput
-                  type="password"
-                  placeholder="비밀번호"
-                  onChange={handlePassword}
-                />
+                {user.provider !== "GOOGLE" && (
+                  <S.EditInput
+                    type="password"
+                    placeholder="비밀번호"
+                    onChange={handlePassword}
+                  />
+                )}
               </S.AvatarPreviewWrap>
               <S.AvatarControllWrap>
                 <S.AvatarController
