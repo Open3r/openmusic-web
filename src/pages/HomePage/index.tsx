@@ -124,7 +124,7 @@ const HomePage = () => {
   };
 
   return (
-    <HS.Conatainer>
+    <HS.Container>
       <HS.Canvas>
         <HS.ChartSectionWrap>
           <HS.RecentlyListenWrap>
@@ -440,7 +440,7 @@ const HomePage = () => {
           All rights reserved
         </p>
       </HS.Footer>
-    </HS.Conatainer>
+    </HS.Container>
   );
 };
 

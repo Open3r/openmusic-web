@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 
-const Conatainer = styled.div`
+const Container = styled.div`
   margin-bottom: 10rem
 
 ;
@@ -139,7 +139,7 @@ export const Member = styled.a`
 `;
 export const DotsWrapper = styled.div`
   position: absolute;
-  bottom: 10px;
+  bottom: 1px;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -150,7 +150,7 @@ export const DotsWrapper = styled.div`
     list-style: none;
   }
   li {
-    margin: 0 5px;
+    margin: 0 1px;
     button {
       width: 10px;
       height: 10px;
@@ -182,5 +182,5 @@ export {
   NoSongAlert,
   Banner,
   BannerImage,
-  Conatainer
+  Container
 }
